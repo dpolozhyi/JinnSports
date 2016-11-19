@@ -1,0 +1,5 @@
+D:\Work\SoftServe\JinnSports\JinnSportsParser.APP\bin\Debug\JinnSportsParser.APP.exe.config
+D:\Work\SoftServe\JinnSports\JinnSportsParser.APP\bin\Debug\JinnSportsParser.APP.exe
+D:\Work\SoftServe\JinnSports\JinnSportsParser.APP\bin\Debug\JinnSportsParser.APP.pdb
+D:\Work\SoftServe\JinnSports\JinnSportsParser.APP\obj\Debug\JinnSportsParser.APP.exe
+D:\Work\SoftServe\JinnSports\JinnSportsParser.APP\obj\Debug\JinnSportsParser.APP.pdb
