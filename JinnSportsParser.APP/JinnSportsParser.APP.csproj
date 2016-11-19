@@ -7,8 +7,8 @@
     <ProjectGuid>{EFA96B10-9AE3-4770-A55D-D0A9F1BD88A2}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JinnSportsParser.APP</RootNamespace>
-    <AssemblyName>JinnSportsParser.APP</AssemblyName>
+    <RootNamespace>JinnSports.Parser.APP</RootNamespace>
+    <AssemblyName>JinnSports.Parser.APP</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
