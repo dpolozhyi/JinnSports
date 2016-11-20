@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JinnSports.DAL
+namespace JinnSports.BLL.DTO
 {
-    public class Class1
+    class SportType
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

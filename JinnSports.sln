@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.BLL", "JinnSport
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.DAL", "JinnSports.DAL\JinnSports.DAL.csproj", "{BE36F33A-801A-4B21-8130-FF952C3A5F97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSportsParser.APP", "JinnSportsParser.APP\JinnSportsParser.APP.csproj", "{EFA96B10-9AE3-4770-A55D-D0A9F1BD88A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.Parser.App", "JinnSports.Parser.App\JinnSports.Parser.App.csproj", "{C5F8DE8E-BEA1-4A55-A0B4-1190EEE9D017}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{BE36F33A-801A-4B21-8130-FF952C3A5F97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE36F33A-801A-4B21-8130-FF952C3A5F97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE36F33A-801A-4B21-8130-FF952C3A5F97}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EFA96B10-9AE3-4770-A55D-D0A9F1BD88A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EFA96B10-9AE3-4770-A55D-D0A9F1BD88A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EFA96B10-9AE3-4770-A55D-D0A9F1BD88A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EFA96B10-9AE3-4770-A55D-D0A9F1BD88A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5F8DE8E-BEA1-4A55-A0B4-1190EEE9D017}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5F8DE8E-BEA1-4A55-A0B4-1190EEE9D017}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5F8DE8E-BEA1-4A55-A0B4-1190EEE9D017}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5F8DE8E-BEA1-4A55-A0B4-1190EEE9D017}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
