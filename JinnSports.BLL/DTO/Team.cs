@@ -10,6 +10,5 @@ namespace JinnSports.BLL.DTO
     {
         public int Id { get; set; }
         public SportType SportType { get; set; }
-        public List<CompetitionEvent> CompetitionEvent { get; set; }
     }
 }
