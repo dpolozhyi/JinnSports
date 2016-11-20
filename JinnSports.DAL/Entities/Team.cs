@@ -7,6 +7,5 @@ namespace JinnSports.DAL.Entities
     {
         public int Id { get; set; }
         public SportType SportType { get; set; }
-        public List<CompetitionEvent> CompetitionEvent { get; set; }
     }
 }
