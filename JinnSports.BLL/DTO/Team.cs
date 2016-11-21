@@ -9,6 +9,9 @@ namespace JinnSports.BLL.DTO
     class Team
     {
         public int Id { get; set; }
-        public SportType SportType { get; set; }
+        public virtual SportType SportType { get; set; }
+        public string Name { get; set; }
+
+        public List<Result> Results { get; set; }
     }
 }
