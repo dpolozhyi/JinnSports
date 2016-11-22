@@ -1,3 +1,4 @@
+D:\Work\SoftServe\JinnSports\JinnSports.WEB\obj\Debug\JinnSports.WEB.csprojResolveAssemblyReference.cache
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\ApplicationInsights.config
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\roslyn\csc.exe
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -15,8 +16,6 @@ D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\JinnSports.WEB.dll.config
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\JinnSports.WEB.dll
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\JinnSports.WEB.pdb
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\Antlr3.Runtime.dll
-D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\EntityFramework.dll
-D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\EntityFramework.SqlServer.dll
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\JinnSports.BLL.dll
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\Microsoft.AI.Agent.Intercept.dll
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\Microsoft.AI.DependencyCollector.dll
@@ -65,8 +64,6 @@ D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\System.Web.WebPages.Deployment.x
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\System.Web.WebPages.Razor.xml
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\Antlr3.Runtime.pdb
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\Newtonsoft.Json.xml
-D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\EntityFramework.xml
-D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\EntityFramework.SqlServer.xml
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\Microsoft.AspNet.Identity.Core.xml
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\Microsoft.AspNet.Identity.Owin.xml
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\Microsoft.AspNet.Identity.EntityFramework.xml
@@ -79,6 +76,5 @@ D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\Microsoft.Owin.Security.OAuth.xm
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\Microsoft.Owin.Security.Google.xml
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\Microsoft.Owin.Security.Twitter.xml
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-D:\Work\SoftServe\JinnSports\JinnSports.WEB\obj\Debug\JinnSports.WEB.csprojResolveAssemblyReference.cache
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\obj\Debug\JinnSports.WEB.dll
 D:\Work\SoftServe\JinnSports\JinnSports.WEB\obj\Debug\JinnSports.WEB.pdb

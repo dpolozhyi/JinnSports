@@ -9,7 +9,8 @@ namespace JinnSports.Parser.App
     {
         static void Main(string[] args)
         {
-                EFUnitOfWork unitOfWork = new EFUnitOfWork();
+            AppDomain.CurrentDomain.SetData("DataDirectory", System.IO.Directory.GetCurrentDirectory());
+            EFUnitOfWork unitOfWork = new EFUnitOfWork();
                 Team t1 = new Team()
                 {
                     Name = "ManchesterCity",
