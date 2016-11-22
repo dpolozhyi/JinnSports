@@ -1,0 +1,12 @@
+D:\Work\SoftServe\JinnSports\JinnSports.DAL\bin\Debug\JinnSports.DAL.dll.config
+D:\Work\SoftServe\JinnSports\JinnSports.DAL\bin\Debug\JinnSports.DAL.dll
+D:\Work\SoftServe\JinnSports\JinnSports.DAL\bin\Debug\JinnSports.DAL.pdb
+D:\Work\SoftServe\JinnSports\JinnSports.DAL\bin\Debug\EntityFramework.dll
+D:\Work\SoftServe\JinnSports\JinnSports.DAL\bin\Debug\EntityFramework.SqlServer.dll
+D:\Work\SoftServe\JinnSports\JinnSports.DAL\bin\Debug\EntityFramework.xml
+D:\Work\SoftServe\JinnSports\JinnSports.DAL\bin\Debug\EntityFramework.SqlServer.xml
+D:\Work\SoftServe\JinnSports\JinnSports.DAL\obj\Debug\JinnSports.DAL.dll
+D:\Work\SoftServe\JinnSports\JinnSports.DAL\obj\Debug\JinnSports.DAL.pdb
+D:\Work\SoftServe\JinnSports\JinnSports.DAL\bin\Debug\Antlr3.Runtime.dll
+D:\Work\SoftServe\JinnSports\JinnSports.DAL\bin\Debug\Antlr3.Runtime.pdb
+D:\Work\SoftServe\JinnSports\JinnSports.DAL\obj\Debug\JinnSports.DAL.csprojResolveAssemblyReference.cache

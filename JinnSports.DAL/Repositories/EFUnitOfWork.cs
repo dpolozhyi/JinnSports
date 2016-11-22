@@ -13,9 +13,10 @@ namespace JinnSports.DAL.Repositories
         private ResultRepository resultRepository;
         private CompetitionEventRepository competitionEventRepository;
 
-        public EFUnitOfWork(string connectionString)
+       
+        public EFUnitOfWork()
         {
-            db = new SportsContext(connectionString);
+            db = new SportsContext();
         }
 
         public IRepository<SportType> SportTypes

@@ -8,44 +8,11 @@ using System.Data.Entity;
 
 namespace JinnSports.DAL.Repositories
 {
-    public class TeamRepository : IRepository<Team>
+    public class TeamRepository : BaseRepository<Team>
     {
-        private SportsContext db;
-
-        public TeamRepository(SportsContext context)
+        public TeamRepository(SportsContext context) : base(context)
         {
-            this.db = context;
-        }
-
-        public IEnumerable<Team> GetAll()
-        {
-            return db.Teams;
-        }
-
-        public Team Get(int id)
-        {
-            return db.Teams.Find(id);
-        }
-
-        public void Create(Team data)
-        {
-            db.Teams.Add(data);
-        }
-        public void Update(Team data)
-        {
-            db.Entry(data).State = EntityState.Modified;
-        }
-
-        public IEnumerable<Team> Find(Func<Team, Boolean> predicate)
-        {
-            return db.Teams.Where(predicate).ToList();
-        }
-
-        public void Delete(int id)
-        {
-            Team data = db.Teams.Find(id);
-            if (data != null)
-                db.Teams.Remove(data);
+            
         }
     }
 }
