@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JinnSports.DAL.Interfaces;
 using JinnSports.DAL.EF;
+using JinnSports.DataAccessInterfaces;
 using System.Data.Entity;
 
 namespace JinnSports.DAL.Repositories
 {
     public class BaseRepository<T> : IRepository<T> where T : class
     {
-        private SportsContext db;
+        SportsContext db; 
         internal DbSet<T> dbSet;
 
         public BaseRepository(SportsContext context)

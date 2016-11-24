@@ -25,31 +25,10 @@ namespace JinnSports.Parser.App
                     Console.Write("{0} ",e.ToString());
                 }
                 Console.WriteLine("]\n");
-            }*/
-
-            AppDomain.CurrentDomain.SetData("DataDirectory", System.IO.Directory.GetCurrentDirectory());
-            EFUnitOfWork unitOfWork = new EFUnitOfWork();
-            Team t1 = new Team()
-            {
-                Name = "ManchesterCity",
-                SportType = new SportType()
-                {
-                    Name = "Football"
-                }
-            };
-            unitOfWork.Teams.Create(t1);
-            Team t2 = new Team()
-            {
-                Name = "ManchesterUnited",
-                SportType = new SportType()
-                {
-                    Name = "Tennis"
-                }
-            };
-            //unitOfWork.Teams.Create(t2);
-            unitOfWork.Save();
+            }
+     */
             //Console.ReadKey();
-            Console.WriteLine("Объекты успешно сохранены");
+            // Console.WriteLine("Объекты успешно сохранены");
             /* var teams = unitOfWork.Teams.GetAll();
              Console.WriteLine("Список объектов:");
              foreach (Team t in teams)

@@ -1,62 +1,26 @@
 ﻿using System;
-using JinnSports.DAL.Entities;
-using JinnSports.DAL.Interfaces;
+using JinnSports.DataAccessInterfaces;
 using JinnSports.DAL.EF;
 
 namespace JinnSports.DAL.Repositories
 {
-    public class EFUnitOfWork : IUnitOfWork
+    public class EFUnitOfWork<T> : IUnitOfWork<T> where T : class
     {
         private SportsContext db;
-        private SportTypeRepository sportTypeRepository;
-        private TeamRepository teamRepository;
-        private ResultRepository resultRepository;
-        private CompetitionEventRepository competitionEventRepository;
-
+        private BaseRepository<T> baseRepository;
        
         public EFUnitOfWork()
         {
             db = new SportsContext();
         }
 
-        public IRepository<SportType> SportTypes
+        public IRepository<T> GetRepository()
         {
-            get
+            if (baseRepository == null)
             {
-                if (sportTypeRepository == null)
-                    sportTypeRepository = new SportTypeRepository(db);
-                return sportTypeRepository;
+                baseRepository = new BaseRepository<T>(db);
             }
-        }
-
-        public IRepository<Team> Teams
-        {
-            get
-            {
-                if (teamRepository == null)
-                    teamRepository = new TeamRepository(db);
-                return teamRepository;
-            }
-        }
-
-        public IRepository<Result> Results
-        {
-            get
-            {
-                if (resultRepository == null)
-                    resultRepository = new ResultRepository(db);
-                return resultRepository;
-            }
-        }
-
-        public IRepository<CompetitionEvent> CompetitionEvents
-        {
-            get
-            {
-                if (competitionEventRepository == null)
-                    competitionEventRepository = new CompetitionEventRepository(db);
-                return competitionEventRepository;
-            }
+            return baseRepository;
         }
         public void Save()
         {
