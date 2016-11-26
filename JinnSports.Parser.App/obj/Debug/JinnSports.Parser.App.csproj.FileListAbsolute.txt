@@ -34,3 +34,4 @@ D:\Work\SoftServe\JinnParser\JinnSports.Parser.App\bin\Debug\Newtonsoft.Json.xml
 D:\Work\SoftServe\JinnParser\JinnSports.Parser.App\bin\Debug\EntityFramework.xml
 D:\Work\SoftServe\JinnParser\JinnSports.Parser.App\bin\Debug\JinnSports.DataAccessInterfaces.dll
 D:\Work\SoftServe\JinnParser\JinnSports.Parser.App\bin\Debug\JinnSports.DataAccessInterfaces.pdb
+C:\Users\Ivan\Documents\GitHub\JinnSports\JinnSports.Parser.App\bin\Debug\JinnSports.Parser.App.exe.config
