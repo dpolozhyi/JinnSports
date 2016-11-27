@@ -55,7 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EF\SportsContext.cs" />
+    <Compile Include="EFContext\SportsContext.cs" />
     <Compile Include="Entities\CompetitionEvent.cs" />
     <Compile Include="Entities\Result.cs" />
     <Compile Include="Entities\SportType.cs" />
