@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace JinnSports.DataAccessInterfaces
 {
-    public interface IUnitOfWork<T> : IDisposable where T : class
+    public interface IUnitOfWork : IDisposable
     {
-        IRepository<T> GetRepository();
-        void Save();
+        void SaveChanges();
     }
 }

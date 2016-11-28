@@ -5,11 +5,10 @@ namespace JinnSports.DataAccessInterfaces
 {
     public interface IRepository<T> where T : class
     {
-        IEnumerable<T> GetAll();
+        IList<T> GetAll();
         T Get(int id);
-        //IEnumerable<T> Find(Func<T, Boolean> predicate);
-        void Create(T item);
-        void Update(T item);
-        void Delete(int id);
+        void Add(T item);
+        void AddAll(T[] items);
+        void Remove(T item);
     }
 }
