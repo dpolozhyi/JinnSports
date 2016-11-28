@@ -1,27 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JinnSports.DAL.Interfaces;
 using JinnSports.DAL.EF;
+using JinnSports.DataAccessInterfaces;
 using System.Data.Entity;
 
 namespace JinnSports.DAL.Repositories
 {
     public class BaseRepository<T> : IRepository<T> where T : class
-    {
-        private SportsContext db;
-        internal DbSet<T> dbSet;
+    { 
+        private DbSet<T> dbSet;
 
-        public BaseRepository(SportsContext context)
+        public BaseRepository()
         {
-            this.db = context;
-            this.dbSet = context.Set<T>();
+            
         }
 
-        public IEnumerable<T> GetAll()
+        public BaseRepository(DbSet<T> DbSet)
         {
-            IQueryable<T> query = dbSet;
-            return query.ToList();
+            this.dbSet = DbSet;
+        }
+
+        public IList<T> GetAll()
+        {
+            return dbSet.ToList();
         }
 
         public T Get(int id)
@@ -29,25 +31,19 @@ namespace JinnSports.DAL.Repositories
             return dbSet.Find(id);
         }
 
-        public void Create(T entity)
+        public void Add(T item)
         {
-            dbSet.Add(entity);
-        }
-        public void Update(T entity)
-        {
-            dbSet.Attach(entity);
-            db.Entry(entity).State = EntityState.Modified;
+            dbSet.Add(item);
         }
 
-        //public IEnumerable<T> Find(Func<Result, Boolean> predicate)
-        //{
-        //    return db.Results.Where(predicate).ToList();
-        //}
-
-        public void Delete(int id)
+        public void AddAll(T[] items)
         {
-            T entityToDelete = dbSet.Find(id);
-            db.Entry(entityToDelete).State = EntityState.Deleted;
+            dbSet.AddRange(items);
+        }
+
+        public void Remove(T item)
+        {
+            dbSet.Remove(item);
         }
     }
 }

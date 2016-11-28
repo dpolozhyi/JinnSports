@@ -1,64 +1,28 @@
 ﻿using System;
-using JinnSports.DAL.Entities;
-using JinnSports.DAL.Interfaces;
+using JinnSports.DataAccessInterfaces;
 using JinnSports.DAL.EF;
+using JinnSports.DAL.Entities;
 
 namespace JinnSports.DAL.Repositories
 {
     public class EFUnitOfWork : IUnitOfWork
     {
         private SportsContext db;
-        private SportTypeRepository sportTypeRepository;
-        private TeamRepository teamRepository;
-        private ResultRepository resultRepository;
-        private CompetitionEventRepository competitionEventRepository;
+        private IRepository<Team> Teams;
+        private IRepository<Result> Results;
+        private IRepository<CompetitionEvent> CompetitionEvents;
+        private IRepository<SportType> SportTypes;
 
-       
         public EFUnitOfWork()
         {
             db = new SportsContext();
+            Teams = new BaseRepository<Team>(db.Teams);
+            Results = new BaseRepository<Result>(db.Results);
+            CompetitionEvents = new BaseRepository<CompetitionEvent>(db.CompetitionEvents);
+            SportTypes = new BaseRepository<SportType>(db.SportTypes);
         }
 
-        public IRepository<SportType> SportTypes
-        {
-            get
-            {
-                if (sportTypeRepository == null)
-                    sportTypeRepository = new SportTypeRepository(db);
-                return sportTypeRepository;
-            }
-        }
-
-        public IRepository<Team> Teams
-        {
-            get
-            {
-                if (teamRepository == null)
-                    teamRepository = new TeamRepository(db);
-                return teamRepository;
-            }
-        }
-
-        public IRepository<Result> Results
-        {
-            get
-            {
-                if (resultRepository == null)
-                    resultRepository = new ResultRepository(db);
-                return resultRepository;
-            }
-        }
-
-        public IRepository<CompetitionEvent> CompetitionEvents
-        {
-            get
-            {
-                if (competitionEventRepository == null)
-                    competitionEventRepository = new CompetitionEventRepository(db);
-                return competitionEventRepository;
-            }
-        }
-        public void Save()
+        public void SaveChanges()
         {
             db.SaveChanges();
         }
