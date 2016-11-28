@@ -12,9 +12,19 @@ namespace JinnSports.DAL.EF
         public DbSet<SportType> SportTypes;
         public DbSet<Team> Teams;
 
+        public SportsContext() : base("SportsContext")
+        {
+            
+        }
+        public SportsContext(string connectionString)
+            : base(connectionString)
+        {
+
+        }
+
         static SportsContext()
         {
-            AppDomain.CurrentDomain.SetData("DataDirectory", System.IO.Directory.GetCurrentDirectory());
+           // AppDomain.CurrentDomain.SetData("DataDirectory", System.IO.Directory.GetCurrentDirectory());
             Database.SetInitializer<SportsContext>(new StoreDbInitializer());
         }
        

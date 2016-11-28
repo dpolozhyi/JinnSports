@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using JinnSports.DAL.Repositories;
 using JinnSports.DAL.Entities;
+using System.Data.SqlClient;
 
 namespace JinnSports.Parser.App
 {
@@ -9,7 +10,6 @@ namespace JinnSports.Parser.App
     {
         static void Main(string[] args)
         {
-            AppDomain.CurrentDomain.SetData("DataDirectory", System.IO.Directory.GetCurrentDirectory());
             EFUnitOfWork unitOfWork = new EFUnitOfWork();
                 Team t1 = new Team()
                 {

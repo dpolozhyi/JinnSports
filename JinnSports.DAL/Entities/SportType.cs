@@ -7,5 +7,7 @@ namespace JinnSports.DAL.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public virtual ICollection<Team> Teams { get; set; }
     }
 }
