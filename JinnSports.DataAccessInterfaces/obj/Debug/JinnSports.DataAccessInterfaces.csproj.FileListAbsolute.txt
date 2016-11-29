@@ -1,4 +1,0 @@
-D:\Work\SoftServe\JinnParser\JinnSports.DataAccessInterfaces\bin\Debug\JinnSports.DataAccessInterfaces.dll
-D:\Work\SoftServe\JinnParser\JinnSports.DataAccessInterfaces\bin\Debug\JinnSports.DataAccessInterfaces.pdb
-D:\Work\SoftServe\JinnParser\JinnSports.DataAccessInterfaces\obj\Debug\JinnSports.DataAccessInterfaces.dll
-D:\Work\SoftServe\JinnParser\JinnSports.DataAccessInterfaces\obj\Debug\JinnSports.DataAccessInterfaces.pdb
