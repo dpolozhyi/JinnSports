@@ -1,6 +1,6 @@
 ﻿using System;
 using JinnSports.DataAccessInterfaces;
-using JinnSports.DAL.EF;
+using JinnSports.DAL.EFContext;
 using JinnSports.DAL.Entities;
 
 namespace JinnSports.DAL.Repositories
@@ -8,10 +8,22 @@ namespace JinnSports.DAL.Repositories
     public class EFUnitOfWork : IUnitOfWork
     {
         private SportsContext db;
-        private IRepository<Team> Teams;
-        private IRepository<Result> Results;
-        private IRepository<CompetitionEvent> CompetitionEvents;
-        private IRepository<SportType> SportTypes;
+        public IRepository<Team> Teams
+        {
+            get;
+        }
+        public IRepository<Result> Results
+        {
+            get;
+        }
+        public IRepository<CompetitionEvent> CompetitionEvents
+        {
+            get;
+        }
+        public IRepository<SportType> SportTypes
+        {
+            get;
+        }
 
         public EFUnitOfWork()
         {
