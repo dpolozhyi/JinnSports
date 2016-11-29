@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using JinnSports.DAL.Entities;
 
-namespace JinnSports.DAL.EF
+namespace JinnSports.DAL.EFContext
 {
     public class SportsContext : DbContext
     {
@@ -12,7 +12,7 @@ namespace JinnSports.DAL.EF
         public DbSet<SportType> SportTypes;
         public DbSet<Team> Teams;
        
-        SportsContext() : base("SqlServerConnection")
+        public SportsContext() : base("SqlServerConnection")
         {
             AppDomain.CurrentDomain.SetData("DataDirectory", System.IO.Directory.GetCurrentDirectory());
         }

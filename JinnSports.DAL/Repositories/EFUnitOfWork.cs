@@ -1,6 +1,6 @@
 ﻿using System;
 using JinnSports.DataAccessInterfaces;
-using JinnSports.DAL.EF;
+using JinnSports.DAL.EFContext;
 using JinnSports.DAL.Entities;
 
 namespace JinnSports.DAL.Repositories

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JinnSports.DAL.EF;
+using JinnSports.DAL.EFContext;
 using JinnSports.DataAccessInterfaces;
 using System.Data.Entity;
 
