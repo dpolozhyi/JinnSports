@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using JinnSports.DAL.Entities;
+using JinnSports.Entities;
 
 namespace JinnSports.Parser.App.Interfaces
 {

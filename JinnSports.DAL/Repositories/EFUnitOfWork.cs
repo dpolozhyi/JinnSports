@@ -1,37 +1,22 @@
 ﻿using System;
 using JinnSports.DataAccessInterfaces;
 using JinnSports.DAL.EFContext;
-using JinnSports.DAL.Entities;
+using JinnSports.Entities;
 
 namespace JinnSports.DAL.Repositories
 {
     public class EFUnitOfWork : IUnitOfWork
     {
         private SportsContext db;
-        public IRepository<Team> Teams
-        {
-            get;
-        }
-        public IRepository<Result> Results
-        {
-            get;
-        }
-        public IRepository<CompetitionEvent> CompetitionEvents
-        {
-            get;
-        }
-        public IRepository<SportType> SportTypes
-        {
-            get;
-        }
-
+        
         public EFUnitOfWork()
         {
-            db = new SportsContext();
-            Teams = new BaseRepository<Team>(db.Teams);
-            Results = new BaseRepository<Result>(db.Results);
-            CompetitionEvents = new BaseRepository<CompetitionEvent>(db.CompetitionEvents);
-            SportTypes = new BaseRepository<SportType>(db.SportTypes);
+            db = new SportsContext();            
+        }
+
+        public IRepository<T> Set<T>() where T : class
+        {
+            return new BaseRepository<T>(db);
         }
 
         public void SaveChanges()
@@ -57,6 +42,6 @@ namespace JinnSports.DAL.Repositories
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-        }
+        }        
     }
 }

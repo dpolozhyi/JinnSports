@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.WEB", "JinnSports.WEB\JinnSports.WEB.csproj", "{A59B1364-9A21-427F-B869-DE3D3AC0D9F9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.BLL", "JinnSports.BLL\JinnSports.BLL.csproj", "{629F73E6-EACE-4DCF-AB1B-1488D3A9BFC9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.DAL", "JinnSports.DAL\JinnSports.DAL.csproj", "{BE36F33A-801A-4B21-8130-FF952C3A5F97}"
@@ -17,16 +15,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.UnitTests.BLL", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.UnitTests.DAL", "JinnSports.UnitTests.DAL\JinnSports.UnitTests.DAL.csproj", "{68527591-F6F1-4176-B12C-A3DD17CF4045}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.MVC", "JinnSports.MVC\JinnSports.MVC.csproj", "{7FBC63F1-9106-41DB-998A-0EE3791B072D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.Entities", "JinnSports.Entities\JinnSports.Entities.csproj", "{FE881C95-44B6-4C3B-8D18-906F050D3CBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A59B1364-9A21-427F-B869-DE3D3AC0D9F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A59B1364-9A21-427F-B869-DE3D3AC0D9F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A59B1364-9A21-427F-B869-DE3D3AC0D9F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A59B1364-9A21-427F-B869-DE3D3AC0D9F9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{629F73E6-EACE-4DCF-AB1B-1488D3A9BFC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{629F73E6-EACE-4DCF-AB1B-1488D3A9BFC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{629F73E6-EACE-4DCF-AB1B-1488D3A9BFC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +49,14 @@ Global
 		{68527591-F6F1-4176-B12C-A3DD17CF4045}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68527591-F6F1-4176-B12C-A3DD17CF4045}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68527591-F6F1-4176-B12C-A3DD17CF4045}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FBC63F1-9106-41DB-998A-0EE3791B072D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FBC63F1-9106-41DB-998A-0EE3791B072D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FBC63F1-9106-41DB-998A-0EE3791B072D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FBC63F1-9106-41DB-998A-0EE3791B072D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE881C95-44B6-4C3B-8D18-906F050D3CBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE881C95-44B6-4C3B-8D18-906F050D3CBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE881C95-44B6-4C3B-8D18-906F050D3CBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE881C95-44B6-4C3B-8D18-906F050D3CBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
