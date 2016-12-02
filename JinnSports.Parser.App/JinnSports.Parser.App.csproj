@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AngleSharp, Version=0.9.8.1, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea, processorArchitecture=MSIL">
+      <HintPath>..\packages\AngleSharp.0.9.8.1\lib\net45\AngleSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
@@ -55,8 +59,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HtmlParsers\HTMLParser24score.cs" />
     <Compile Include="Interfaces\ISaver.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="Interfaces\IWebConnection.cs" />
     <Compile Include="ProxyService\ProxyConnection\ProxyConnection.cs" />
     <Compile Include="ProxyService\ProxyInterfaces\IHtmlProxyServer.cs" />
     <Compile Include="ProxyService\ProxyInterfaces\IProxyRepository.cs" />
@@ -73,6 +79,8 @@
     <Compile Include="ProxyService\ProxyEntities\ProxyServer.cs" />
     <Compile Include="ProxyService\ProxyParser\ProxyParser.cs" />
     <Compile Include="ProxyService\ProxyRepository\ProxyRepository.cs" />
+    <Compile Include="WebConnection\WebConnection.cs" />
+    <Compile Include="WebConnection\WebProxyConnection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -94,7 +102,9 @@
       <Name>JinnSports.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="StyleCopReport.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\StyleCop.MSBuild.4.7.55.0\build\StyleCop.MSBuild.Targets" Condition="Exists('..\packages\StyleCop.MSBuild.4.7.55.0\build\StyleCop.MSBuild.Targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
