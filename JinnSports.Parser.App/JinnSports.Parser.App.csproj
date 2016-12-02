@@ -120,17 +120,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Target Name="StyleCop">
-    <!-- Create a collection of files to scan -->
-    <CreateItem Include="$(SourceFolder)\**\*.cs">
-      <Output TaskParameter="Include" ItemName="StyleCopFiles" />
-    </CreateItem>
-    <StyleCopTask ProjectFullPath="$(MSBuildProjectFile)" SourceFiles="@(StyleCopFiles)" ForceFullAnalysis="true" TreatErrorsAsWarnings="true" OutputFile="StyleCopReport.xml" CacheResults="true" />
-    <Xslt Inputs="StyleCopReport.xml" RootTag="StyleCopViolations" Xsl="tools\StyleCop\StyleCopReport.xsl" Output="StyleCopReport.html" />
-    <XmlRead XPath="count(//Violation)" XmlFileName="StyleCopReport.xml">
-      <Output TaskParameter="Value" PropertyName="StyleCopViolations" />
-    </XmlRead>
-    <UsingTask TaskName="StyleCopTask" AssemblyFile="$(StyleCopTasksPath)\Microsoft.StyleCop.dll" />
-    <!-- <Error Condition="$(StyleCopViolations) > 0" Text="StyleCop found $(StyleCopViolations) broken rules!" />-->
-  </Target>
 </Project>
