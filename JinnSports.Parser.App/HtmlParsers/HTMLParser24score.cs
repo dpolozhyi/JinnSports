@@ -1,16 +1,19 @@
-﻿using System;
+﻿using AngleSharp.Dom;
+using AngleSharp.Parser.Html;
+using JinnSports.DataAccessInterfaces;
+using JinnSports.Entities;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using JinnSports.DAL.Entities;
-using JinnSports.DataAccessInterfaces;
+using System.Text;
+using System.Threading.Tasks;
 
-
-namespace JinnSports.Parser.App
+namespace JinnSports.Parser.App.HtmlParsers
 {
     public class HTMLParser24score
-    { 
+    {
         public HTMLParser24score(IUnitOfWork unit)
         {
             this.Unit = unit;
@@ -44,7 +47,7 @@ namespace JinnSports.Parser.App
                     sport.Name = "Football";
                 }
 
-                this.Unit.SportTypes.Add(sport);
+                this.Unit.Set<SportType>().Add(sport);
                 DateTime now = DateTime.Now;
 
                 for (int i = 1; i < daysCount + 1; i++)
@@ -90,8 +93,10 @@ namespace JinnSports.Parser.App
                         }
 
                         Result result2 = new Result() { Team = t2, CompetitionEvent = c, Score = score2 };
-                        this.Unit.Results.Add(result1);
-                        this.Unit.Results.Add(result2);
+
+                        this.Unit.Set<Result>().Add(result1);
+                        this.Unit.Set<Result>().Add(result2);
+                        this.Unit.SaveChanges();
                     }
                 }
 
