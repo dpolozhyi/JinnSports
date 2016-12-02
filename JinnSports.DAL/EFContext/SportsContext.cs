@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using JinnSports.DAL.Entities;
+using JinnSports.Entities;
 
 namespace JinnSports.DAL.EFContext
 {

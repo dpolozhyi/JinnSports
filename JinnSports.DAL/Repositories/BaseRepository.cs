@@ -11,22 +11,17 @@ namespace JinnSports.DAL.Repositories
     { 
         private DbSet<T> dbSet;
 
-        public BaseRepository()
+        public BaseRepository(SportsContext db)
         {
-            
-        }
-
-        public BaseRepository(DbSet<T> DbSet)
-        {
-            this.dbSet = DbSet;
-        }
+            dbSet = db.Set<T>();
+        }        
 
         public IList<T> GetAll()
         {
             return dbSet.ToList();
         }
 
-        public T Get(int id)
+        public T GetByID(int id)
         {
             return dbSet.Find(id);
         }
