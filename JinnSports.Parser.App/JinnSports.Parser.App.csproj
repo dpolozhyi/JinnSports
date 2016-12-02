@@ -55,9 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="htmlParser\Class1.cs" />
     <Compile Include="Interfaces\ISaver.cs" />
-    <Compile Include="ConfigSections.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="ProxyService\ProxyConnection\ProxyConnection.cs" />
     <Compile Include="ProxyService\ProxyInterfaces\IHtmlProxyServer.cs" />
     <Compile Include="ProxyService\ProxyInterfaces\IProxyRepository.cs" />
@@ -94,9 +93,6 @@
       <Project>{fe881c95-44b6-4c3b-8d18-906f050d3cbb}</Project>
       <Name>JinnSports.Entities</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

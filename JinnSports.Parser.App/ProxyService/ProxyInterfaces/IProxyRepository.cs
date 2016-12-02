@@ -13,6 +13,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyInterfaces
         void Clear();
         int Count();
         void Add(T proxy);
+        void Add(List<T> proxyList);
         List<T> GetAll();
         bool isAvaliable(T proxy);
         bool Contains(string ip);

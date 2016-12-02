@@ -14,13 +14,14 @@ namespace JinnSports.Parser.App
     {
         static void Main(string[] args)
         {
-           // ProxyParser pp = new ProxyParser();
-            //pp.UpdateData(true);
+            ProxyParser pp = new ProxyParser();
+            pp.UpdateData(true, "http://foxtools.ru/Proxy");
             //pp.UpdateData();
-            //ProxyConnection pc = new ProxyConnection();
-            //string proxy = pc.GetProxy();
-            //pc.SetStatus(proxy, true);
+            ProxyConnection pc = new ProxyConnection();
+            string proxy = pc.GetProxy();
+            pc.SetStatus(proxy, true);
             //string a = ConfigSection.XmlPath();
+            string path = ConfigSettings.Xml();
         }
     }
 }

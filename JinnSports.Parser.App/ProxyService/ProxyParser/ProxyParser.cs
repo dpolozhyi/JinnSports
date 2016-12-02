@@ -6,32 +6,34 @@ using System.Net;
 using System.IO;
 using HtmlAgilityPack;
 using System.Globalization;
+using System.Collections.Generic;
 
 namespace JinnSports.Parser.App.ProxyService.ProxyParser
 {
     public class ProxyParser
     {
-        public void UpdateData(bool clearData)
+        public void UpdateData(bool clearData, string url)
         {
-            ProxyRepository<ProxyServer> writer = new ProxyRepository<ProxyServer>("proxy.xml");
+            ProxyRepository<ProxyServer> writer = new ProxyRepository<ProxyServer>();
             if (clearData)
             {
                 writer.Clear();
             }
-            HtmlProxyServerCollection service_proxies = GetProxiesFromService("http://foxtools.ru/Proxy");
+            HtmlProxyServerCollection service_proxies = GetProxiesFromService(url);
             SaveProxiesToXml(service_proxies);
         }
-        public void UpdateData()
+        public void UpdateData(string url)
         {
-            HtmlProxyServerCollection service_proxies = GetProxiesFromService("http://foxtools.ru/Proxy");
+            HtmlProxyServerCollection service_proxies = GetProxiesFromService(url);
             SaveProxiesToXml(service_proxies);
         }
         private void SaveProxiesToXml(HtmlProxyServerCollection service_proxies)
         {
+            ProxyRepository<ProxyServer> xmlWriter = new ProxyRepository<ProxyServer>();
+            List<ProxyServer> proxyCollection = new List<ProxyServer>();
             DateTime defaultLastUsed = DateTime.Now.AddMinutes(-20);
             foreach (HtmlProxyServer service_proxy in service_proxies.HtmlProxies)
             {
-                ProxyRepository<ProxyServer> xmlWriter = new ProxyRepository<ProxyServer>("proxy.xml");
                 ProxyServer proxy = new ProxyServer();
                 if (!xmlWriter.Contains(service_proxy.Ip))
                 {
@@ -48,9 +50,10 @@ namespace JinnSports.Parser.App.ProxyService.ProxyParser
                     proxy.Ip = service_proxy.Ip;
                     proxy.LastUsed = defaultLastUsed;
                     //здесь приоритет будет 1 также если низкая защищенность, после разбора кодировки
-                    xmlWriter.Add(proxy);
+                    proxyCollection.Add(proxy);
                 }
             }
+            xmlWriter.Add(proxyCollection);
         }
         private HtmlProxyServerCollection GetProxiesFromService(string url)
         {
@@ -87,18 +90,18 @@ namespace JinnSports.Parser.App.ProxyService.ProxyParser
                 HtmlNode doc_proxyArea = doc.DocumentNode.SelectSingleNode("//table/tbody");
                 try
                 {
-                    //int a = 0;
+                    int a = 0;
                     foreach (HtmlNode doc_lineNode in doc_proxyArea.SelectNodes("tr"))
                     {
                         //test
-                        /* {
-                              if (a == 16)
-                              {
-                                  lastPage = true;
-                                  break;
-                              }
-                              a++;
-                          }*/
+                        {
+                            if (a == 8)
+                            {
+                                lastPage = true;
+                                break;
+                            }
+                            a++;
+                        }
                         HtmlNodeCollection doc_proxyLine = doc_lineNode.SelectNodes("td");
 
                         //Entity's object formation

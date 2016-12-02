@@ -13,9 +13,9 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
         private XmlSerializer xmlSerializer;
         private string path;
 
-        public ProxyRepository(string path)
+        public ProxyRepository()
         {
-            this.path = path;
+            this.path = "../../" + ConfigSettings.Xml();
             xmlSerializer = new XmlSerializer(typeof(List<ProxyServer>));
         }
         public void Delete(string ip)
@@ -101,6 +101,29 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
                 xmlReader.Close();
             }
             proxyCollection.Add(proxy);
+            TextWriter xmlWriter = new StreamWriter(path);
+            xmlSerializer.Serialize(xmlWriter, proxyCollection);
+            xmlWriter.Close();
+        }
+        public void Add(List<T> proxyList)
+        {
+            List<T> proxyCollection = new List<T>();
+            TextReader xmlReader = new StreamReader(path);
+            try
+            {
+                proxyCollection = (List<T>)xmlSerializer.Deserialize(xmlReader);
+            }
+            catch
+            {
+            }
+            finally
+            {
+                xmlReader.Close();
+            }
+            foreach (T proxy in proxyList)
+            {
+                proxyCollection.Add(proxy);
+            }
             TextWriter xmlWriter = new StreamWriter(path);
             xmlSerializer.Serialize(xmlWriter, proxyCollection);
             xmlWriter.Close();

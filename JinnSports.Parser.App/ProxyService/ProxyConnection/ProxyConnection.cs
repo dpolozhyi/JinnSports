@@ -10,7 +10,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyConnection
     {
         public void SetStatus(string ip, bool connected)
         {
-            ProxyRepository<ProxyServer> xmlWriter = new ProxyRepository<ProxyServer>("proxy.xml");
+            ProxyRepository<ProxyServer> xmlWriter = new ProxyRepository<ProxyServer>();
             List<ProxyServer> proxyCollection = xmlWriter.GetAll();
             ProxyServer proxy = proxyCollection.Where(x => x.Ip == ip).FirstOrDefault();
             try
@@ -64,7 +64,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyConnection
         }
         public string GetProxy()
         {
-            ProxyRepository<ProxyServer> xmlWriter = new ProxyRepository<ProxyServer>("proxy.xml");
+            ProxyRepository<ProxyServer> xmlWriter = new ProxyRepository<ProxyServer>();
             List<ProxyServer> proxyCollection = xmlWriter.GetAll();
             List<ProxyServer> usableProxies = proxyCollection.Where(x => x.Priority == 0 && xmlWriter.isAvaliable(x)).ToList();
             if (usableProxies.Count == 0)
