@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using JinnSports.Parser.App.ProxyService.ProxyRepository;
-using JinnSports.Parser.App.ProxyService.ProxyEnities;
 using System.Net;
 using System.IO;
 using HtmlAgilityPack;
 using System.Globalization;
 using System.Collections.Generic;
+using JinnSports.Parser.App.ProxyService.ProxyEntities;
 
 namespace JinnSports.Parser.App.ProxyService.ProxyParser
 {
@@ -19,13 +19,13 @@ namespace JinnSports.Parser.App.ProxyService.ProxyParser
             {
                 writer.Clear();
             }
-            HtmlProxyServerCollection service_proxies = GetProxiesFromService(url);
-            SaveProxiesToXml(service_proxies);
+            HtmlProxyServerCollection service_proxies = this.GetProxiesFromService(url);
+            this.SaveProxiesToXml(service_proxies);
         }
         public void UpdateData(string url)
         {
-            HtmlProxyServerCollection service_proxies = GetProxiesFromService(url);
-            SaveProxiesToXml(service_proxies);
+            HtmlProxyServerCollection service_proxies = this.GetProxiesFromService(url);
+            this.SaveProxiesToXml(service_proxies);
         }
         private void SaveProxiesToXml(HtmlProxyServerCollection service_proxies)
         {
@@ -66,7 +66,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyParser
             bool lastPage = false;
             while (!lastPage)
             {
-                string result = "";
+                string result = string.Empty;
                 //проход по всему сайту
                 req = (HttpWebRequest)WebRequest.Create(url + "?page=" + page++);
 
@@ -79,10 +79,14 @@ namespace JinnSports.Parser.App.ProxyService.ProxyParser
                 req.Headers.Set(HttpRequestHeader.ContentEncoding, "utf-8");
                 resp = (HttpWebResponse)req.GetResponse();
                 stream = resp.GetResponseStream();
-                for (int i = 1; ; i++)
+
+                for (int i = 1;; i++)
                 {
                     ch = stream.ReadByte();
-                    if (ch == -1) break;
+                    if (ch == -1)
+                    {
+                        break;
+                    }
                     result += (char)ch;
                 }
                 HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();

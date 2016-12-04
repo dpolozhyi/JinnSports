@@ -1,14 +1,9 @@
 ﻿using System;
-using JinnSports.Parser.App.ProxyService.ProxyInterfaces;
 using System.Xml.Serialization;
+using JinnSports.Parser.App.ProxyService.ProxyInterfaces;
 
-namespace JinnSports.Parser.App.ProxyService.ProxyEnities
+namespace JinnSports.Parser.App.ProxyService.ProxyEntities
 {
-    public abstract class BaseProxyServer
-    {
-        [XmlElement]
-        public string Ip { get; set; }
-    }
     [Serializable]
     public class ProxyServer : BaseProxyServer, IProxyServer
     {

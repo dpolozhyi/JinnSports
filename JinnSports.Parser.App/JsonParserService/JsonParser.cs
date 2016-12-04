@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using JinnSports.Entities;
 using JinnSports.DAL.Repositories;
@@ -15,34 +13,38 @@ namespace JinnSports.Parser.App.JsonParserService
 {
     public class JsonParser : ISaver
     {
-        public Uri FonbetUri { get; private set; }
-
         private EFUnitOfWork uow;
-
+        
         public JsonParser()
         {
-            FonbetUri = new Uri("http://results.fbwebdn.com/results.json.php");
-            uow = new EFUnitOfWork();
+            this.FonbetUri = new Uri("http://results.fbwebdn.com/results.json.php");
+            this.uow = new EFUnitOfWork("SportsContext");
         }
+        public Uri FonbetUri { get; private set; }
 
         public string GetJsonFromUrl()
         {
-            return this.GetJsonFromUrl(FonbetUri);
+            return this.GetJsonFromUrl(this.FonbetUri);
         }
 
         public string GetJsonFromUrl(Uri uri)
         {
             int ch;
-            string result = "";
+            string result = string.Empty;
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create("http://results.fbwebdn.com/results.json.php");
             HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
             Stream stream = resp.GetResponseStream();
-            for (int i = 1; ; i++)
+
+            for (int i = 1;; i++)
             {
                 ch = stream.ReadByte();
-                if (ch == -1) break;
+                if (ch == -1)
+                {
+                    break;
+                }
                 result += (char)ch;
             }
+
             resp.Close();
             return result;
         }
@@ -60,12 +62,12 @@ namespace JinnSports.Parser.App.JsonParserService
             {
                 Team team1 = new Team() { Results = new List<Result>() };
                 Team team2 = new Team() { Results = new List<Result>() };
-                if (GetTeamsFromEvent(e, team1, team2))
+                if (this.GetTeamsFromEvent(e, team1, team2))
                 {
                     SportType sportType = new SportType() { Teams = new List<Team>() };
                     Result resTeam1 = new Result();
                     Result resTeam2 = new Result();
-                    CompetitionEvent compEvent = new CompetitionEvent() { Date = GetEventDate(e), Results = new List<Result>() };
+                    CompetitionEvent compEvent = new CompetitionEvent() { Date = this.GetEventDate(e), Results = new List<Result>() };
 
                     var sports = result.Sections.Where(n => n.Events.Contains(e.Id)).Select(n => n).ToList();
                     sportType.Name = result.Sports.Where(n => n.Id == sports[0].Sport).Select(n => n).ToList()[0].Name;
@@ -75,8 +77,8 @@ namespace JinnSports.Parser.App.JsonParserService
                     team1.SportType = sportType;
                     team2.SportType = sportType;
 
-                    GetResultFromEvent(e, resTeam1, team1, false);
-                    GetResultFromEvent(e, resTeam2, team2, true);
+                    this.GetResultFromEvent(e, resTeam1, team1, false);
+                    this.GetResultFromEvent(e, resTeam2, team2, true);
                     resTeam1.CompetitionEvent = compEvent;
                     resTeam2.CompetitionEvent = compEvent;
 
@@ -91,15 +93,6 @@ namespace JinnSports.Parser.App.JsonParserService
                 }
             }
             return resultList;
-        }
-
-        private DateTime GetEventDate(Event ev)
-        {
-            int startTime = (int)ev.StartTime;
-            int hour, min;
-            hour = (startTime / 60 / 60) % 24;
-            min = (startTime / 60) % 60;
-            return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, min, 0);
         }
 
         public void GetResultFromEvent(Event ev, Result res, Team team, bool invertScore)
@@ -123,7 +116,7 @@ namespace JinnSports.Parser.App.JsonParserService
             else
             {
                 string[] scores = mainScore.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                res.Score = String.Format("{0}:{1}", scores[1], scores[0]);
+                res.Score = string.Format("{0}:{1}", scores[1], scores[0]);
             }
         }
 
@@ -145,6 +138,15 @@ namespace JinnSports.Parser.App.JsonParserService
         public void DBSaveChanges(List<Result> results)
         {
             //uow.Results.AddAll(results.ToArray());
+        }
+
+        private DateTime GetEventDate(Event ev)
+        {
+            int startTime = (int)ev.StartTime;
+            int hour, min;
+            hour = (startTime / 60 / 60) % 24;
+            min = (startTime / 60) % 60;
+            return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, min, 0);
         }
     }
 }

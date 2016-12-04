@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace JinnSports.DataAccessInterfaces
+namespace JinnSports.DataAccessInterfaces.Interfaces
 {
     public interface IRepository<T> where T : class
     {

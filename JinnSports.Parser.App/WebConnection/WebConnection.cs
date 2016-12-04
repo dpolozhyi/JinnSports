@@ -1,14 +1,9 @@
-﻿using JinnSports.Parser.App.Inerfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net;
+﻿using System.Net;
+using JinnSports.Parser.App.Interfaces;
 
 namespace JinnSports.Parser.App.WebConnection
 {
-    class WebConnection : IWebConnection
+    public class WebConnection : IWebConnection
     {
         private string url;
         private string encoding = "utf-8";
@@ -20,8 +15,8 @@ namespace JinnSports.Parser.App.WebConnection
 
         public WebResponse GetResponse()
         {
-            WebRequest request = WebRequest.Create(url);
-            request.Headers.Set(HttpRequestHeader.ContentEncoding, encoding);
+            WebRequest request = WebRequest.Create(this.url);
+            request.Headers.Set(HttpRequestHeader.ContentEncoding, this.encoding);
             return request.GetResponse();
         }
 
