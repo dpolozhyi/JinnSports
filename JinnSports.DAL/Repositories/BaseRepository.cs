@@ -1,44 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using JinnSports.DAL.EFContext;
-using JinnSports.DataAccessInterfaces;
 using System.Data.Entity;
+using JinnSports.DataAccessInterfaces.Interfaces;
 
 namespace JinnSports.DAL.Repositories
 {
     public class BaseRepository<T> : IRepository<T> where T : class
     { 
-        private DbSet<T> dbSet;
-
         public BaseRepository(SportsContext db)
         {
-            dbSet = db.Set<T>();
-        }        
+            this.DbSet = db.Set<T>();
+        }
+        private DbSet<T> DbSet { get; }
 
         public IList<T> GetAll()
         {
-            return dbSet.ToList();
+            return this.DbSet.ToList();
         }
 
         public T GetByID(int id)
         {
-            return dbSet.Find(id);
+            return this.DbSet.Find(id);
         }
 
         public void Add(T item)
         {
-            dbSet.Add(item);
+            this.DbSet.Add(item);
         }
 
         public void AddAll(T[] items)
         {
-            dbSet.AddRange(items);
+            this.DbSet.AddRange(items);
         }
 
         public void Remove(T item)
         {
-            dbSet.Remove(item);
+            this.DbSet.Remove(item);
         }
     }
 }

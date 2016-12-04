@@ -63,7 +63,12 @@
     <Compile Include="Interfaces\ISaver.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Interfaces\IWebConnection.cs" />
+    <Compile Include="MyConfigInstanceCollection.cs" />
+    <Compile Include="MyConfigInstanceElement.cs" />
+    <Compile Include="MyConfigSection.cs" />
     <Compile Include="ProxyService\ProxyConnection\ProxyConnection.cs" />
+    <Compile Include="ProxyService\ProxyEntities\BaseProxyServer.cs" />
+    <Compile Include="ProxyService\ProxyEntities\HtmlProxyServerCollection.cs" />
     <Compile Include="ProxyService\ProxyInterfaces\IHtmlProxyServer.cs" />
     <Compile Include="ProxyService\ProxyInterfaces\IProxyRepository.cs" />
     <Compile Include="ProxyService\ProxyInterfaces\IProxyServer.cs" />

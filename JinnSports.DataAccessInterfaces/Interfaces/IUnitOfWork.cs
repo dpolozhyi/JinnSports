@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace JinnSports.DataAccessInterfaces
+namespace JinnSports.DataAccessInterfaces.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {

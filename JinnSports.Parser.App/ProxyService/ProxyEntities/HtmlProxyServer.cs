@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using JinnSports.Parser.App.ProxyService.ProxyInterfaces;
+﻿using JinnSports.Parser.App.ProxyService.ProxyInterfaces;
 
-namespace JinnSports.Parser.App.ProxyService.ProxyEnities
+namespace JinnSports.Parser.App.ProxyService.ProxyEntities
 {
     public class HtmlProxyServer : IHtmlProxyServer
     {
@@ -14,13 +9,5 @@ namespace JinnSports.Parser.App.ProxyService.ProxyEnities
         public string Anonymity { get; set; }
         public string Type { get; set; }
         public double Ping { get; set; }
-    }
-    public class HtmlProxyServerCollection
-    {
-        public HtmlProxyServerCollection()
-        {
-            HtmlProxies = new List<HtmlProxyServer>();
-        }
-        public List<HtmlProxyServer> HtmlProxies { get; set; }
     }
 }

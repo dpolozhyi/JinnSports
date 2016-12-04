@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JinnSports.Parser.App.ProxyService.ProxyEntities;
 using JinnSports.Parser.App.ProxyService.ProxyRepository;
-using JinnSports.Parser.App.ProxyService.ProxyEnities;
 
 namespace JinnSports.Parser.App.ProxyService.ProxyConnection
 {
@@ -66,13 +66,13 @@ namespace JinnSports.Parser.App.ProxyService.ProxyConnection
         {
             ProxyRepository<ProxyServer> xmlWriter = new ProxyRepository<ProxyServer>();
             List<ProxyServer> proxyCollection = xmlWriter.GetAll();
-            List<ProxyServer> usableProxies = proxyCollection.Where(x => x.Priority == 0 && xmlWriter.isAvaliable(x)).ToList();
+            List<ProxyServer> usableProxies = proxyCollection.Where(x => x.Priority == 0 && xmlWriter.IsAvaliable(x)).ToList();
             if (usableProxies.Count == 0)
             {
-                usableProxies = proxyCollection.Where(x => x.Priority == 1 && xmlWriter.isAvaliable(x)).ToList();
+                usableProxies = proxyCollection.Where(x => x.Priority == 1 && xmlWriter.IsAvaliable(x)).ToList();
                 if (usableProxies.Count == 0)
                 {
-                    usableProxies = proxyCollection.Where(x => x.Priority == 2 && xmlWriter.isAvaliable(x)).ToList();
+                    usableProxies = proxyCollection.Where(x => x.Priority == 2 && xmlWriter.IsAvaliable(x)).ToList();
                 }
             }
             try
@@ -84,7 +84,8 @@ namespace JinnSports.Parser.App.ProxyService.ProxyConnection
             {
                 System.Console.WriteLine(e.Message);
             }
-            return "";
+            return string.Empty;
         }
     }
 }
+

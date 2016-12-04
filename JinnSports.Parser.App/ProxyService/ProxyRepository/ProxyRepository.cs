@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using System.IO;
+using JinnSports.Parser.App.ProxyService.ProxyEntities;
 using JinnSports.Parser.App.ProxyService.ProxyInterfaces;
-using JinnSports.Parser.App.ProxyService.ProxyEnities;
 
 namespace JinnSports.Parser.App.ProxyService.ProxyRepository
 {
@@ -16,15 +16,15 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
         public ProxyRepository()
         {
             this.path = "../../" + ConfigSettings.Xml();
-            xmlSerializer = new XmlSerializer(typeof(List<ProxyServer>));
+            this.xmlSerializer = new XmlSerializer(typeof(List<ProxyServer>));
         }
         public void Delete(string ip)
         {
             List<T> proxyCollection = new List<T>();
-            TextReader xmlReader = new StreamReader(path);
+            TextReader xmlReader = new StreamReader(this.path);
             try
             {
-                proxyCollection = (List<T>)xmlSerializer.Deserialize(xmlReader);
+                proxyCollection = (List<T>)this.xmlSerializer.Deserialize(xmlReader);
             }
             catch
             {
@@ -34,17 +34,17 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
                 xmlReader.Close();
             }
             proxyCollection.Remove(proxyCollection.FirstOrDefault(x => x.Ip == ip));
-            TextWriter xmlWriter = new StreamWriter(path);
-            xmlSerializer.Serialize(xmlWriter, proxyCollection);
+            TextWriter xmlWriter = new StreamWriter(this.path);
+            this.xmlSerializer.Serialize(xmlWriter, proxyCollection);
             xmlWriter.Close();
         }
         public void Modify(T proxy)
         {
             List<T> proxyCollection = new List<T>();
-            TextReader xmlReader = new StreamReader(path);
+            TextReader xmlReader = new StreamReader(this.path);
             try
             {
-                proxyCollection = (List<T>)xmlSerializer.Deserialize(xmlReader);
+                proxyCollection = (List<T>)this.xmlSerializer.Deserialize(xmlReader);
             }
             catch
             {
@@ -56,24 +56,24 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
             int index = proxyCollection.FindIndex(x => x.Ip == proxy.Ip);
             proxyCollection.RemoveAt(index);
             proxyCollection.Insert(index, proxy);
-            TextWriter xmlWriter = new StreamWriter(path);
-            xmlSerializer.Serialize(xmlWriter, proxyCollection);
+            TextWriter xmlWriter = new StreamWriter(this.path);
+            this.xmlSerializer.Serialize(xmlWriter, proxyCollection);
             xmlWriter.Close();
         }
         public void Clear()
         {
             List<T> proxyCollection = new List<T>();
-            TextWriter xmlWriter = new StreamWriter(path);
-            xmlSerializer.Serialize(xmlWriter, proxyCollection);
+            TextWriter xmlWriter = new StreamWriter(this.path);
+            this.xmlSerializer.Serialize(xmlWriter, proxyCollection);
             xmlWriter.Close();
         }
         public int Count()
         {
             List<T> proxyCollection = new List<T>();
-            TextReader xmlReader = new StreamReader(path);
+            TextReader xmlReader = new StreamReader(this.path);
             try
             {
-                proxyCollection = (List<T>)xmlSerializer.Deserialize(xmlReader);
+                proxyCollection = (List<T>)this.xmlSerializer.Deserialize(xmlReader);
             }
             catch
             {
@@ -88,10 +88,10 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
         public void Add(T proxy)
         {
             List<T> proxyCollection = new List<T>();
-            TextReader xmlReader = new StreamReader(path);
+            TextReader xmlReader = new StreamReader(this.path);
             try
             {
-                proxyCollection = (List<T>)xmlSerializer.Deserialize(xmlReader);
+                proxyCollection = (List<T>)this.xmlSerializer.Deserialize(xmlReader);
             }
             catch
             {
@@ -101,17 +101,17 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
                 xmlReader.Close();
             }
             proxyCollection.Add(proxy);
-            TextWriter xmlWriter = new StreamWriter(path);
-            xmlSerializer.Serialize(xmlWriter, proxyCollection);
+            TextWriter xmlWriter = new StreamWriter(this.path);
+            this.xmlSerializer.Serialize(xmlWriter, proxyCollection);
             xmlWriter.Close();
         }
         public void Add(List<T> proxyList)
         {
             List<T> proxyCollection = new List<T>();
-            TextReader xmlReader = new StreamReader(path);
+            TextReader xmlReader = new StreamReader(this.path);
             try
             {
-                proxyCollection = (List<T>)xmlSerializer.Deserialize(xmlReader);
+                proxyCollection = (List<T>)this.xmlSerializer.Deserialize(xmlReader);
             }
             catch
             {
@@ -124,17 +124,17 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
             {
                 proxyCollection.Add(proxy);
             }
-            TextWriter xmlWriter = new StreamWriter(path);
-            xmlSerializer.Serialize(xmlWriter, proxyCollection);
+            TextWriter xmlWriter = new StreamWriter(this.path);
+            this.xmlSerializer.Serialize(xmlWriter, proxyCollection);
             xmlWriter.Close();
         }
         public List<T> GetAll()
         {
             List<T> proxyCollection = new List<T>();
-            TextReader xmlReader = new StreamReader(path);
+            TextReader xmlReader = new StreamReader(this.path);
             try
             {
-                proxyCollection = (List<T>)xmlSerializer.Deserialize(xmlReader);
+                proxyCollection = (List<T>)this.xmlSerializer.Deserialize(xmlReader);
             }
             catch
             {
@@ -145,10 +145,11 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
             }
             return proxyCollection;
         }
-        public bool isAvaliable(T proxy)
+        public bool IsAvaliable(T proxy)
         {
             TimeSpan timeDifference = DateTime.Now.TimeOfDay - proxy.LastUsed.TimeOfDay;
-            if (Math.Abs(timeDifference.Seconds + timeDifference.Minutes * 60 + timeDifference.Hours * 3600 + timeDifference.Days * 3600 * 24) >= 20 * 60)
+            var proxyTimeout = timeDifference.Seconds + (timeDifference.Minutes * 60) + (timeDifference.Hours * 3600) + (timeDifference.Days * 3600 * 24);
+            if (Math.Abs(proxyTimeout) >= 20 * 60)
             {
                 return true;
             }
@@ -160,10 +161,10 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
         public bool Contains(string ip)
         {
             List<T> proxyCollection = new List<T>();
-            TextReader xmlReader = new StreamReader(path);
+            TextReader xmlReader = new StreamReader(this.path);
             try
             {
-                proxyCollection = (List<T>)xmlSerializer.Deserialize(xmlReader);
+                proxyCollection = (List<T>)this.xmlSerializer.Deserialize(xmlReader);
             }
             catch
             {

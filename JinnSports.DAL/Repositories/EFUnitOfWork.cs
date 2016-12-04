@@ -1,30 +1,29 @@
 ﻿using System;
-using JinnSports.DataAccessInterfaces;
+using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.DAL.EFContext;
-using JinnSports.Entities;
 
 namespace JinnSports.DAL.Repositories
 {
     public class EFUnitOfWork : IUnitOfWork
     {
         private SportsContext db;
-        
-        public EFUnitOfWork()
+
+        private bool disposed = false;
+
+        public EFUnitOfWork(string connectionString)
         {
-            db = new SportsContext();            
+            this.db = new SportsContext(connectionString);            
         }
 
         public IRepository<T> Set<T>() where T : class
         {
-            return new BaseRepository<T>(db);
+            return new BaseRepository<T>(this.db);
         }
 
         public void SaveChanges()
         {
-            db.SaveChanges();
+            this.db.SaveChanges();
         }
-
-        private bool disposed = false;
 
         public virtual void Dispose(bool disposing)
         {
@@ -32,7 +31,7 @@ namespace JinnSports.DAL.Repositories
             {
                 if (disposing)
                 {
-                    db.Dispose();
+                    this.db.Dispose();
                 }
                 this.disposed = true;
             }
@@ -40,7 +39,7 @@ namespace JinnSports.DAL.Repositories
 
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }        
     }
