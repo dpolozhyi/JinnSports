@@ -54,6 +54,8 @@ namespace JinnSports.BLL.Service
                 cEvent.Result = competitionEventResult;
                 events.Add(cEvent);
             }
+
+            dataUnit.Dispose();
             return events;
         }
     }
