@@ -13,10 +13,11 @@ namespace JinnSports.Parser.App.HtmlParsers
     {
         public HTMLParser24score(IUnitOfWork unit)
         {
-            this.Unit = unit;
+            this.Unit = unit;            
         }
 
         public IUnitOfWork Unit { get; private set; }
+        public uint DaysCount { get; set; }
 
         public void Parse(uint daysCount = 1)
         {

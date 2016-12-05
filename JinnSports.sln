@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.BLL", "JinnSport
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.DAL", "JinnSports.DAL\JinnSports.DAL.csproj", "{BE36F33A-801A-4B21-8130-FF952C3A5F97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.Parser.App", "JinnSports.Parser.App\JinnSports.Parser.App.csproj", "{C5F8DE8E-BEA1-4A55-A0B4-1190EEE9D017}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.DataAccessInterfaces", "JinnSports.DataAccessInterfaces\JinnSports.DataAccessInterfaces.csproj", "{07107E13-6DDF-47AF-90BC-FB344B060511}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.UnitTests.BLL", "JinnSports.UnitTests.BLL\JinnSports.UnitTests.BLL.csproj", "{64663BB2-1170-4956-92EF-A2DC80F72CF7}"
@@ -16,8 +14,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.UnitTests.DAL", "JinnSports.UnitTests.DAL\JinnSports.UnitTests.DAL.csproj", "{68527591-F6F1-4176-B12C-A3DD17CF4045}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.Entities", "JinnSports.Entities\JinnSports.Entities.csproj", "{FE881C95-44B6-4C3B-8D18-906F050D3CBB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JinnSports.WEB", "JinnSports.WEB\JinnSports.WEB.csproj", "{60699990-4981-4AE2-8043-8120D0AE8249}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +29,6 @@ Global
 		{BE36F33A-801A-4B21-8130-FF952C3A5F97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE36F33A-801A-4B21-8130-FF952C3A5F97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE36F33A-801A-4B21-8130-FF952C3A5F97}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C5F8DE8E-BEA1-4A55-A0B4-1190EEE9D017}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C5F8DE8E-BEA1-4A55-A0B4-1190EEE9D017}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C5F8DE8E-BEA1-4A55-A0B4-1190EEE9D017}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C5F8DE8E-BEA1-4A55-A0B4-1190EEE9D017}.Release|Any CPU.Build.0 = Release|Any CPU
 		{07107E13-6DDF-47AF-90BC-FB344B060511}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{07107E13-6DDF-47AF-90BC-FB344B060511}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07107E13-6DDF-47AF-90BC-FB344B060511}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,10 +45,6 @@ Global
 		{FE881C95-44B6-4C3B-8D18-906F050D3CBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE881C95-44B6-4C3B-8D18-906F050D3CBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE881C95-44B6-4C3B-8D18-906F050D3CBB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{60699990-4981-4AE2-8043-8120D0AE8249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{60699990-4981-4AE2-8043-8120D0AE8249}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{60699990-4981-4AE2-8043-8120D0AE8249}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{60699990-4981-4AE2-8043-8120D0AE8249}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
