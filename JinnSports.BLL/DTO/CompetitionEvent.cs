@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JinnSports.BLL.DTO
 {
-    public class CompetitionEvent
+    class CompetitionEvent
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
