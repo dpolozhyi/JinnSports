@@ -7,20 +7,34 @@ using Newtonsoft.Json;
 using JinnSports.Entities;
 using JinnSports.DAL.Repositories;
 using JinnSports.Parser.App.Interfaces;
-using JinnSports.Parser.App.JsonParserService.JsonEntities;
+using JinnSports.Parser.App.JsonParsers.JsonEntities;
+using JinnSports.Parser.App.ProxyService.ProxyParser;
+using JinnSports.Parser.App.ProxyService.ProxyConnection;
+using log4net;
+using log4net.Config;
 
-namespace JinnSports.Parser.App.JsonParserService
+namespace JinnSports.Parser.App.JsonParsers
 {
     public class JsonParser : ISaver
     {
+        public static readonly ILog log = LogManager.GetLogger(typeof(JsonParser));
+
         private EFUnitOfWork uow;
-        
+
         public JsonParser()
         {
             this.FonbetUri = new Uri("http://results.fbwebdn.com/results.json.php");
             this.uow = new EFUnitOfWork("SportsContext");
+            XmlConfigurator.Configure();
         }
         public Uri FonbetUri { get; private set; }
+
+        public void StartJsonParser()
+        {
+            JsonResult jResults = this.DeserializeJson(this.GetJsonFromUrl(this.FonbetUri));
+            List<Result> res = this.GetResultsList(jResults);
+            this.DBSaveChanges(res);
+        }
 
         public string GetJsonFromUrl()
         {
@@ -29,29 +43,55 @@ namespace JinnSports.Parser.App.JsonParserService
 
         public string GetJsonFromUrl(Uri uri)
         {
-            int ch;
-            string result = string.Empty;
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create("http://results.fbwebdn.com/results.json.php");
-            HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
-            Stream stream = resp.GetResponseStream();
+            return this.GetJsonFromUrl(this.FonbetUri,null);
+        }
 
-            for (int i = 1;; i++)
+        public string GetJsonFromUrl(Uri uri, string proxy)
+        {
+            ProxyConnection pc = new ProxyConnection();
+            while (true)
             {
-                ch = stream.ReadByte();
-                if (ch == -1)
+                proxy = pc.GetProxy();
+                if (pc.CanPing(proxy) == true)
                 {
-                    break;
+                    try
+                    {
+                        int ch;
+                        string result = string.Empty;
+                        HttpWebRequest req = (HttpWebRequest)WebRequest.Create(uri);
+                        WebProxy webProxy = new WebProxy(proxy, true);
+                        req.Proxy = webProxy;
+                        HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+                        Stream stream = resp.GetResponseStream();
+                        for (int i = 1; ; i++)
+                        {
+                            ch = stream.ReadByte();
+                            if (ch == -1)
+                            {
+                                break;
+                            }
+                            result += (char)ch;
+                        }
+                        resp.Close();
+                        log.Info("Json was read from site");
+                        return result;
+                    }
+                    catch (Exception e)
+                    {
+                        pc.SetStatus(proxy, false);
+                    }
                 }
-                result += (char)ch;
+                else
+                {
+                    pc.SetStatus(proxy, false);
+                }
             }
-
-            resp.Close();
-            return result;
         }
 
         public JsonResult DeserializeJson(string jsonStr)
         {
             JsonResult res = JsonConvert.DeserializeObject<JsonResult>(jsonStr);
+            log.Info("Json data was deserialized");
             return res;
         }
 
@@ -137,7 +177,9 @@ namespace JinnSports.Parser.App.JsonParserService
 
         public void DBSaveChanges(List<Result> results)
         {
-            //uow.Results.AddAll(results.ToArray());
+            uow.Set<Result>().AddAll(results.ToArray());
+            uow.SaveChanges();
+            log.Info(String.Format("Results for {0}.{1}.{2} was added to DB", DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year));
         }
 
         private DateTime GetEventDate(Event ev)
