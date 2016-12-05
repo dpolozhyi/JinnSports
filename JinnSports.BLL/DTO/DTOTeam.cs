@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace JinnSports.BLL.DTO
 {
-    class Team
+    public class DTOTeam
     {
         public int Id { get; set; }
-        public virtual SportType SportType { get; set; }
         public string Name { get; set; }
-
-        public List<Result> Results { get; set; }
+        public List<DTOResult> Results { get; set; }
     }
 }
