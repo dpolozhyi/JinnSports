@@ -12,13 +12,16 @@ namespace JinnSports.DAL.EFContext
         {
             Database.SetInitializer(new SportsDbInitializer());
         }
-       
-        public SportsContext(string connectionString) : base(connectionString)
+        private static string GetConnectionString(string connectionString)
         {
-            // Getting root folder for solution from Parser.App
-            // TODO: make work from all projects
-            AppDomain.CurrentDomain.SetData("DataDirectory", Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\..\\"));
             connectionString = ConfigurationManager.ConnectionStrings[connectionString].ConnectionString;
+            return connectionString;
+        }
+        public SportsContext(string connectionString) : base(SportsContext.GetConnectionString(connectionString))
+        {
+            AppDomain.CurrentDomain.SetData("DataDirectory", Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\..\\"));
+            // Getting root folder for solution from Parser.App
+            // TODO: make work from all projects     
         }
 
         public DbSet<CompetitionEvent> CompetitionEvents { get; set; }

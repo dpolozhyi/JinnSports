@@ -31,7 +31,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyParser
         {
             ProxyRepository<ProxyServer> xmlWriter = new ProxyRepository<ProxyServer>();
             List<ProxyServer> proxyCollection = new List<ProxyServer>();
-            DateTime defaultLastUsed = DateTime.Now.AddMinutes(-20);
+            DateTime defaultLastUsed = DateTime.Now.AddMinutes(-xmlWriter.Interval);
             foreach (HtmlProxyServer service_proxy in service_proxies.HtmlProxies)
             {
                 ProxyServer proxy = new ProxyServer();
@@ -59,7 +59,6 @@ namespace JinnSports.Parser.App.ProxyService.ProxyParser
         {
             HttpWebRequest req;
             HttpWebResponse resp;
-            Stream stream;
             HtmlProxyServerCollection proxyEntities = new HtmlProxyServerCollection();
             int ch;
             int page = 1;
@@ -78,33 +77,23 @@ namespace JinnSports.Parser.App.ProxyService.ProxyParser
 
                 req.Headers.Set(HttpRequestHeader.ContentEncoding, "utf-8");
                 resp = (HttpWebResponse)req.GetResponse();
-                stream = resp.GetResponseStream();
-
-                for (int i = 1;; i++)
-                {
-                    ch = stream.ReadByte();
-                    if (ch == -1)
-                    {
-                        break;
-                    }
-                    result += (char)ch;
-                }
+                result = new StreamReader(resp.GetResponseStream()).ReadToEnd();
                 HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
                 doc.LoadHtml(result);
                 HtmlNode doc_proxyArea = doc.DocumentNode.SelectSingleNode("//table/tbody");
                 try
                 {
-                    int a = 0;
+                    //int a = 0;
                     foreach (HtmlNode doc_lineNode in doc_proxyArea.SelectNodes("tr"))
                     {
                         //test
                         {
-                            if (a == 8)
+                            /*if (a == 8)
                             {
                                 lastPage = true;
                                 break;
                             }
-                            a++;
+                            a++;*/
                         }
                         HtmlNodeCollection doc_proxyLine = doc_lineNode.SelectNodes("td");
 

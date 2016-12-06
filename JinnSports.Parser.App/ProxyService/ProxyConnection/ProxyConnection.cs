@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JinnSports.Parser.App.ProxyService.ProxyEntities;
 using JinnSports.Parser.App.ProxyService.ProxyRepository;
+using System.Net.NetworkInformation;
 
 namespace JinnSports.Parser.App.ProxyService.ProxyConnection
 {
@@ -85,6 +86,22 @@ namespace JinnSports.Parser.App.ProxyService.ProxyConnection
                 System.Console.WriteLine(e.Message);
             }
             return string.Empty;
+        }
+        public bool CanPing(string address)
+        {
+            Ping ping = new Ping();
+
+            try
+            {
+                PingReply reply = ping.Send(address, 2000);
+                if (reply == null) return false;
+
+                return (reply.Status == IPStatus.Success);
+            }
+            catch (PingException e)
+            {
+                return false;
+            }
         }
     }
 }
