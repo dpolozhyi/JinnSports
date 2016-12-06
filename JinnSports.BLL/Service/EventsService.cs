@@ -7,16 +7,16 @@ using JinnSports.BLL.Interfaces;
 using JinnSports.DataAccessInterfaces;
 using JinnSports.DAL.Repositories;
 using JinnSports.Entities;
-using JinnSports.BLL.Entities;
+using JinnSports.BLL.DTO;
 using JinnSports.DataAccessInterfaces.Interfaces;
 
 namespace JinnSports.BLL.Service
 {
     public class EventsService : IEventService
     {
-        public IList<CEvent> GetCEvents()
+        public IList<CompetitionEventDTO> GetCEvents()
         {
-            IList<CEvent> events = new List<CEvent>();
+            IList<CompetitionEventDTO> events = new List<CompetitionEventDTO>();
             string competitionEventResult = string.Empty;
 
             IUnitOfWork dataUnit = new EFUnitOfWork("SqlServerConnection");
@@ -28,8 +28,8 @@ namespace JinnSports.BLL.Service
             IList<CompetitionEvent> competitionEvents = eventsRepository.GetAll();
             foreach (CompetitionEvent ce in competitionEvents)
             {
-                CEvent cEvent = new CEvent();
-                cEvent.Date = ce.Date;
+                CompetitionEventDTO competitionEvent = new CompetitionEventDTO();
+                competitionEvent.Date = ce.Date;
 
                 var datedResults = results.GetAll(r => r.CompetitionEvent.Id == ce.Id);
 
@@ -37,9 +37,9 @@ namespace JinnSports.BLL.Service
                 foreach (Result res in datedResults)
                 {
                     Team selectedTeam = teams.Get(t => t.Id == res.Team.Id);
-                    if (!cEvent.SportType.Any())
+                    if (!competitionEvent.SportType.Any())
                     {
-                        cEvent.SportType = selectedTeam.SportType.ToString();
+                        competitionEvent.SportType = selectedTeam.SportType.ToString();
                     }
 
                     if (!competitionEventResult.Any())
@@ -51,8 +51,8 @@ namespace JinnSports.BLL.Service
                         competitionEventResult += " : " + res.Score + " " + selectedTeam.Name;
                     }
                 }
-                cEvent.Result = competitionEventResult;
-                events.Add(cEvent);
+                competitionEvent.Result = competitionEventResult;
+                events.Add(competitionEvent);
             }
 
             dataUnit.Dispose();

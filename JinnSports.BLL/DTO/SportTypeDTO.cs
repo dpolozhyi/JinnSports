@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JinnSports.BLL.DTO
 {
-    public class DTOSportType
+    public class SportTypeDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }

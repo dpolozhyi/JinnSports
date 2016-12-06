@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JinnSports.BLL.Entities
+namespace JinnSports.BLL.DTO
 {
-    public class CEvent
+    public class CompetitionEventDTO
     {
         public string SportType
         {
