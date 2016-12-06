@@ -14,12 +14,14 @@ namespace JinnSports.BLL.Service
 {
     public class EventsService : IEventService
     {
+        private IUnitOfWork dataUnit;
+
         public IList<CompetitionEventDTO> GetCEvents()
         {
             IList<CompetitionEventDTO> events = new List<CompetitionEventDTO>();
             string competitionEventResult = string.Empty;
 
-            IUnitOfWork dataUnit = new EFUnitOfWork("SqlServerConnection");
+            dataUnit = new EFUnitOfWork("SportsContext");
 
             IRepository<CompetitionEvent> eventsRepository = dataUnit.Set<CompetitionEvent>();
             IRepository<Team> teams = dataUnit.Set<Team>();
@@ -55,8 +57,13 @@ namespace JinnSports.BLL.Service
                 events.Add(competitionEvent);
             }
 
-            dataUnit.Dispose();
             return events;
         }
+
+        public void Dispose()
+        {
+            dataUnit.Dispose();
+        }
+
     }
 }

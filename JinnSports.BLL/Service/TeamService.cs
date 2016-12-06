@@ -13,16 +13,22 @@ namespace JinnSports.BLL.Service
 {
     public class TeamService : ITeamService
     {
+        private IUnitOfWork dataUnit;
+
         public IList<Team> GetAllTeams()
         {
             IList<Team> teams;
-            IUnitOfWork dataUnit = new EFUnitOfWork("SqlServerConnection");
+            dataUnit = new EFUnitOfWork("SportsContext");
 
             IRepository<Team> teamsRepository = dataUnit.Set<Team>();
             teams = teamsRepository.GetAll();
 
-            dataUnit.Dispose();
             return teams;
+        }
+
+        public void Dispose()
+        {
+            dataUnit.Dispose();
         }
     }
 }

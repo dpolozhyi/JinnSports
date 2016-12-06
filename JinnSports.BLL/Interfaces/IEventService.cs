@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace JinnSports.BLL.Interfaces
 {
-    public interface IEventService
+    public interface IEventService : IService
     {
-        IList<DtoCompetitionEvent> GetCEvents();
+        IList<CompetitionEventDTO> GetCEvents();
     }
 }
