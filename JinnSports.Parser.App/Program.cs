@@ -4,10 +4,11 @@ using System.Linq;
 using JinnSports.DAL.Repositories;
 using JinnSports.Entities;
 using System.Data.SqlClient;
-using JinnSports.Parser.App.JsonParserService;
+using JinnSports.Parser.App.JsonParsers;
 using JinnSports.Parser.App.ProxyService.ProxyParser;
 using JinnSports.Parser.App.ProxyService.ProxyConnection;
 using JinnSports.DataAccessInterfaces.Interfaces;
+using System.Threading;
 using System.Net;
 
 namespace JinnSports.Parser.App
@@ -19,7 +20,7 @@ namespace JinnSports.Parser.App
             /*ProxyParser pp = new ProxyParser();
             pp.UpdateData(true, "http://foxtools.ru/Proxy");*/
             //pp.UpdateData();*/
-            EFUnitOfWork unit = new EFUnitOfWork("SportsContext");
+            /*EFUnitOfWork unit = new EFUnitOfWork("SportsContext");
             Team t1 = new Team()
             {
                 Name = "Manchester City",
@@ -67,8 +68,13 @@ namespace JinnSports.Parser.App
                 }
                 /*pc.SetStatus(proxy, true);
                 //string a = ConfigSection.XmlPath();
-                string path = ConfigSettings.Xml();*/
+                string path = ConfigSettings.Xml();
             }
+        }*/
+            Thread jThread;
+            /* ParserManager pm = new ParserManager();
+             jThread = new Thread(() => pm.StartJsonParser(new EFUnitOfWork("StudetnsContext")));
+             jThread.Start();*/
         }
     }
 }

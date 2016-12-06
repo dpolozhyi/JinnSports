@@ -7,18 +7,19 @@ using Newtonsoft.Json;
 using JinnSports.Entities;
 using JinnSports.DAL.Repositories;
 using JinnSports.Parser.App.Interfaces;
-using JinnSports.Parser.App.JsonParserService.JsonEntities;
+using JinnSports.Parser.App.JsonParsers.JsonEntities;
+using JinnSports.DataAccessInterfaces.Interfaces;
 
-namespace JinnSports.Parser.App.JsonParserService
+namespace JinnSports.Parser.App.JsonParsers
 {
     public class JsonParser : ISaver
     {
-        private EFUnitOfWork uow;
+        private IUnitOfWork uow;
         
         public JsonParser()
         {
             this.FonbetUri = new Uri("http://results.fbwebdn.com/results.json.php");
-            this.uow = new EFUnitOfWork("SportsContext");
+            uow = new EFUnitOfWork("SportsContext");
         }
         public Uri FonbetUri { get; private set; }
 
@@ -58,6 +59,7 @@ namespace JinnSports.Parser.App.JsonParserService
         public List<Result> GetResultsList(JsonResult result)
         {
             List<Result> resultList = new List<Result>();
+            List<SportType> sportList = new List<SportType>();
             foreach (var e in result.Events)
             {
                 Team team1 = new Team() { Results = new List<Result>() };
@@ -70,7 +72,16 @@ namespace JinnSports.Parser.App.JsonParserService
                     CompetitionEvent compEvent = new CompetitionEvent() { Date = this.GetEventDate(e), Results = new List<Result>() };
 
                     var sports = result.Sections.Where(n => n.Events.Contains(e.Id)).Select(n => n).ToList();
-                    sportType.Name = result.Sports.Where(n => n.Id == sports[0].Sport).Select(n => n).ToList()[0].Name;
+                    string sportName = result.Sports.Where(n => n.Id == sports[0].Sport).Select(n => n).ToList()[0].Name;
+                    if(sportList.Where(n=>n.Name==sportName).Count()>0)
+                    {
+                        sportType = sportList.Where(n => n.Name == sportName).ToList()[0];
+                    }
+                    else
+                    {
+                        sportType.Name = result.Sports.Where(n => n.Id == sports[0].Sport).Select(n => n).ToList()[0].Name;
+                        sportList.Add(sportType);
+                    }
                     sportType.Teams.Add(team1);
                     sportType.Teams.Add(team2);
 
@@ -109,14 +120,16 @@ namespace JinnSports.Parser.App.JsonParserService
                 mainScore = ev.Score;
             }
 
+            string[] scores = mainScore.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+
             if (!invertScore)
             {
-                res.Score = mainScore;
+                res.Score = scores[0]; ;
             }
             else
             {
-                string[] scores = mainScore.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                res.Score = string.Format("{0}:{1}", scores[1], scores[0]);
+
+                res.Score = scores[1];
             }
         }
 
@@ -137,7 +150,8 @@ namespace JinnSports.Parser.App.JsonParserService
 
         public void DBSaveChanges(List<Result> results)
         {
-            //uow.Results.AddAll(results.ToArray());
+            uow.Set<Result>().AddAll(results.ToArray());
+            uow.SaveChanges();
         }
 
         private DateTime GetEventDate(Event ev)
@@ -147,6 +161,13 @@ namespace JinnSports.Parser.App.JsonParserService
             hour = (startTime / 60 / 60) % 24;
             min = (startTime / 60) % 60;
             return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, min, 0);
+        }
+
+        public void StartJsonParser()
+        {
+            JsonResult jResults = this.DeserializeJson(this.GetJsonFromUrl(this.FonbetUri));
+            List<Result> res = this.GetResultsList(jResults);
+            this.DBSaveChanges(res);
         }
     }
 }
