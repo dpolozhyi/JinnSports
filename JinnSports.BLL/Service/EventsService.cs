@@ -27,7 +27,7 @@ namespace JinnSports.BLL.Service
             IRepository<Team> teams = dataUnit.Set<Team>();
             IRepository<Result> results = dataUnit.Set<Result>();
 
-            IList<CompetitionEvent> competitionEvents = eventsRepository.GetAll();
+            IEnumerable<CompetitionEvent> competitionEvents = eventsRepository.GetAll();
             foreach (CompetitionEvent ce in competitionEvents)
             {
                 CompetitionEventDTO competitionEvent = new CompetitionEventDTO();
@@ -36,6 +36,7 @@ namespace JinnSports.BLL.Service
                 var datedResults = results.GetAll(r => r.CompetitionEvent.Id == ce.Id);
 
                 competitionEventResult = string.Empty;
+
                 foreach (Result res in datedResults)
                 {
                     Team selectedTeam = teams.Get(t => t.Id == res.Team.Id);
@@ -44,16 +45,26 @@ namespace JinnSports.BLL.Service
                         competitionEvent.SportType = selectedTeam.SportType.ToString();
                     }
 
-                    if (!competitionEventResult.Any())
+                    if (!competitionEvent.Team1.Any())
                     {
-                        competitionEventResult = selectedTeam.Name + " " + res.Score;
-                    } 
+                        competitionEvent.Team1 = res.Team.Name;
+                    }
                     else
                     {
-                        competitionEventResult += " : " + res.Score + " " + selectedTeam.Name;
+                        competitionEvent.Team2 = res.Team.Name;
                     }
+
+                    if (!competitionEvent.Result1.Any())
+                    {
+                        competitionEvent.Result1 = res.Score;
+                    }
+                    else
+                    {
+                        competitionEvent.Result2 = res.Score;
+                    }
+
+
                 }
-                competitionEvent.Result = competitionEventResult;
                 events.Add(competitionEvent);
             }
 
