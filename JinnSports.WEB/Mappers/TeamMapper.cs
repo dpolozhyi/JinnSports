@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using JinnSports.Entities.Entities;
-using JinnSports.WEB.Views.ViewModels;
+using JinnSports.WEB.Models;
 
 namespace JinnSports.WEB.Mappers
 {
@@ -12,7 +12,7 @@ namespace JinnSports.WEB.Mappers
             {
                 Id = team.Id,
                 Name = team.Name,
-                Result = team.Results.Select(result => result.MapToResultViewModel()).ToList()
+                //Result = team.Results.Select(result => result.MapToResultViewModel()).ToList()
             };
         }
     }

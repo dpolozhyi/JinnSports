@@ -4,7 +4,7 @@ using JinnSports.BLL.Interfaces;
 using JinnSports.BLL.Service;
 using JinnSports.Entities.Entities;
 using JinnSports.WEB.Mappers;
-using JinnSports.WEB.Views.ViewModels;
+using JinnSports.WEB.Models;
 
 namespace JinnSports.WEB.Controllers
 {

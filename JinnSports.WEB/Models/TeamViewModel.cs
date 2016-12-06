@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace JinnSports.WEB.Views.ViewModels
+namespace JinnSports.WEB.Models
 {
     public class TeamViewModel
     {
