@@ -15,9 +15,9 @@ namespace JinnSports.BLL.Service
     {
         private IUnitOfWork dataUnit;
 
-        public IList<Team> GetAllTeams()
+        public IEnumerable<Team> GetAllTeams()
         {
-            IList<Team> teams;
+            IEnumerable<Team> teams;
             dataUnit = new EFUnitOfWork("SportsContext");
 
             IRepository<Team> teamsRepository = dataUnit.Set<Team>();

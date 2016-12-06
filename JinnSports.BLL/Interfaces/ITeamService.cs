@@ -10,6 +10,6 @@ namespace JinnSports.BLL.Interfaces
 {
     public interface ITeamService : IService
     {
-        IList<Team> GetAllTeams();
+        IEnumerable<Team> GetAllTeams();
     }
 }

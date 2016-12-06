@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JinnSports.BLL.DTO
 {
@@ -16,7 +12,19 @@ namespace JinnSports.BLL.DTO
         {
             get; set;
         }
-        public string Result
+        public string Team1
+        {
+            get; set;
+        }
+        public string Result1
+        {
+            get; set;
+        }
+        public string Team2
+        {
+            get; set;
+        }
+        public string Result2
         {
             get; set;
         }
