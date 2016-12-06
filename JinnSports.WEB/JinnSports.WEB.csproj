@@ -94,14 +94,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Mappers\ResultMapper.cs" />
+    <Compile Include="Mappers\TeamMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\ViewModels\ResultViewModel.cs" />
+    <Compile Include="Views\ViewModels\TeamViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
+    <Content Include="Views\Team\Index.cshtml" />
+    <Content Include="Views\Shared\_ResultPartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -111,8 +118,21 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JinnSports.BLL\JinnSports.BLL.csproj">
+      <Project>{629f73e6-eace-4dcf-ab1b-1488d3a9bfc9}</Project>
+      <Name>JinnSports.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JinnSports.DAL\JinnSports.DAL.csproj">
+      <Project>{be36f33a-801a-4b21-8130-ff952c3a5f97}</Project>
+      <Name>JinnSports.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JinnSports.Entities\JinnSports.Entities.csproj">
+      <Project>{fe881c95-44b6-4c3b-8d18-906f050d3cbb}</Project>
+      <Name>JinnSports.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,0 +1,41 @@
+﻿@using JinnSports.WEB.Views.ViewModels
+@model IEnumerable<JinnSports.WEB.Views.ViewModels.TeamViewModel>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+@foreach (var item in Model)
+{
+    <div>
+        <h4>TeamViewModel</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(modelItem => item.Name)
+            </dd>
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+    foreach (var result in item.Result)
+    {
+        @Html.Partial("_ResultPartial", result)
+    }
+}
+</body>
+</html>
