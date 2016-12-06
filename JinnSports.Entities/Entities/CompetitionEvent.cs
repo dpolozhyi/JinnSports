@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace JinnSports.Entities
+namespace JinnSports.Entities.Entities
 {
     public class CompetitionEvent
     {
@@ -9,5 +9,20 @@ namespace JinnSports.Entities
         public DateTime Date { get; set; }
 
         public virtual ICollection<Result> Results { get; set; }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override string ToString()
+        {
+            return "Id: " + Id + " Date: " + Date;
+        }
     }
 }

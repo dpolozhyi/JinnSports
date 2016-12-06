@@ -1,11 +1,11 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp.Parser.Html;
-using JinnSports.Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using JinnSports.DataAccessInterfaces.Interfaces;
+using JinnSports.Entities.Entities;
 
 namespace JinnSports.Parser.App.HtmlParsers
 {

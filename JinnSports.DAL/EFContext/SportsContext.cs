@@ -2,7 +2,7 @@ using System;
 using System.Configuration;
 using System.Data.Entity;
 using System.IO;
-using JinnSports.Entities;
+using JinnSports.Entities.Entities;
 
 namespace JinnSports.DAL.EFContext
 {

@@ -1,34 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using JinnSports.BLL.Interfaces;
-using JinnSports.BLL.DTO;
-using JinnSports.Entities;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.DAL.Repositories;
+using JinnSports.Entities.Entities;
 
 namespace JinnSports.BLL.Service
 {
     public class TeamService : ITeamService
     {
-        IUnitOfWork dataUnit = new EFUnitOfWork("SportsContext");
+        private IUnitOfWork dataUnit;
 
         public IEnumerable<Team> GetAllTeams()
         {
-            IEnumerable<Team> teams;
+            this.dataUnit = new EFUnitOfWork("SportsContext");
 
-            IRepository<Team> teamsRepository = dataUnit.Set<Team>();
-            teams = teamsRepository.GetAll();
+            IRepository<Team> teamsRepository = this.dataUnit.Set<Team>();
+            var teams = teamsRepository.GetAll();
 
-            //dataUnit.Dispose();
             return teams;
         }
 
         public void Dispose()
         {
-            dataUnit.Dispose();
+            this.dataUnit.Dispose();
         }
     }
 }

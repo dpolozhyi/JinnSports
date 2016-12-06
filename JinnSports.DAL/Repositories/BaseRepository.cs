@@ -31,7 +31,7 @@ namespace JinnSports.DAL.Repositories
             return this.DbSet.Where(where).FirstOrDefault();
         }
 
-        public T GetByID(int id)
+        public T GetById(int id)
         {
             return this.DbSet.Find(id);
         }

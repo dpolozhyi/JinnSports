@@ -1,5 +1,4 @@
-﻿using JinnSports.BLL.DTO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace JinnSports.BLL.Interfaces
 {
-    public interface IEventService : IService
+    public interface IService
     {
-        IList<CompetitionEventDTO> GetCEvents();
+        void Dispose();
     }
 }

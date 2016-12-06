@@ -1,4 +1,4 @@
-﻿using JinnSports.Entities;
+﻿using JinnSports.Entities.Entities;
 using JinnSports.WEB.Views.ViewModels;
 
 namespace JinnSports.WEB.Mappers

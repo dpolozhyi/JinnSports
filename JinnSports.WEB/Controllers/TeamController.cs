@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using JinnSports.BLL.Interfaces;
 using JinnSports.BLL.Service;
-using JinnSports.Entities;
+using JinnSports.Entities.Entities;
 using JinnSports.WEB.Mappers;
 using JinnSports.WEB.Views.ViewModels;
 

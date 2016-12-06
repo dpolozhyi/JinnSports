@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
-using JinnSports.Entities;
 using JinnSports.DAL.Repositories;
+using JinnSports.Entities.Entities;
 using JinnSports.Parser.App.Interfaces;
 using JinnSports.Parser.App.JsonParserService.JsonEntities;
 
@@ -135,7 +135,7 @@ namespace JinnSports.Parser.App.JsonParserService
             }
         }
 
-        public void DBSaveChanges(List<Result> results)
+        public void DbSaveChanges(List<Result> results)
         {
             //uow.Results.AddAll(results.ToArray());
         }

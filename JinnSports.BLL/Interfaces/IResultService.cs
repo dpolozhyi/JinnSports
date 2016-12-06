@@ -1,13 +1,9 @@
-﻿using JinnSports.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using JinnSports.Entities.Entities;
 
 namespace JinnSports.BLL.Interfaces
 {
-    public interface IResultService
+    public interface IResultService : IService
     {
         void SaveResults(List<Result> results);
     }
