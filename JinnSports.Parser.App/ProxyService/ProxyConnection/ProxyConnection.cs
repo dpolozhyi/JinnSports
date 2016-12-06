@@ -4,6 +4,8 @@ using System.Linq;
 using JinnSports.Parser.App.ProxyService.ProxyEntities;
 using JinnSports.Parser.App.ProxyService.ProxyRepository;
 using System.Net.NetworkInformation;
+using System.Net;
+using System.Diagnostics;
 
 namespace JinnSports.Parser.App.ProxyService.ProxyConnection
 {
@@ -102,6 +104,49 @@ namespace JinnSports.Parser.App.ProxyService.ProxyConnection
             {
                 return false;
             }
+        }
+        public HttpWebResponse MakeProxyRequest(string url, int tries)
+        {
+            int iter = 0;
+            HttpWebResponse response;
+            HttpWebRequest request;
+            ProxyConnection pc = new ProxyConnection();
+            while (iter < tries)
+            {
+                string proxy = pc.GetProxy();
+                if (proxy != string.Empty)
+                {
+                    if (pc.CanPing(proxy) == true)
+                    {
+                        try
+                        {
+                            request = (HttpWebRequest)WebRequest.Create(url);
+                            request.Headers.Set(HttpRequestHeader.ContentEncoding, "1251");
+                            WebProxy webProxy = new WebProxy(proxy, true);
+                            request.Proxy = webProxy;
+                            response = (HttpWebResponse)request.GetResponse();
+                            Debug.WriteLine("Good IP : " + proxy);
+                            pc.SetStatus(proxy, true);
+                            return response;
+                        }
+                        catch (Exception e)
+                        {
+                            pc.SetStatus(proxy, false);
+                            iter++;
+                        }
+                    }
+                    else
+                    {
+                        pc.SetStatus(proxy, false);
+                        iter++;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return null;
         }
     }
 }
