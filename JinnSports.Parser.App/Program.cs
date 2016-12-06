@@ -17,18 +17,6 @@ namespace JinnSports.Parser.App
     {
         static void Main(string[] args)
         {
-            JsonParser jp = new JsonParser();
-            Thread jThread = new Thread(() => jp.StartParser());
-            int sec = 0;
-            jThread.Start();
-            while(jThread.IsAlive)
-            {
-                //Console.Clear();
-                //Console.WriteLine("JParser works for {0}s", sec);
-                sec++;
-                Thread.Sleep(1000);
-            }
-            Console.WriteLine("Done!");
         }
     }
 }
