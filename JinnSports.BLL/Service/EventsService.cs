@@ -40,12 +40,12 @@ namespace JinnSports.BLL.Service
                 foreach (Result res in datedResults)
                 {
                     Team selectedTeam = teams.Get(t => t.Id == res.Team.Id);
-                    if (!competitionEvent.SportType.Any())
+                    if (string.IsNullOrEmpty(competitionEvent.SportType)) 
                     {
-                        competitionEvent.SportType = selectedTeam.SportType.ToString();
+                        competitionEvent.SportType = selectedTeam.SportType.Name;
                     }
 
-                    if (!competitionEvent.Team1.Any())
+                    if (string.IsNullOrEmpty(competitionEvent.Team1))
                     {
                         competitionEvent.Team1 = res.Team.Name;
                     }
@@ -54,7 +54,7 @@ namespace JinnSports.BLL.Service
                         competitionEvent.Team2 = res.Team.Name;
                     }
 
-                    if (!competitionEvent.Result1.Any())
+                    if (string.IsNullOrEmpty(competitionEvent.Result1))
                     {
                         competitionEvent.Result1 = res.Score;
                     }
