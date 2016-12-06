@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using JinnSports.BLL.Interfaces;
-using JinnSports.DataAccessInterfaces;
 using JinnSports.DAL.Repositories;
 using JinnSports.Entities;
 using JinnSports.BLL.DTO;
@@ -21,11 +16,11 @@ namespace JinnSports.BLL.Service
             IList<CompetitionEventDTO> events = new List<CompetitionEventDTO>();
             string competitionEventResult = string.Empty;
 
-            dataUnit = new EFUnitOfWork("SportsContext");
+            this.dataUnit = new EFUnitOfWork("SportsContext");
 
-            IRepository<CompetitionEvent> eventsRepository = dataUnit.Set<CompetitionEvent>();
-            IRepository<Team> teams = dataUnit.Set<Team>();
-            IRepository<Result> results = dataUnit.Set<Result>();
+            IRepository<CompetitionEvent> eventsRepository = this.dataUnit.Set<CompetitionEvent>();
+            IRepository<Team> teams = this.dataUnit.Set<Team>();
+            IRepository<Result> results = this.dataUnit.Set<Result>();
 
             IEnumerable<CompetitionEvent> competitionEvents = eventsRepository.GetAll();
             foreach (CompetitionEvent ce in competitionEvents)
@@ -73,7 +68,7 @@ namespace JinnSports.BLL.Service
 
         public void Dispose()
         {
-            dataUnit.Dispose();
+            this.dataUnit.Dispose();
         }
 
     }

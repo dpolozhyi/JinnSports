@@ -9,13 +9,12 @@ using System;
 namespace JinnSports.DAL.Repositories
 {
     public class BaseRepository<T> : IRepository<T> where T : class
-    {
-        private DbSet<T> dbSet;
-
+    { 
         public BaseRepository(SportsContext db)
         {
             this.DbSet = db.Set<T>();
         }
+
         private DbSet<T> DbSet { get; }
 
         public IEnumerable<T> GetAll()
@@ -25,12 +24,12 @@ namespace JinnSports.DAL.Repositories
 
         public IEnumerable<T> GetAll(Expression<Func<T, bool>> where)
         {
-            return dbSet.Where(where).ToList();
+            return this.DbSet.Where(where).ToList();
         }
 
         public T Get(Expression<Func<T, bool>> where)
         {
-            return dbSet.Where(where).FirstOrDefault();
+            return this.DbSet.Where(where).FirstOrDefault();
         }
 
         public T GetByID(int id)

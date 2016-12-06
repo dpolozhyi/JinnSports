@@ -67,6 +67,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Settings.StyleCop" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JinnSports.DataAccessInterfaces\JinnSports.DataAccessInterfaces.csproj">
@@ -86,6 +87,10 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\StyleCop.MSBuild.4.7.55.0\build\StyleCop.MSBuild.Targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\StyleCop.MSBuild.4.7.55.0\build\StyleCop.MSBuild.Targets'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /E /Y "$(ProjectDir)$(OutDir)EntityFramework.SqlServer.dll" "$(SolutionDir)JinnSports.Parser.App\bin\Debug"
+xcopy /E /Y "$(ProjectDir)$(OutDir)EntityFramework.SqlServer.dll" "$(SolutionDir)Services\bin\Debug"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

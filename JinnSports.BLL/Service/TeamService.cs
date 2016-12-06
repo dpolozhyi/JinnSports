@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using JinnSports.BLL.Interfaces;
-using JinnSports.BLL.DTO;
 using JinnSports.Entities;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.DAL.Repositories;
@@ -18,9 +13,9 @@ namespace JinnSports.BLL.Service
         public IEnumerable<Team> GetAllTeams()
         {
             IEnumerable<Team> teams;
-            dataUnit = new EFUnitOfWork("SportsContext");
+            this.dataUnit = new EFUnitOfWork("SportsContext");
 
-            IRepository<Team> teamsRepository = dataUnit.Set<Team>();
+            IRepository<Team> teamsRepository = this.dataUnit.Set<Team>();
             teams = teamsRepository.GetAll();
 
             return teams;
@@ -28,7 +23,7 @@ namespace JinnSports.BLL.Service
 
         public void Dispose()
         {
-            dataUnit.Dispose();
+            this.dataUnit.Dispose();
         }
     }
 }

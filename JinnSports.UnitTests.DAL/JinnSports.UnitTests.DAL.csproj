@@ -51,8 +51,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Settings.StyleCop" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\JinnSports.DAL\JinnSports.DAL.csproj">
+      <Project>{be36f33a-801a-4b21-8130-ff952c3a5f97}</Project>
+      <Name>JinnSports.DAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\JinnSports.Entities\JinnSports.Entities.csproj">
       <Project>{fe881c95-44b6-4c3b-8d18-906f050d3cbb}</Project>
       <Name>JinnSports.Entities</Name>

@@ -10,20 +10,24 @@ namespace JinnSports.DAL.EFContext
     {
         static SportsContext()
         {
-            Database.SetInitializer(new SportsDbInitializer());
         }
-       
-        public SportsContext(string connectionString) : base(connectionString)
+        
+        public SportsContext(string connectionString) : base(SportsContext.GetConnectionString(connectionString))
         {
+            AppDomain.CurrentDomain.SetData("DataDirectory", "C:");
             // Getting root folder for solution from Parser.App
-            // TODO: make work from all projects
-            AppDomain.CurrentDomain.SetData("DataDirectory", Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\..\\"));
-            connectionString = ConfigurationManager.ConnectionStrings[connectionString].ConnectionString;
+            // TODO: make work from all projects     
         }
 
         public DbSet<CompetitionEvent> CompetitionEvents { get; set; }
         public DbSet<Result> Results { get; set; }
         public DbSet<SportType> SportTypes { get; set; }
         public DbSet<Team> Teams { get; set; }
+
+        private static string GetConnectionString(string connectionString)
+        {
+            connectionString = ConfigurationManager.ConnectionStrings[connectionString].ConnectionString;
+            return connectionString;
+        }
     }
 }

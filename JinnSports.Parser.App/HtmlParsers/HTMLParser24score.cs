@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using JinnSports.DataAccessInterfaces.Interfaces;
+using JinnSports.Parser.App.ProxyService.ProxyConnection;
+using System.Diagnostics;
 
 namespace JinnSports.Parser.App.HtmlParsers
 {
@@ -13,13 +15,16 @@ namespace JinnSports.Parser.App.HtmlParsers
     {
         public HTMLParser24score(IUnitOfWork unit)
         {
-            this.Unit = unit;
+            this.Unit = unit;            
         }
 
         public IUnitOfWork Unit { get; private set; }
+        public uint DaysCount { get; set; }
 
         public void Parse(uint daysCount = 1)
         {
+            ProxyConnection pc = new ProxyConnection();  
+
             Uri footballUrl = new Uri("https://24score.com/?date=");
             Uri basketballUrl = new Uri("https://24score.com/basketball/?date=");
             Uri hokkeyUrl = new Uri("https://24score.com/ice_hockey/?date=");
@@ -51,13 +56,16 @@ namespace JinnSports.Parser.App.HtmlParsers
                 {
                     DateTime date = now.Subtract(new TimeSpan(i, 0, 0, 0));
                     string url = baseUrl.ToString() + date.Date.ToString("yyyy-MM-dd");
-
-                    WebRequest reqGET = WebRequest.Create(url);
-                    reqGET.Headers.Set(HttpRequestHeader.ContentEncoding, "1251");
-                    WebResponse resp = reqGET.GetResponse();
-                    Stream stream = resp.GetResponseStream();
-                    StreamReader sr = new StreamReader(stream);
-                    string html = sr.ReadToEnd();
+                                        
+                    WebRequest reqGet = WebRequest.Create(url);
+                    reqGet.Headers.Set(HttpRequestHeader.ContentEncoding, "1251");                    
+                    HttpWebResponse resp = pc.MakeProxyRequest(url, 8);
+                    if (resp == null)
+                    {
+                        resp = (HttpWebResponse)reqGet.GetResponse();
+                    }
+                    
+                    string html = new StreamReader(resp.GetResponseStream()).ReadToEnd();
 
                     var parser = new HtmlParser();
                     var document = parser.Parse(html);
@@ -96,8 +104,7 @@ namespace JinnSports.Parser.App.HtmlParsers
                         this.Unit.SaveChanges();
                     }
                 }
-
-            }
+            }            
         }
     }
 }

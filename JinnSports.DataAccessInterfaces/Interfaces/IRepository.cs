@@ -8,7 +8,7 @@ namespace JinnSports.DataAccessInterfaces.Interfaces
     {
         IEnumerable<T> GetAll();
         IEnumerable<T> GetAll(Expression<Func<T, bool>> where);
-        T Get(Expression<Func<T, bool>> where);
+        T Get(Expression<Func<T, bool>> where);        
         T GetByID(int id);
         void Add(T item);
         void AddAll(T[] items);

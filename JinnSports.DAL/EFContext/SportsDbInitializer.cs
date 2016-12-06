@@ -2,7 +2,7 @@
 
 namespace JinnSports.DAL.EFContext
 {
-    public class SportsDbInitializer : DropCreateDatabaseAlways<SportsContext>
+    public class SportsDbInitializer : DropCreateDatabaseIfModelChanges<SportsContext>
     {
 
     }

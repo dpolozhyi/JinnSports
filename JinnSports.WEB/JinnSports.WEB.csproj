@@ -43,9 +43,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JinnSports.BLL">
-      <HintPath>..\JinnSports.BLL\bin\Debug\JinnSports.BLL.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -93,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Views\web.config" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -108,9 +106,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\web.config" />
     <Content Include="packages.config" />
     <Content Include="Views\Event\History.cshtml" />
+    <Content Include="Settings.StyleCop" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -120,6 +118,24 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JinnSports.BLL\JinnSports.BLL.csproj">
+      <Project>{629f73e6-eace-4dcf-ab1b-1488d3a9bfc9}</Project>
+      <Name>JinnSports.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JinnSports.DAL\JinnSports.DAL.csproj">
+      <Project>{be36f33a-801a-4b21-8130-ff952c3a5f97}</Project>
+      <Name>JinnSports.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JinnSports.DataAccessInterfaces\JinnSports.DataAccessInterfaces.csproj">
+      <Project>{07107e13-6ddf-47af-90bc-fb344b060511}</Project>
+      <Name>JinnSports.DataAccessInterfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JinnSports.Entities\JinnSports.Entities.csproj">
+      <Project>{fe881c95-44b6-4c3b-8d18-906f050d3cbb}</Project>
+      <Name>JinnSports.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
