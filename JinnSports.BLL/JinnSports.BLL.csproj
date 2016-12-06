@@ -43,12 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DTO\DTOCompetitionEvent.cs" />
-    <Compile Include="DTO\DTOResult.cs" />
-    <Compile Include="DTO\DTOSportType.cs" />
-    <Compile Include="DTO\DTOTeam.cs" />
-    <Compile Include="Entities\CEvent.cs" />
+    <Compile Include="DTO\ResultDTO.cs" />
+    <Compile Include="DTO\SportTypeDTO.cs" />
+    <Compile Include="DTO\TeamDTO.cs" />
+    <Compile Include="DTO\CompetitionEventDTO.cs" />
     <Compile Include="Interfaces\IEventService.cs" />
+    <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Interfaces\IResultService.cs" />
     <Compile Include="Interfaces\ITeamService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

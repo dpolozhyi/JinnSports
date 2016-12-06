@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace JinnSports.BLL.Interfaces
 {
-    public interface ITeamService
+    public interface ITeamService : IService
     {
         IList<Team> GetAllTeams();
     }
