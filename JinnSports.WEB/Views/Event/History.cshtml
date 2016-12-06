@@ -17,12 +17,16 @@
         <table>
             @foreach (var sportEvents in Model)
             {
-                <tr>@sportEvents.SportName</tr>
+                <tr>
+                    <td colspan="2">
+                        <h4>@sportEvents.SportName</h4>
+                    </td>
+                </tr>
                 foreach (var events in sportEvents.Events)
                 {
                     <tr>
-                        <td>@events.Result</td>
-                        <td>@events.Date</td>
+                        <td><h6>@events.Result</h6></td>
+                        <td><h6>@events.Date</h6></td>
                     </tr>
                 }
             }
