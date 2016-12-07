@@ -16,7 +16,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
 
         public ProxyRepository()
         {
-            this.path = @"D:\APROGRAMMING\SS\JinnSports\Services\" + ConfigSettings.Xml();
+            this.path = @"..\..\" + ConfigSettings.Xml();
             this.xmlSerializer = new XmlSerializer(typeof(List<ProxyServer>));
             Interval = 1;
     }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JinnSports.Parser.App.JsonParserService.JsonEntities
+namespace JinnSports.Parser.App.JsonParsers.JsonEntities
 {
     public abstract class JsonObject
     {
