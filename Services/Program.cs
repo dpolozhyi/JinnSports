@@ -17,9 +17,8 @@ namespace Services
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new HTMLService()
-                //,
-                //new JSONService()
+                new HTMLService(),
+                new JSONService()
             };
             ServiceBase.Run(ServicesToRun);
         }
