@@ -25,15 +25,15 @@ namespace Services
             Installers.Add(HTMLProcessInstaller);
             Installers.Add(HTMLServiceInstaller);
 
-            //ServiceInstaller JSONServiceInstaller = new ServiceInstaller();
-            //ServiceProcessInstaller JSONProcessInstaller = new ServiceProcessInstaller();
+            ServiceInstaller JSONServiceInstaller = new ServiceInstaller();
+            ServiceProcessInstaller JSONProcessInstaller = new ServiceProcessInstaller();
 
-            //JSONProcessInstaller.Account = ServiceAccount.LocalSystem;
-            //JSONServiceInstaller.StartType = ServiceStartMode.Manual;
-            //JSONServiceInstaller.ServiceName = "JSONService";
-            //JSONServiceInstaller.DisplayName = "JSONService";
-            //Installers.Add(JSONProcessInstaller);
-            //Installers.Add(JSONServiceInstaller);
+            JSONProcessInstaller.Account = ServiceAccount.LocalSystem;
+            JSONServiceInstaller.StartType = ServiceStartMode.Manual;
+            JSONServiceInstaller.ServiceName = "JSONService";
+            JSONServiceInstaller.DisplayName = "JSONService";
+            Installers.Add(JSONProcessInstaller);
+            Installers.Add(JSONServiceInstaller);
         }
     }
 }

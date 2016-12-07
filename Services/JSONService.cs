@@ -6,25 +6,33 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using JinnSports.Parser.App.JsonParsers;
 
 namespace Services
 {
     partial class JSONService : ServiceBase
     {
+        Thread jsonThread;
+
         public JSONService()
         {
             InitializeComponent();
+            this.CanStop = true;
+            this.CanPauseAndContinue = true;
         }
 
         protected override void OnStart(string[] args)
         {
-            // TODO: Add code here to start your service.
+            JsonParser jp = new JsonParser();
+            jsonThread = new Thread(() => jp.StartParser());
+            jsonThread.Start();
         }
 
         protected override void OnStop()
         {
-            // TODO: Add code here to perform any tear-down necessary to stop your service.
+            jsonThread.Abort();
         }
     }
 }
