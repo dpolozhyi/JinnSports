@@ -1,16 +1,10 @@
-﻿@model JinnSports.WEB.Views.ViewModels.ResultViewModel
+﻿@model JinnSports.WEB.Models.ResultDetailsViewModel
 
 <div>
-    <h4>ResultViewModel</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Score)
-        </dt>
+    <a href="@Url.Action("Details", "Team", new { id = Model.Team1Id })">@Model.Team1</a>
+    
+    <span>@Model.Score</span>
 
-        <dd>
-            @Html.DisplayFor(model => model.Score)
-        </dd>
-
-    </dl>
+    <a href="@Url.Action("Details", "Team", new { id = Model.Team2Id })">@Model.Team2</a>
 </div>
+<hr />

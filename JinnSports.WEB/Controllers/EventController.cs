@@ -1,10 +1,11 @@
 ﻿using JinnSports.BLL.DTO;
 using JinnSports.BLL.Interfaces;
 using JinnSports.BLL.Service;
-using JinnSports.WEB.Mapper;
 using JinnSports.WEB.Models;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using JinnSports.WEB.Filters;
+using JinnSports.WEB.Mappers;
 
 namespace JinnSports.WEB.Controllers
 {

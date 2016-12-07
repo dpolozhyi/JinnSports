@@ -4,7 +4,7 @@ using JinnSports.Entities.Entities;
 
 namespace JinnSports.DAL.EFContext
 {
-    public class SportsDbInitializer : DropCreateDatabaseAlways<SportsContext>
+    public class SportsDbInitializer : CreateDatabaseIfNotExists<SportsContext>
     {
         protected override void Seed(SportsContext context)
         {

@@ -45,12 +45,16 @@
   <ItemGroup>
     <Compile Include="DTO\ResultDTO.cs" />
     <Compile Include="DTO\SportTypeDTO.cs" />
+    <Compile Include="DTO\TeamDetailsDTO.cs" />
     <Compile Include="DTO\TeamDTO.cs" />
     <Compile Include="DTO\CompetitionEventDTO.cs" />
+    <Compile Include="Exceptions\TeamNotFoundException.cs" />
     <Compile Include="Interfaces\IEventService.cs" />
     <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Interfaces\IResultService.cs" />
     <Compile Include="Interfaces\ITeamService.cs" />
+    <Compile Include="Mappers\ResultDtoMapper.cs" />
+    <Compile Include="Mappers\TeamDtoMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\EventsService.cs" />
     <Compile Include="Service\TeamService.cs" />

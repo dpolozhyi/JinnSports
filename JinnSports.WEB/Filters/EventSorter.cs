@@ -1,11 +1,10 @@
-﻿using JinnSports.BLL.DTO;
-using JinnSports.WEB.Models;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using JinnSports.BLL.DTO;
+using JinnSports.WEB.Mappers;
+using JinnSports.WEB.Models;
 
-namespace JinnSports.WEB.Mapper
+namespace JinnSports.WEB.Filters
 {
     internal static class EventSorter
     {

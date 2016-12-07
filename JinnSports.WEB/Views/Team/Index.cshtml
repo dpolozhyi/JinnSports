@@ -1,5 +1,4 @@
-﻿@using JinnSports.WEB.Views.ViewModels
-@model IEnumerable<JinnSports.WEB.Models.TeamViewModel>
+﻿@model IEnumerable<JinnSports.WEB.Models.TeamViewModel>
 
 @{
     Layout = null;
@@ -16,8 +15,6 @@
 @foreach (var item in Model)
 {
     <div>
-        <h4>TeamViewModel</h4>
-        <hr />
         <dl class="dl-horizontal">
             <dt>
                 @Html.DisplayNameFor(model => model.Name)
@@ -29,13 +26,9 @@
         </dl>
     </div>
     <p>
-        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Details", "Details", new { id = item.Id })
     </p>
-    foreach (var result in item.Result)
-    {
-        @Html.Partial("_ResultPartial", result)
-    }
 }
+<hr />
 </body>
 </html>

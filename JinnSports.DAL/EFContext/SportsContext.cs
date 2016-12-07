@@ -19,6 +19,7 @@ namespace JinnSports.DAL.EFContext
             // TODO: make work from all projects
             AppDomain.CurrentDomain.SetData("DataDirectory", Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + "..\\..\\..\\"));
             connectionString = ConfigurationManager.ConnectionStrings[connectionString].ConnectionString;
+            Database.SetInitializer(new SportsDbInitializer());
         }
 
         public DbSet<CompetitionEvent> CompetitionEvents { get; set; }

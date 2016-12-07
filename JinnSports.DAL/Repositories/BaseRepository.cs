@@ -16,12 +16,12 @@ namespace JinnSports.DAL.Repositories
         }
         private DbSet<T> DbSet { get; }
 
-        public IList<T> GetAll()
+        public IEnumerable<T> GetAll()
         {
             return this.DbSet.ToList();
         }
 
-        public IList<T> GetAll(Expression<Func<T, bool>> where)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>> where)
         {
             return this.DbSet.Where(where).ToList();
         }

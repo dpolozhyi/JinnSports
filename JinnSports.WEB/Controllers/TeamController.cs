@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
+using JinnSports.BLL.DTO;
 using JinnSports.BLL.Interfaces;
 using JinnSports.BLL.Service;
-using JinnSports.Entities.Entities;
 using JinnSports.WEB.Mappers;
 using JinnSports.WEB.Models;
 
@@ -20,7 +20,7 @@ namespace JinnSports.WEB.Controllers
         // GET: Team
         public ActionResult Index()
         {
-            IEnumerable<Team> teams = teamService.GetAllTeams();
+            IEnumerable<TeamDTO> teams = teamService.GetAllTeams();
 
             List<TeamViewModel> teamViewModels = new List<TeamViewModel>();
             foreach (var team in teams)
@@ -31,76 +31,24 @@ namespace JinnSports.WEB.Controllers
             return View(teamViewModels);
         }
 
-        // GET: Team/Details/5
+        // GET: Team
         public ActionResult Details(int id)
         {
-            return View();
-        }
+            TeamDetailsDTO team = teamService.GetTeamDetailsById(id);
 
-        // GET: Team/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Team/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
+            TeamDetailsViewModel teamDetailsViewModel = new TeamDetailsViewModel
             {
-                // TODO: Add insert logic here
+                Id = team.Id,
+                Name = team.Name,
+                Results = new List<ResultDetailsViewModel>()
+            };
 
-                return RedirectToAction("Index");
-            }
-            catch
+            foreach (var teamResult in team.Results)
             {
-                return View();
+                teamDetailsViewModel.Results.Add(teamResult.MapToResultDetailsViewModel());
             }
-        }
 
-        // GET: Team/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Team/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Team/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Team/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            return View(teamDetailsViewModel);
         }
     }
 }
