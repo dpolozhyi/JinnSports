@@ -9,6 +9,7 @@ using JinnSports.Parser.App.JsonParsers;
 using JinnSports.Parser.App.ProxyService.ProxyParser;
 using JinnSports.Parser.App.ProxyService.ProxyConnection;
 using JinnSports.DataAccessInterfaces.Interfaces;
+using JinnSports.Entities.Entities;
 using System.Net;
 
 namespace JinnSports.Parser.App
