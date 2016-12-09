@@ -20,7 +20,7 @@ namespace JinnSports.WEB.Controllers
         // GET: Team
         public ActionResult Index()
         {
-            IEnumerable<TeamDTO> teams = teamService.GetAllTeams();
+            IEnumerable<TeamDTO> teams = this.teamService.GetAllTeams();
 
             List<TeamViewModel> teamViewModels = new List<TeamViewModel>();
             foreach (var team in teams)
@@ -28,13 +28,13 @@ namespace JinnSports.WEB.Controllers
                 teamViewModels.Add(team.MapToTeamViewModel());
             }
 
-            return View(teamViewModels);
+            return this.View(teamViewModels);
         }
 
         // GET: Team
         public ActionResult Details(int id)
         {
-            TeamDetailsDTO team = teamService.GetTeamDetailsById(id);
+            TeamDetailsDTO team = this.teamService.GetTeamDetailsById(id);
 
             TeamDetailsViewModel teamDetailsViewModel = new TeamDetailsViewModel
             {
@@ -48,7 +48,7 @@ namespace JinnSports.WEB.Controllers
                 teamDetailsViewModel.Results.Add(teamResult.MapToResultDetailsViewModel());
             }
 
-            return View(teamDetailsViewModel);
+            return this.View(teamDetailsViewModel);
         }
     }
 }

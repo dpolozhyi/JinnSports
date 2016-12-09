@@ -20,7 +20,7 @@
 
         public override string ToString()
         {
-            return "Id: " + " TeamId: " + " EventId: " + CompetitionEvent.Id + " Score: " + Score;
+            return "Id: " + " TeamId: " + " EventId: " + this.CompetitionEvent.Id + " Score: " + this.Score;
         }
     }
 }

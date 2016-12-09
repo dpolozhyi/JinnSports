@@ -9,7 +9,7 @@ using JinnSports.WEB.Mappers;
 
 namespace JinnSports.WEB.Controllers
 {
-    public class EventController:Controller
+    public class EventController : Controller
     {
         public ActionResult History()
         {
@@ -18,7 +18,7 @@ namespace JinnSports.WEB.Controllers
             IList<SportResultsViewModel> viewModel = EventSorter.Sort(events);
             bllService.Dispose();
 
-            return View(viewModel);
+            return this.View(viewModel);
         }
     }
 }

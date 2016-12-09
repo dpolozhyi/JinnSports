@@ -73,7 +73,7 @@ namespace JinnSports.BLL.Service
             {
                 teamDetails.Results.Add(result
                     .MapToResultDto(results
-                        .SingleOrDefault(r => Equals(r.CompetitionEvent, result.CompetitionEvent) && r.Team != result.Team)));
+                        .SingleOrDefault(r => object.Equals(r.CompetitionEvent, result.CompetitionEvent) && r.Team != result.Team)));
             }
 
             return teamDetails;

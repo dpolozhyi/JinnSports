@@ -22,7 +22,7 @@ namespace JinnSports.Entities.Entities
 
         public override string ToString()
         {
-            return "Id: " + Id + " Date: " + Date;
+            return "Id: " + this.Id + " Date: " + this.Date;
         }
     }
 }

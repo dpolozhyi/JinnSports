@@ -8,9 +8,16 @@ namespace JinnSports.WEB.Mappers
     {
         public static ResultViewModel MapToViewModel(this CompetitionEventDTO compEvent)
         {
-            return new ResultViewModel  {
-                Result = string.Concat(compEvent.Team1, " ", 
-                compEvent.Result1, ":", compEvent.Result2, " ", compEvent.Team2),
+            return new ResultViewModel
+            {
+                Result = string.Concat(
+                    compEvent.Team1, 
+                    " ", 
+                    compEvent.Result1, 
+                    ":", 
+                    compEvent.Result2, 
+                    " ", 
+                    compEvent.Team2),
                 Date = compEvent.Date.ToShortDateString()
             };
         }
