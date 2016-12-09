@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using JinnSports.BLL.Dtos;
 using JinnSports.BLL.Interfaces;
 using JinnSports.DAL.Repositories;
-using JinnSports.BLL.DTO;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.Entities.Entities;
 
@@ -12,9 +11,9 @@ namespace JinnSports.BLL.Service
     {
         private IUnitOfWork dataUnit;
 
-        public IList<CompetitionEventDTO> GetCEvents()
+        public IList<CompetitionEventDto> GetCEvents()
         {
-            IList<CompetitionEventDTO> events = new List<CompetitionEventDTO>();
+            IList<CompetitionEventDto> events = new List<CompetitionEventDto>();
             string competitionEventResult = string.Empty;
 
             this.dataUnit = new EFUnitOfWork("SportsContext");
@@ -26,7 +25,7 @@ namespace JinnSports.BLL.Service
             IEnumerable<CompetitionEvent> competitionEvents = eventsRepository.GetAll();
             foreach (CompetitionEvent ce in competitionEvents)
             {
-                CompetitionEventDTO competitionEvent = new CompetitionEventDTO();
+                CompetitionEventDto competitionEvent = new CompetitionEventDto();
                 competitionEvent.Date = ce.Date;
 
                 var datedResults = results.GetAll(r => r.CompetitionEvent.Id == ce.Id);
@@ -58,12 +57,9 @@ namespace JinnSports.BLL.Service
                     {
                         competitionEvent.Result2 = res.Score;
                     }
-
-
                 }
                 events.Add(competitionEvent);
             }
-
             return events;
         }
 
@@ -71,6 +67,5 @@ namespace JinnSports.BLL.Service
         {
             this.dataUnit.Dispose();
         }
-
     }
 }

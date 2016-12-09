@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using JinnSports.BLL.DTO;
+using JinnSports.BLL.Dtos;
 using JinnSports.WEB.Mappers;
 using JinnSports.WEB.Models;
 
@@ -8,7 +8,7 @@ namespace JinnSports.WEB.Filters
 {
     internal static class EventSorter
     {
-        public static IList<SportResultsViewModel> Sort(IList<CompetitionEventDTO> compEvents)
+        public static IList<SportResultsViewModel> Sort(IList<CompetitionEventDto> compEvents)
         {
             List<SportResultsViewModel> viewModels = new List<SportResultsViewModel>();
 

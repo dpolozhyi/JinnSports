@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace JinnSports.BLL.DTO
+namespace JinnSports.BLL.Dtos
 {
-    public class CompetitionEventDTO
+    public class CompetitionEventDto
     {
         public string SportType
         {

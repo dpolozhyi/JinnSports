@@ -12,12 +12,14 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
     {
         private XmlSerializer xmlSerializer;
         private string path;
+        public int Interval { get; private set; }
 
         public ProxyRepository()
         {
-            this.path = "../../" + ConfigSettings.Xml();
+            this.path = @"..\..\" + ConfigSettings.Xml();
             this.xmlSerializer = new XmlSerializer(typeof(List<ProxyServer>));
-        }
+            Interval = 1;
+    }
         public void Delete(string ip)
         {
             List<T> proxyCollection = new List<T>();
@@ -149,7 +151,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
         {
             TimeSpan timeDifference = DateTime.Now.TimeOfDay - proxy.LastUsed.TimeOfDay;
             var proxyTimeout = timeDifference.Seconds + (timeDifference.Minutes * 60) + (timeDifference.Hours * 3600) + (timeDifference.Days * 3600 * 24);
-            if (Math.Abs(proxyTimeout) >= 20 * 60)
+            if (Math.Abs(proxyTimeout) >= this.Interval * 60)
             {
                 return true;
             }

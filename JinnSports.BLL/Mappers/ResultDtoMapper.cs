@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using JinnSports.BLL.DTO;
+﻿using JinnSports.BLL.Dtos;
 using JinnSports.Entities.Entities;
 
 namespace JinnSports.BLL.Mappers
 {
     internal static class ResultDtoMapper
     {
-        public static ResultDTO MapToResultDto(this Result result, Result result2)
+        public static ResultDto MapToResultDto(this Result result, Result result2)
         {
-            return new ResultDTO
+            return new ResultDto
             {
                 Date = result.CompetitionEvent.Date.ToShortDateString(),
                 Score = $"{result.Score}:{result2.Score}",

@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JinnSports.BLL.DTO
+namespace JinnSports.Parser.App.JsonParsers.JsonEntities
 {
-    public class SportTypeDTO
+    public abstract class JsonObject
     {
-        public int Id { get; set; }
+        public virtual int Id { get; set; }
+
         public string Name { get; set; }
     }
 }

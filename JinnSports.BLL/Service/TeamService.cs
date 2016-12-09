@@ -1,13 +1,12 @@
-﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using JinnSports.BLL.DTO;
 using JinnSports.BLL.Exceptions;
 using JinnSports.BLL.Interfaces;
 using JinnSports.BLL.Mappers;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.DAL.Repositories;
 using JinnSports.Entities.Entities;
+using JinnSports.BLL.Dtos;
 
 namespace JinnSports.BLL.Service
 {
@@ -26,9 +25,9 @@ namespace JinnSports.BLL.Service
             this.competitionsEventsRepository = this.dataUnit.Set<CompetitionEvent>();
         }
 
-        public IEnumerable<TeamDTO> GetAllTeams()
+        public IEnumerable<TeamDto> GetAllTeams()
         {
-            List<TeamDTO> teamDtos = new List<TeamDTO>();
+            List<TeamDto> teamDtos = new List<TeamDto>();
             IEnumerable<Team> teams = this.teamsRepository.GetAll();
             var teamsList = teams as IList<Team> ?? teams.ToList();
 
@@ -45,7 +44,7 @@ namespace JinnSports.BLL.Service
             return teamDtos;
         }
 
-        public TeamDetailsDTO GetTeamDetailsById(int id)
+        public TeamDetailsDto GetTeamDetailsById(int id)
         {
             Team team = this.teamsRepository.GetById(id);
 
@@ -62,11 +61,11 @@ namespace JinnSports.BLL.Service
                 .GetAll()
                 .Where(s => events.Contains(s.CompetitionEvent))
                 .ToList();
-            TeamDetailsDTO teamDetails = new TeamDetailsDTO
+            TeamDetailsDto teamDetails = new TeamDetailsDto
             {
                 Id = team.Id,
                 Name = team.Name,
-                Results = new List<ResultDTO>()
+                Results = new List<ResultDto>()
             };
             
             foreach (var result in results)

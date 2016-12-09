@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using JinnSports.BLL.DTO;
+using JinnSports.BLL.Dtos;
 using JinnSports.BLL.Interfaces;
 using JinnSports.BLL.Service;
 using JinnSports.WEB.Mappers;
@@ -20,7 +20,7 @@ namespace JinnSports.WEB.Controllers
         // GET: Team
         public ActionResult Index()
         {
-            IEnumerable<TeamDTO> teams = this.teamService.GetAllTeams();
+            IEnumerable<TeamDto> teams = this.teamService.GetAllTeams();
 
             List<TeamViewModel> teamViewModels = new List<TeamViewModel>();
             foreach (var team in teams)
@@ -34,7 +34,7 @@ namespace JinnSports.WEB.Controllers
         // GET: Team
         public ActionResult Details(int id)
         {
-            TeamDetailsDTO team = this.teamService.GetTeamDetailsById(id);
+            TeamDetailsDto team = this.teamService.GetTeamDetailsById(id);
 
             TeamDetailsViewModel teamDetailsViewModel = new TeamDetailsViewModel
             {

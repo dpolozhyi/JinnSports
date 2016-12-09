@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using JinnSports.BLL.DTO;
+﻿using JinnSports.BLL.Dtos;
 using JinnSports.Entities.Entities;
 
 namespace JinnSports.BLL.Mappers
 {
     internal static class TeamDtoMapper
     {
-        public static TeamDTO MapToTeamDto(this Team team)
+        public static TeamDto MapToTeamDto(this Team team)
         {
-            return new TeamDTO
+            return new TeamDto
             {
                 Id = team.Id,
                 Name = team.Name

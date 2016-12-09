@@ -1,6 +1,6 @@
-﻿namespace JinnSports.BLL.DTO
+﻿namespace JinnSports.BLL.Dtos
 {
-    public class ResultDTO
+    public class ResultDto
     {
         public string Team1 { get; set; }
         public int Team1Id { get; set; }

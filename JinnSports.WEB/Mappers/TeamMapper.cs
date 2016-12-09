@@ -1,13 +1,11 @@
-﻿using System.Linq;
-using JinnSports.BLL.DTO;
-using JinnSports.Entities.Entities;
+﻿using JinnSports.BLL.Dtos;
 using JinnSports.WEB.Models;
 
 namespace JinnSports.WEB.Mappers
 {
     internal static class TeamMapper
     {
-        public static TeamViewModel MapToTeamViewModel(this TeamDTO team)
+        public static TeamViewModel MapToTeamViewModel(this TeamDto team)
         {
             return new TeamViewModel
             {

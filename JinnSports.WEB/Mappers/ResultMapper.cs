@@ -1,4 +1,4 @@
-﻿using JinnSports.BLL.DTO;
+﻿using JinnSports.BLL.Dtos;
 using JinnSports.Entities.Entities;
 using JinnSports.WEB.Models;
 
@@ -6,7 +6,7 @@ namespace JinnSports.WEB.Mappers
 {
     internal static class ResultMapper
     {
-        public static ResultViewModel MapToViewModel(this CompetitionEventDTO compEvent)
+        public static ResultViewModel MapToViewModel(this CompetitionEventDto compEvent)
         {
             return new ResultViewModel
             {
@@ -31,7 +31,7 @@ namespace JinnSports.WEB.Mappers
             };
         }
 
-        public static ResultDetailsViewModel MapToResultDetailsViewModel(this ResultDTO result)
+        public static ResultDetailsViewModel MapToResultDetailsViewModel(this ResultDto result)
         {
             return new ResultDetailsViewModel
             {

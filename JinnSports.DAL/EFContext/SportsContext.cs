@@ -1,7 +1,5 @@
-using System;
 using System.Configuration;
 using System.Data.Entity;
-using System.IO;
 using JinnSports.Entities.Entities;
 
 namespace JinnSports.DAL.EFContext
@@ -10,7 +8,6 @@ namespace JinnSports.DAL.EFContext
     {
         static SportsContext()
         {
-            Database.SetInitializer(new SportsDbInitializer());
         }
        
         public SportsContext(string connectionName) : base(GetConnectionString(connectionName))

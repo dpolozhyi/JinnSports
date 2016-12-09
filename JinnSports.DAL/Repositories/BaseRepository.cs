@@ -14,6 +14,7 @@ namespace JinnSports.DAL.Repositories
         {
             this.DbSet = db.Set<T>();
         }
+
         private DbSet<T> DbSet { get; }
 
         public IEnumerable<T> GetAll()
