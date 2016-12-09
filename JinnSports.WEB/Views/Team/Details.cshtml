@@ -1,6 +1,4 @@
-﻿@model JinnSports.WEB.Models.TeamDetailsViewModel
-
-@{
+﻿@{
     Layout = null;
 }
 
@@ -13,12 +11,9 @@
 </head>
 <body>
 <div>
-    <h3>ID: @Model.Id</h3>
-    <h4>NAME: @Model.Name</h4>
-    @foreach (var resultDetailsViewModel in Model.Results)
-    {
-        @Html.Partial("_ResultPartial", resultDetailsViewModel)
-    }
+    <h3>ID: </h3>
+    <h4>NAME: </h4>
+    
 </div>
 </body>
 </html>
