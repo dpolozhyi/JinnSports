@@ -1,6 +1,4 @@
-﻿@model IEnumerable<JinnSports.WEB.Models.TeamViewModel>
-
-@{
+﻿@{
     Layout = null;
 }
 
@@ -17,16 +15,16 @@
     <div>
         <dl class="dl-horizontal">
             <dt>
-                @Html.DisplayNameFor(model => model.Name)
+                
             </dt>
 
             <dd>
-                @Html.DisplayFor(modelItem => item.Name)
+               
             </dd>
         </dl>
     </div>
     <p>
-        @Html.ActionLink("Details", "Details", new { id = item.Id })
+        @Html.ActionLink("Details", "Details")
     </p>
 }
 <hr />

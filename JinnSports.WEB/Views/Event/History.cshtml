@@ -1,6 +1,4 @@
-﻿@using JinnSports.WEB.Models
-@model IList<SportResultsViewModel>
-@{
+﻿@{
     Layout = null;
 }
 
@@ -14,22 +12,16 @@
 <body>
     <div> 
         <h3>Sport History</h3>
-        <table>
-            @foreach (var sportEvents in Model)
-            {
+        <table>           
                 <tr>
                     <td colspan="2">
-                        <h3>@sportEvents.SportName</h3>
+                        <h3></h3>
                     </td>
+                </tr>                
+                <tr>
+                    <td><h4></h4></td>
+                    <td><h4></h4></td>
                 </tr>
-                foreach (var events in sportEvents.Events)
-                {
-                    <tr>
-                        <td><h4>@events.Result</h4></td>
-                        <td><h4>@events.Date</h4></td>
-                    </tr>
-                }
-            }
         </table>
     </div>
 </body>
