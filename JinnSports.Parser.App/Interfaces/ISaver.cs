@@ -5,6 +5,6 @@ namespace JinnSports.Parser.App.Interfaces
 {
     public interface ISaver
     {
-        void DbSaveChanges(List<Result> results);
+        void DBSaveChanges(List<Result> results);
     }
 }
