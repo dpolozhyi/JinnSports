@@ -4,68 +4,56 @@ using JinnSports.BLL.Interfaces;
 using JinnSports.DAL.Repositories;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.Entities.Entities;
+using System.Linq;
 
 namespace JinnSports.BLL.Service
 {
     public class EventsService : IEventService
     {
-        private IUnitOfWork dataUnit;
-
-        public IList<CompetitionEventDto> GetCEvents()
+        private IUnitOfWork dataUnit; 
+        
+        public IDictionary<string, List<SportEventDto>> GetSportEvents()
         {
-            IList<CompetitionEventDto> events = new List<CompetitionEventDto>();
-            string competitionEventResult = string.Empty;
-
-            this.dataUnit = new EFUnitOfWork("SportsContext");
-
-            IRepository<CompetitionEvent> eventsRepository = this.dataUnit.Set<CompetitionEvent>();
-            IRepository<Team> teams = this.dataUnit.Set<Team>();
-            IRepository<Result> results = this.dataUnit.Set<Result>();
-
-            IEnumerable<CompetitionEvent> competitionEvents = eventsRepository.GetAll();
-            foreach (CompetitionEvent ce in competitionEvents)
+            IDictionary<string, List<SportEventDto>> orderedEvents = new Dictionary<string, List<SportEventDto>>();
+            
+            using (dataUnit = new EFUnitOfWork("SportsContext"))
             {
-                CompetitionEventDto competitionEvent = new CompetitionEventDto();
-                competitionEvent.Date = ce.Date;
+                IEnumerable<SportEvent> sportEvents = dataUnit.Set<SportEvent>().GetAll();
+                IEnumerable<SportType> sportTypes = dataUnit.Set<SportType>().GetAll();
 
-                var datedResults = results.GetAll(r => r.CompetitionEvent.Id == ce.Id);
-
-                competitionEventResult = string.Empty;
-
-                foreach (Result res in datedResults)
+                foreach (SportType sportType in sportTypes)
                 {
-                    Team selectedTeam = teams.Get(t => t.Id == res.Team.Id);
-                    if (string.IsNullOrEmpty(competitionEvent.SportType)) 
+                    orderedEvents.Add(sportType.Name, new List<SportEventDto>());
+                }
+
+                foreach (SportEvent sportEvent in sportEvents)
+                {
+                    SportEventDto eventDto = new SportEventDto();
+                    eventDto.Date = sportEvent.Date;
+
+                    foreach (Result result in sportEvent.Results)
                     {
-                        competitionEvent.SportType = selectedTeam.SportType.Name;
+                        eventDto.Results.Add(result.Team.Name, result.Score);
                     }
 
-                    if (string.IsNullOrEmpty(competitionEvent.Team1))
+                    List<SportEventDto> listedEventDtos;
+                    if (orderedEvents.TryGetValue(sportEvent.SportType.Name, out listedEventDtos))
                     {
-                        competitionEvent.Team1 = res.Team.Name;
-                    }
-                    else
-                    {
-                        competitionEvent.Team2 = res.Team.Name;
-                    }
-
-                    if (string.IsNullOrEmpty(competitionEvent.Result1))
-                    {
-                        competitionEvent.Result1 = res.Score;
-                    }
-                    else
-                    {
-                        competitionEvent.Result2 = res.Score;
+                        listedEventDtos.Add(eventDto);
                     }
                 }
-                events.Add(competitionEvent);
             }
-            return events;
+
+            return orderedEvents;
         }
 
-        public void Dispose()
+        public void SortEventsByDate(IDictionary<string, List<SportEventDto>> orderedEvents)
         {
-            this.dataUnit.Dispose();
+            ICollection<List<SportEventDto>> eventsLists = orderedEvents.Values;
+            foreach (List<SportEventDto> eventsList in eventsLists)
+            {
+                eventsList.OrderBy(e => e.Date);
+            }
         }
     }
 }
