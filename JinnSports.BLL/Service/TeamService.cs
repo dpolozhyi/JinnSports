@@ -6,6 +6,7 @@ using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.DAL.Repositories;
 using JinnSports.Entities.Entities;
 using JinnSports.BLL.Dtos;
+using System;
 
 namespace JinnSports.BLL.Service
 {
@@ -27,8 +28,7 @@ namespace JinnSports.BLL.Service
                 IEnumerable<Team> teams = dataUnit.Set<Team>().GetAll();
                 foreach (Team team in teams)
                 {
-                    TeamDto teamDto = new TeamDto();
-                    teamDto.Name = team.Name;
+                    TeamDto teamDto = new TeamDto { Name = team.Name };
 
                     foreach (Result result in team.Results)
                     {
@@ -44,7 +44,7 @@ namespace JinnSports.BLL.Service
 
         public TeamDto GetTeamById(int id)
         {
-            return new TeamDto();
+            throw new NotImplementedException();
         }
     }
 }

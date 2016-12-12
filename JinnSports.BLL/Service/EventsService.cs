@@ -28,19 +28,14 @@ namespace JinnSports.BLL.Service
 
                 foreach (SportEvent sportEvent in sportEvents)
                 {
-                    SportEventDto eventDto = new SportEventDto();
-                    eventDto.Date = sportEvent.Date;
+                    SportEventDto eventDto = new SportEventDto { Date = sportEvent.Date };
 
                     foreach (Result result in sportEvent.Results)
                     {
                         eventDto.Results.Add(result.Team.Name, result.Score);
                     }
 
-                    List<SportEventDto> listedEventDtos;
-                    if (orderedEvents.TryGetValue(sportEvent.SportType.Name, out listedEventDtos))
-                    {
-                        listedEventDtos.Add(eventDto);
-                    }
+                    orderedEvents[sportEvent.SportType.Name].Add(eventDto);        
                 }
             }
 

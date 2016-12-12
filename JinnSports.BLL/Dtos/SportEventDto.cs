@@ -6,22 +6,8 @@ namespace JinnSports.BLL.Dtos
 {
     public class SportEventDto
     {
-        public SportEventDto()
-        {
-            this.Results = new Dictionary<string, int>();
-        }
-
-        public string SportType
-        {
-            get; set;
-        }
-        public DateTime Date
-        {
-            get; set;
-        }
-        public IDictionary<string, int> Results
-        {
-            get; set;
-        }
+        public string SportType { get; set; }
+        public DateTime Date { get; set; }
+        public IDictionary<string, int> Results { get; set; } = new Dictionary<string, int>();
     }
 }
