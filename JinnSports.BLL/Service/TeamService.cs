@@ -14,11 +14,6 @@ namespace JinnSports.BLL.Service
     {
         private IUnitOfWork dataUnit;
 
-        public TeamService()
-        {
-            
-        }
-
         public IEnumerable<TeamDto> GetAllTeams()
         {
             IList<TeamDto> teamDtoList = new List<TeamDto>();
