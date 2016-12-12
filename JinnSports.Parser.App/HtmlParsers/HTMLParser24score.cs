@@ -10,7 +10,7 @@ using JinnSports.Parser.App.ProxyService.ProxyConnection;
 
 namespace JinnSports.Parser.App.HtmlParsers
 {
-    /*public class HTMLParser24score
+    public class HTMLParser24score
     {
         public HTMLParser24score(IUnitOfWork unit)
         {
@@ -105,5 +105,5 @@ namespace JinnSports.Parser.App.HtmlParsers
                 }
             }            
         }
-    }*/
+    }
 }
