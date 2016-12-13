@@ -9,9 +9,9 @@ namespace JinnSports.DAL.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
-            AutomaticMigrationDataLossAllowed = false;
-            ContextKey = "JinnSports.DAL.EFContext.SportsContext";
+            this.AutomaticMigrationsEnabled = false;
+            this.AutomaticMigrationDataLossAllowed = false;
+            this.ContextKey = "JinnSports.DAL.EFContext.SportsContext";
         }
 
         protected override void Seed(JinnSports.DAL.EFContext.SportsContext context)
