@@ -7,6 +7,7 @@ namespace JinnSports.Entities.Entities
     public class SportEvent
     {
         public int Id { get; set; }
+
         public DateTime Date { get; set; }
 
         public virtual SportType SportType { get; set; }

@@ -1,8 +1,8 @@
+using System;
+using System.Data.Entity.Migrations;
+
 namespace JinnSports.DAL.Migrations
 {
-    using System;
-    using System.Data.Entity.Migrations;
-    
     public partial class SportEvents : DbMigration
     {
         public override void Up()
@@ -14,6 +14,9 @@ namespace JinnSports.DAL.Migrations
             this.AlterColumn("dbo.Results", "Score", c => c.Int(nullable: false));
             this.CreateIndex("dbo.SportEvents", "SportType_Id");
             this.AddForeignKey("dbo.SportEvents", "SportType_Id", "dbo.SportTypes", "Id");
+            this.Sql(@"INSERT INTO [dbo].[SportTypes] ([NAME]) VALUES('Football')
+                  INSERT INTO [dbo].[SportTypes] ([NAME]) VALUES('Basletball')
+                  INSERT INTO [dbo].[SportTypes] ([NAME]) VALUES('Hockey')");
         }
         
         public override void Down()
