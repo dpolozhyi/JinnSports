@@ -95,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Global.asax.cs">
@@ -106,9 +107,10 @@
     <Content Include="packages.config" />
     <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\Shared\_ResultPartial.cshtml" />
-    <Content Include="Views\Event\History.cshtml" />
+    <Content Include="Views\Event\Index.cshtml" />
     <Content Include="Views\Team\Details.cshtml" />
     <Content Include="Settings.StyleCop" />
+    <Content Include="Views\Home\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
