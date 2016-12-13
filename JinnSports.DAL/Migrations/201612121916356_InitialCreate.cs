@@ -56,16 +56,16 @@ namespace JinnSports.DAL.Migrations
         
         public override void Down()
         {
-            DropForeignKey("dbo.Teams", "SportType_Id", "dbo.SportTypes");
-            DropForeignKey("dbo.Results", "Team_Id", "dbo.Teams");
-            DropForeignKey("dbo.Results", "CompetitionEvent_Id", "dbo.CompetitionEvents");
-            DropIndex("dbo.Teams", new[] { "SportType_Id" });
-            DropIndex("dbo.Results", new[] { "Team_Id" });
-            DropIndex("dbo.Results", new[] { "CompetitionEvent_Id" });
-            DropTable("dbo.SportTypes");
-            DropTable("dbo.Teams");
-            DropTable("dbo.Results");
-            DropTable("dbo.CompetitionEvents");
+            this.DropForeignKey("dbo.Teams", "SportType_Id", "dbo.SportTypes");
+            this.DropForeignKey("dbo.Results", "Team_Id", "dbo.Teams");
+            this.DropForeignKey("dbo.Results", "CompetitionEvent_Id", "dbo.CompetitionEvents");
+            this.DropIndex("dbo.Teams", new[] { "SportType_Id" });
+            this.DropIndex("dbo.Results", new[] { "Team_Id" });
+            this.DropIndex("dbo.Results", new[] { "CompetitionEvent_Id" });
+            this.DropTable("dbo.SportTypes");
+            this.DropTable("dbo.Teams");
+            this.DropTable("dbo.Results");
+            this.DropTable("dbo.CompetitionEvents");
         }
     }
 }

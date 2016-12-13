@@ -3,6 +3,7 @@ using AngleSharp.Parser.Html;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.Parser.App.ProxyService.ProxyConnection;
@@ -42,7 +43,7 @@ namespace JinnSports.Parser.App.HtmlParsers
                 {
                     currentSport = "Football";
                 }
-                SportType sport = this.Unit.Set<SportType>().Get(t => t.Name == currentSport);
+                SportType sport = this.Unit.GetRepository<SportType>().Get(t => t.Name == currentSport).FirstOrDefault();
                 DateTime now = DateTime.Now;
 
                 for (int i = 1; i < daysCount + 1; i++)
@@ -87,13 +88,13 @@ namespace JinnSports.Parser.App.HtmlParsers
                 string name1 = htmlTr.Children[1].FirstElementChild.TextContent;
                 string name2 = htmlTr.Children[2].FirstElementChild.TextContent;
 
-                Team t1 = this.Unit.Set<Team>().Get(t => t.Name == name1);
+                Team t1 = this.Unit.GetRepository<Team>().Get(t => t.Name == name1).FirstOrDefault();
                 if (t1 == null)
                 {
                     t1 = new Team { Name = name1, SportType = sportType };
                 }
 
-                Team t2 = this.Unit.Set<Team>().Get(t => t.Name == name2);
+                Team t2 = this.Unit.GetRepository<Team>().Get(t => t.Name == name2).FirstOrDefault();
                 if (t2 == null)
                 {
                     t2 = new Team { Name = name2, SportType = sportType };
@@ -134,13 +135,10 @@ namespace JinnSports.Parser.App.HtmlParsers
         {
             foreach (Result item in results)
             {
-                this.Unit.Set<Result>().Add(item);
+                this.Unit.GetRepository<Result>().Insert(item);
             }
 
             this.Unit.SaveChanges();
         }
     }
-
-
 }
-

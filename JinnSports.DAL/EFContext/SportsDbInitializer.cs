@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data.Entity;
-using JinnSports.Entities.Entities;
+﻿using System.Data.Entity;
 
 namespace JinnSports.DAL.EFContext
 {

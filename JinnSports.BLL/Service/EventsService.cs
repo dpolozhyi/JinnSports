@@ -16,10 +16,10 @@ namespace JinnSports.BLL.Service
         {
             IDictionary<string, List<SportEventDto>> orderedEvents = new Dictionary<string, List<SportEventDto>>();
             
-            using (dataUnit = new EFUnitOfWork("SportsContext"))
+            using (this.dataUnit = new EFUnitOfWork("SportsContext"))
             {
-                IEnumerable<SportEvent> sportEvents = dataUnit.Set<SportEvent>().GetAll();
-                IEnumerable<SportType> sportTypes = dataUnit.Set<SportType>().GetAll();
+                IEnumerable<SportEvent> sportEvents = this.dataUnit.GetRepository<SportEvent>().Get();
+                IEnumerable<SportType> sportTypes = this.dataUnit.GetRepository<SportType>().Get();
 
                 foreach (SportType sportType in sportTypes)
                 {
