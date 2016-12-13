@@ -16,9 +16,7 @@ namespace JinnSports.Parser.App.JsonParsers
     public class JsonParser : ISaver
     {
         private IUnitOfWork uow;
-
-        public Uri SiteUri { get; private set; }
-
+        
         public JsonParser() : this(new Uri("http://results.fbwebdn.com/results.json.php"))
         {
         }
@@ -37,6 +35,7 @@ namespace JinnSports.Parser.App.JsonParsers
             this.SiteUri = uri;
             this.uow = unit;
         }
+        public Uri SiteUri { get; private set; }
 
         public void StartParser()
         {
@@ -63,7 +62,7 @@ namespace JinnSports.Parser.App.JsonParsers
             }
             Stream stream = resp.GetResponseStream();
 
-            for (int i = 1; ; i++)
+            for (int i = 1;; i++)
             {
                 ch = stream.ReadByte();
                 if (ch == -1)
@@ -85,8 +84,8 @@ namespace JinnSports.Parser.App.JsonParsers
 
         public void DBSaveChanges(List<Result> results)
         {
-            uow.Set<Result>().AddAll(results.ToArray());
-            uow.SaveChanges();
+            this.uow.GetRepository<Result>().InsertAll(results.ToArray());
+            this.uow.SaveChanges();
         }
 
         public List<Result> GetResultsList(JsonResult result)
@@ -102,7 +101,7 @@ namespace JinnSports.Parser.App.JsonParsers
                     SportType sportType = new SportType();
                     Result resTeam1 = new Result();
                     Result resTeam2 = new Result();
-                    SportEvent compEvent = new SportEvent() { Date = this.GetEventDate(e)};
+                    SportEvent compEvent = new SportEvent { Date = this.GetEventDate(e) };
 
                     var sports = result.Sections.Where(n => n.Events.Contains(e.Id)).Select(n => n).ToList();
                     string sportName = result.Sports.Where(n => n.Id == sports[0].Sport).Select(n => n).ToList()[0].Name;
@@ -150,11 +149,11 @@ namespace JinnSports.Parser.App.JsonParsers
 
             if (!invertScore)
             {
-                Int32.TryParse(scores[0], out score);
+                int.TryParse(scores[0], out score);
             }
             else
             {
-                Int32.TryParse(scores[1], out score);
+                int.TryParse(scores[1], out score);
             }
             res.Score = score;
         }
