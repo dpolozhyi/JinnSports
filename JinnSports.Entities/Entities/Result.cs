@@ -3,8 +3,11 @@
     public class Result
     {
         public int Id { get; set; }
+
         public virtual Team Team { get; set; }
+
         public virtual SportEvent SportEvent { get; set; }
+
         public int Score { get; set; }
 
         public override string ToString()
