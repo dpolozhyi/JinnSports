@@ -5,6 +5,7 @@ using JinnSports.DAL.Repositories;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.Entities.Entities;
 using System.Linq;
+using AutoMapper;
 
 namespace JinnSports.BLL.Service
 {
@@ -28,14 +29,7 @@ namespace JinnSports.BLL.Service
 
                 foreach (SportEvent sportEvent in sportEvents)
                 {
-                    SportEventDto eventDto = new SportEventDto { Date = sportEvent.Date };
-
-                    foreach (Result result in sportEvent.Results)
-                    {
-                        eventDto.Results.Add(result.Team.Name, result.Score);
-                    }
-
-                    orderedEvents[sportEvent.SportType.Name].Add(eventDto);        
+                    orderedEvents[sportEvent.SportType.Name].Add(Mapper.Map<SportEvent, SportEventDto>(sportEvent));
                 }
             }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using JinnSports.BLL.Mappers;
 
 namespace JinnSports.WEB
 {
@@ -13,6 +14,7 @@ namespace JinnSports.WEB
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            AutoMapperConfiguration.Configure();
         }
     }
 }
