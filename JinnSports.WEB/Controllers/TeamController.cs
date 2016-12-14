@@ -45,12 +45,12 @@ namespace JinnSports.WEB.Controllers
                 .Take(pageSize)
                 .ToList();
 
-            foreach(TeamDto team in teams)
+            foreach (TeamDto team in teams)
             {
                 team.Results = null;
             }
 
-            return Json(
+            return this.Json(
                 new
                 {
                     draw = draw,

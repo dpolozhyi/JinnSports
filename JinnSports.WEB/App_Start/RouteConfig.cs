@@ -26,7 +26,7 @@ namespace JinnSports.WEB
 
             routes.MapRoute(
                 name: "Home",
-                url: "",
+                url: string.Empty,
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional });
 
             routes.MapRoute(
