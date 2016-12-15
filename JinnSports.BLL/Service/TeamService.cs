@@ -18,9 +18,9 @@ namespace JinnSports.BLL.Service
         {
             IList<TeamDto> teamDtoList = new List<TeamDto>();
 
-            using (dataUnit = new EFUnitOfWork("SportsContext"))
+            using (this.dataUnit = new EFUnitOfWork("SportsContext"))
             {
-                IEnumerable<Team> teams = dataUnit.Set<Team>().GetAll();
+                IEnumerable<Team> teams = this.dataUnit.GetRepository<Team>().Get();
                 foreach (Team team in teams)
                 {
                     TeamDto teamDto = new TeamDto { Name = team.Name };
