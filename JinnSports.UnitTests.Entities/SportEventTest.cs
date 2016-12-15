@@ -25,13 +25,13 @@ namespace JinnSports.UnitTests.Entities
             res2 = new Result { Id = 1, Team = team2, Score = 1 };
             res3 = new Result { Id = 2, Team = team3, Score = 5 };
 
-            sportEvent1 = new SportEvent();
+            sportEvent1 = new SportEvent { Id = 0 };
             sportEvent1.Results = new List<Result>();
 
-            sportEvent2 = new SportEvent();
+            sportEvent2 = new SportEvent { Id = 1 };
             sportEvent2.Results = new List<Result>();
 
-            sportEvent3 = new SportEvent();
+            sportEvent3 = new SportEvent { Id = 2 };
             sportEvent3.Results = new List<Result>();
 
             DateTime date = new DateTime(2016, 11, 21, 16, 30, 0);
@@ -113,23 +113,23 @@ namespace JinnSports.UnitTests.Entities
         }
 
         [Test]
-        public void CheckContainsDifferent()
+        public void CheckSetContainsDifferent()
         {
             ICollection<SportEvent> set = new HashSet<SportEvent>();
             set.Add(sportEvent1);
             set.Add(sportEvent3);
 
-            Assert.IsTrue(set.Contains(sportEvent1) && set.Contains(sportEvent3));
+            Assert.IsTrue(set.Contains(sportEvent1) && set.Contains(sportEvent3) && (set.Count == 2));
         }
 
         [Test]
-        public void CheckNotContainsSame()
+        public void CheckSetNotContainsSame()
         {
             ICollection<SportEvent> set = new HashSet<SportEvent>();
             set.Add(sportEvent1);
             set.Add(sportEvent2);
 
-            Assert.IsFalse(set.Contains(sportEvent2));
+            Assert.IsTrue(set.Contains(sportEvent1) && (set.Count == 1));
         }
     }
 }
