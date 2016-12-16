@@ -12,24 +12,25 @@ namespace JinnSports.WEB.Controllers
     public class TeamDetailsController : Controller
     {
         private readonly ITeamDetailsService teamDetailsService;
-        // GET: TeamDetails
-        public ActionResult Index()
-        {
-            return View();
-        }
-        // GET: Team
-        public ActionResult Details(int? id = 2)
-        {
-            return this.View();
-        }
 
         public TeamDetailsController()
         {
             this.teamDetailsService = new TeamDetailsService();
         }
 
+        // GET: TeamDetails
+        public ActionResult Index()
+        {
+            return this.View();
+        }
+        // GET: TeamDetails
+        public ActionResult Details(int? id = 4)
+        {
+            return this.View();
+        }
+
         [HttpPost]
-        public ActionResult LoadResults(int? id = 2)
+        public ActionResult LoadResults(int? id = 4)
         {
             string draw = this.Request.Form.GetValues("draw").FirstOrDefault();
             string start = this.Request.Form.GetValues("start").FirstOrDefault();
@@ -38,8 +39,8 @@ namespace JinnSports.WEB.Controllers
 
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
-            int recordsTotal = this.teamDetailsService.Count();
             int teamId = id != null ? Convert.ToInt32(id) : 0;
+            int recordsTotal = this.teamDetailsService.Count(id);
 
             List<ResultDto> results = this.teamDetailsService.GetResults(teamId)
                 .Skip(skip)

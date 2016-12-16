@@ -18,13 +18,13 @@ namespace JinnSports.BLL.Service
 
         private IUnitOfWork dataUnit;
 
-        public int Count()
+        public int Count(int? teamId)
         {
             int count;
 
             using (this.dataUnit = new EFUnitOfWork(SPORTCONTEXT))
             {
-                count = this.dataUnit.GetRepository<SportEvent>().Count(); //изменить
+                count = this.dataUnit.GetRepository<Team>().GetById(teamId).Results.ToList().Count(); //изменить
             }
             return count;
         }
