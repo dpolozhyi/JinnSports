@@ -10,7 +10,7 @@ namespace JinnSports.WEB.App_Start
     {
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/bundles/jquery")
+           bundles.Add(new ScriptBundle("~/bundles/jquery")
                 .Include("~/Scripts/jquery-3.1.1.js"));
         }
     }

@@ -7,16 +7,17 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Teams</title>
+    <title>Team Details</title>
 </head>
 <body>
     @Html.ActionLink("Главная", "Index", "Home")
     @Html.ActionLink("Результаты", "Index", "Event")
+    @Html.ActionLink("Результаты матчей", "Index", "Event")
     <div style="width:90%; margin:0 auto;">
-        <table id="teamTable">
+        <table id="teamResultTable">
             <thead>
                 <tr>
-                    <th>Team</th>
+                    <th>TeamDetails</th>
                 </tr>
             </thead>
         </table>
@@ -24,28 +25,32 @@
     @Scripts.Render("~/bundles/jquery")
     @* Load datatable css *@
     <link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
-    
-        @* Load DataTable js here *@
-         <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
-        <script>
+
+    @* Load DataTable js here *@
+    <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+
+    <script>
         $(document).ready(function () {
-            $("#teamTable").DataTable({
+            $("#teamResultTable").DataTable({
                 "processing": true,
                 "serverSide": true,
                 "filter": false,
                 "orderMulti": false,
                 "ajax": {
-                    "url": "/Team/LoadTeams",
+                    "url": "/TeamDetails/LoadResults",
                     "type": "POST",
                     "datatype": "json"
                 },
                 "columns": [
-                        { "data": "Name", "name": "Name", "autoWidth": true }
+                        { "data": "TeamFirst", "team1": "TeamFirst", "autoWidth": true },
+                        { "data": "Score", "score": "Score", "autoWidth": true },
+                        { "data": "TeamSecond", "team2": "TeamSecond", "autoWidth": true },
+                        { "data": "Date", "date": "Date", "autoWidth": true }
                 ]
             });
         });
-        </script>
+    </script>
 
-<hr />
+    <hr />
 </body>
 </html>

@@ -1,14 +1,16 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
+using JinnSports.Entities.Entities;
 
 namespace JinnSports.DAL.EFContext
 {
     public class SportsDbInitializer : CreateDatabaseIfNotExists<SportsContext>
     {
-        /*protected override void Seed(SportsContext context)
+        protected override void Seed(SportsContext context)
         {
-            /*
-                ---- Init sport types ----
-            
+
+            //    ---- Init sport types ----
+
             SportType football = new SportType()
             {
                 Id = 1,
@@ -34,9 +36,9 @@ namespace JinnSports.DAL.EFContext
             };
 
 
-            /*
-                ---- Init teams ----
-            
+
+            // ---- Init teams ----
+
 
             // Football teams
             Team MU = new Team()
@@ -91,39 +93,40 @@ namespace JinnSports.DAL.EFContext
             };
 
 
-            /*
-                --- Init Events --- 
-            
+
+            //    --- Init Events --- 
+
             SportEvent ChicagoBulls_vs_LA_event = new SportEvent()
             {
                 Id = 1,
-                Date = new DateTime(2016, 11, 5, 16, 0, 0)
+                Date = new DateTime(2016, 11, 5, 16, 0, 0),
+                SportType = basketball
             };
             SportEvent ChicagoBulls_vs_Suns_event = new SportEvent()
             {
                 Id = 2,
-                Date = new DateTime(2016, 11, 29, 16, 0, 0)
+                Date = new DateTime(2016, 11, 29, 16, 0, 0),
+                SportType = basketball
             };
             SportEvent LA_vs_Suns_event = new SportEvent()
             {
                 Id = 3,
-                Date = new DateTime(2016, 11, 15, 16, 0, 0)
+                Date = new DateTime(2016, 11, 15, 16, 0, 0),
+                SportType = basketball
             };
-            SportEvent MU_vs_Bayern_event = new SportEvent()
-            {
-                Id = 4,
-                Date = new DateTime(2016, 12, 6, 15, 0, 0)
-            };
+
             SportEvent MU_vs_MC_event = new SportEvent()
             {
                 Id = 5,
-                Date = new DateTime(2016, 11, 19, 17, 0, 0)
+                Date = new DateTime(2016, 11, 19, 17, 0, 0),
+                SportType = football
             };
 
             SportEvent Bayern_vs_Milano_event = new SportEvent()
             {
                 Id = 6,
-                Date = new DateTime(2016, 10, 28, 17, 0, 0)
+                Date = new DateTime(2016, 10, 28, 17, 0, 0),
+                SportType = football
             };
             Result Bayern_vs_Milano = new Result()
             {
@@ -144,7 +147,8 @@ namespace JinnSports.DAL.EFContext
             SportEvent Chelsea_vs_MC_event = new SportEvent()
             {
                 Id = 7,
-                Date = new DateTime(2016, 10, 17, 18, 0, 0)
+                Date = new DateTime(2016, 10, 17, 18, 0, 0),
+                SportType = football
             };
             Result Chelsea_vs_MC = new Result()
             {
@@ -164,7 +168,8 @@ namespace JinnSports.DAL.EFContext
             SportEvent Chelsea_vs_Milano_event = new SportEvent()
             {
                 Id = 8,
-                Date = new System.DateTime(2016, 11, 3, 16, 0, 0)
+                Date = new System.DateTime(2016, 11, 3, 16, 0, 0),
+                SportType = football
             };
             Result Chelsea_vs_Milano = new Result()
             {
@@ -263,7 +268,6 @@ namespace JinnSports.DAL.EFContext
             context.SportEvents.Add(ChicagoBulls_vs_LA_event);
             context.SportEvents.Add(ChicagoBulls_vs_Suns_event);
             context.SportEvents.Add(LA_vs_Suns_event);
-            context.SportEvents.Add(MU_vs_Bayern_event);
             context.SportEvents.Add(Bayern_vs_Milano_event);
             context.SportEvents.Add(MU_vs_MC_event);
             context.SportEvents.Add(Chelsea_vs_Milano_event);
@@ -286,6 +290,6 @@ namespace JinnSports.DAL.EFContext
 
             context.SaveChanges();
             base.Seed(context);
-        }*/
+        }
     }
 }
