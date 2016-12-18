@@ -2,3 +2,4 @@ D:\Work\SoftServe\JinnLTE\JinnSports.DataAccessInterfaces\bin\Debug\JinnSports.D
 D:\Work\SoftServe\JinnLTE\JinnSports.DataAccessInterfaces\bin\Debug\JinnSports.DataAccessInterfaces.pdb
 D:\Work\SoftServe\JinnLTE\JinnSports.DataAccessInterfaces\obj\Debug\JinnSports.DataAccessInterfaces.dll
 D:\Work\SoftServe\JinnLTE\JinnSports.DataAccessInterfaces\obj\Debug\JinnSports.DataAccessInterfaces.pdb
+D:\Work\SoftServe\JinnLTE\JinnSports.DataAccessInterfaces\obj\Debug\JinnSports.DataAccessInterfaces.csprojResolveAssemblyReference.cache

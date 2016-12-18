@@ -30,7 +30,7 @@ namespace JinnSports.WEB.Controllers
         }
 
         [HttpPost]
-        public ActionResult LoadResults(int? id = 3)
+        public ActionResult LoadResults(int? id = 6)
         {
             string draw = this.Request.Form.GetValues("draw").FirstOrDefault();
             string start = this.Request.Form.GetValues("start").FirstOrDefault();

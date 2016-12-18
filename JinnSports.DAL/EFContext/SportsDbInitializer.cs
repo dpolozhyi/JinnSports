@@ -92,8 +92,6 @@ namespace JinnSports.DAL.EFContext
                 SportType = basketball
             };
 
-
-
             //    --- Init Events --- 
 
             SportEvent ChicagoBulls_vs_LA_event = new SportEvent()
@@ -255,24 +253,6 @@ namespace JinnSports.DAL.EFContext
             context.SportTypes.Add(tennis);
             context.SportTypes.Add(snooker);
 
-
-            context.Teams.Add(MU);
-            context.Teams.Add(Milano);
-            context.Teams.Add(MC);
-            context.Teams.Add(Chelsea);
-            context.Teams.Add(Bayern);
-            context.Teams.Add(ChicagoBulls);
-            context.Teams.Add(LALakers);
-            context.Teams.Add(PhoenixSuns);
-
-            context.SportEvents.Add(ChicagoBulls_vs_LA_event);
-            context.SportEvents.Add(ChicagoBulls_vs_Suns_event);
-            context.SportEvents.Add(LA_vs_Suns_event);
-            context.SportEvents.Add(Bayern_vs_Milano_event);
-            context.SportEvents.Add(MU_vs_MC_event);
-            context.SportEvents.Add(Chelsea_vs_Milano_event);
-            context.SportEvents.Add(Chelsea_vs_MC_event);
-
             context.Results.Add(Ch_vs_LA);
             context.Results.Add(LA_vs_Ch);
             context.Results.Add(Ch_vs_Ph);
@@ -287,6 +267,23 @@ namespace JinnSports.DAL.EFContext
             context.Results.Add(MC_vs_Chelsea);
             context.Results.Add(Chelsea_vs_Milano);
             context.Results.Add(Milano_vs_Chelsea);
+
+            context.SportEvents.Add(ChicagoBulls_vs_LA_event);
+            context.SportEvents.Add(ChicagoBulls_vs_Suns_event);
+            context.SportEvents.Add(LA_vs_Suns_event);
+            context.SportEvents.Add(Bayern_vs_Milano_event);
+            context.SportEvents.Add(MU_vs_MC_event);
+            context.SportEvents.Add(Chelsea_vs_Milano_event);
+            context.SportEvents.Add(Chelsea_vs_MC_event);
+
+            context.Teams.Add(MU);
+            context.Teams.Add(Milano);
+            context.Teams.Add(MC);
+            context.Teams.Add(Chelsea);
+            context.Teams.Add(Bayern);
+            context.Teams.Add(ChicagoBulls);
+            context.Teams.Add(LALakers);
+            context.Teams.Add(PhoenixSuns);
 
             context.SaveChanges();
             base.Seed(context);

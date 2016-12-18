@@ -7,6 +7,7 @@ using JinnSports.BLL.Dtos;
 using JinnSports.DAL.Repositories;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using System.Linq;
+using System.Collections;
 
 namespace JinnSports.UnitTests.Services
 {
@@ -18,8 +19,31 @@ namespace JinnSports.UnitTests.Services
         List<Team> teams;
         List<Result> results;
         List<SportEvent> sportEvents;
-        IEnumerable<IEnumerable<ResultDto>> resultsDto;
+        IEnumerable<List<ResultDto>> resultsDto;
+        public class ResultDtoComparer : IComparer, IComparer<ResultDto>
+        {
+            public int Compare(object x, object y)
+            {
+                var ldto = x as ResultDto;
+                var rdto = y as ResultDto;
+                if (ldto == null || rdto == null) throw new InvalidOperationException();
+                return Compare(ldto, rdto);
+            }
 
+            public int Compare(ResultDto ldto, ResultDto rdto)
+            {
+                if (ldto.Date == null || string.IsNullOrEmpty(ldto.Score) || ldto.Id < 1 || ldto.TeamFirstId < 1 || ldto.TeamSecondId < 1 ||
+                string.IsNullOrEmpty(ldto.TeamFirst) || string.IsNullOrEmpty(ldto.TeamSecond))
+                {
+                    return -1;
+                }
+
+                return ((ldto.Date.CompareTo(rdto.Date)) & (ldto.Score.CompareTo(rdto.Score)) &
+                    (ldto.Id.CompareTo(rdto.Id)) & (ldto.TeamFirstId.CompareTo(rdto.TeamFirstId)) &
+                    (ldto.TeamSecondId.CompareTo(rdto.TeamSecondId)) & (ldto.TeamFirst.CompareTo(rdto.TeamFirst)) &
+                    (ldto.TeamSecond.CompareTo(rdto.TeamSecond)));
+            }
+        }
         [SetUp]
        public void Init()
         {
@@ -27,7 +51,7 @@ namespace JinnSports.UnitTests.Services
             this.teams = new List<Team>();
             this.results = new List<Result>();
             this.sportEvents = new List<SportEvent>();
-            this.resultsDto = new List<IEnumerable<ResultDto>>();
+            this.resultsDto = new List<List<ResultDto>>();
 
             SportType football = new SportType()
             {
@@ -155,14 +179,14 @@ namespace JinnSports.UnitTests.Services
             };
             Result Bayern_vs_Milano = new Result()
             {
-                Id = 9,
+                Id = 8,
                 Team = Bayern,
                 Score = 4,
                 SportEvent = Bayern_vs_Milano_event
             };
             Result Milano_vs_Bayern = new Result()
             {
-                Id = 10,
+                Id = 2,
                 Team = Milano,
                 Score = 1,
                 SportEvent = Bayern_vs_Milano_event
@@ -178,14 +202,14 @@ namespace JinnSports.UnitTests.Services
             };
             Result Chelsea_vs_MC = new Result()
             {
-                Id = 11,
+                Id = 6,
                 Team = Chelsea,
                 Score = 0,
                 SportEvent = Chelsea_vs_MC_event
             };
             Result MC_vs_Chelsea = new Result()
             {
-                Id = 12,
+                Id = 5,
                 Team = MC,
                 Score = 0,
                 SportEvent = Chelsea_vs_MC_event
@@ -200,14 +224,14 @@ namespace JinnSports.UnitTests.Services
             };
             Result Chelsea_vs_Milano = new Result()
             {
-                Id = 13,
+                Id = 7,
                 Team = Chelsea,
                 Score = 2,
                 SportEvent = Chelsea_vs_Milano_event
             };
             Result Milano_vs_Chelsea = new Result()
             {
-                Id = 14,
+                Id = 3,
                 Team = Milano,
                 Score = 3,
                 SportEvent = Chelsea_vs_Milano_event
@@ -216,14 +240,14 @@ namespace JinnSports.UnitTests.Services
             // Init Results
             Result Ch_vs_LA = new Result()
             {
-                Id = 1,
+                Id = 9,
                 Score = 68,
                 Team = ChicagoBulls,
                 SportEvent = ChicagoBulls_vs_LA_event
             };
             Result LA_vs_Ch = new Result()
             {
-                Id = 2,
+                Id = 11,
                 Score = 65,
                 Team = LALakers,
                 SportEvent = ChicagoBulls_vs_LA_event
@@ -231,14 +255,14 @@ namespace JinnSports.UnitTests.Services
 
             Result LA_vs_Ph = new Result()
             {
-                Id = 3,
+                Id = 12,
                 Score = 65,
                 Team = LALakers,
                 SportEvent = LA_vs_Suns_event
             };
             Result Ph_vs_LA = new Result()
             {
-                Id = 4,
+                Id = 13,
                 Score = 64,
                 Team = PhoenixSuns,
                 SportEvent = LA_vs_Suns_event
@@ -246,28 +270,28 @@ namespace JinnSports.UnitTests.Services
 
             Result Ch_vs_Ph = new Result()
             {
-                Id = 5,
+                Id = 10,
                 Score = 52,
                 Team = ChicagoBulls,
                 SportEvent = ChicagoBulls_vs_Suns_event
             };
             Result Ph_vs_Ch = new Result()
             {
-                Id = 6,
+                Id = 14,
                 Score = 52,
                 Team = PhoenixSuns,
                 SportEvent = ChicagoBulls_vs_Suns_event
             };
             Result MU_vs_MC = new Result()
             {
-                Id = 7,
+                Id = 1,
                 Score = 2,
                 Team = MU,
                 SportEvent = MU_vs_MC_event
             };
             Result MC_vs_MU = new Result()
             {
-                Id = 8,
+                Id = 4,
                 Score = 1,
                 Team = MC,
                 SportEvent = MU_vs_MC_event
@@ -299,7 +323,7 @@ namespace JinnSports.UnitTests.Services
             sportEvents.Add(Chelsea_vs_Milano_event);
             sportEvents.Add(Chelsea_vs_MC_event);
 
-            results.Add(Ch_vs_LA);
+            /*results.Add(Ch_vs_LA);
             results.Add(LA_vs_Ch);
             results.Add(Ch_vs_Ph);
             results.Add(Ph_vs_Ch);
@@ -312,7 +336,22 @@ namespace JinnSports.UnitTests.Services
             results.Add(Chelsea_vs_MC);
             results.Add(MC_vs_Chelsea);
             results.Add(Chelsea_vs_Milano);
+            results.Add(Milano_vs_Chelsea); OLD ID Initialization*/
+
+            results.Add(MU_vs_MC);
+            results.Add(Milano_vs_Bayern);
             results.Add(Milano_vs_Chelsea);
+            results.Add(MC_vs_MU);
+            results.Add(MC_vs_Chelsea);
+            results.Add(Chelsea_vs_MC);
+            results.Add(Chelsea_vs_Milano);
+            results.Add(Bayern_vs_Milano);
+            results.Add(Ch_vs_LA);
+            results.Add(Ch_vs_Ph);
+            results.Add(LA_vs_Ch);
+            results.Add(LA_vs_Ph);
+            results.Add(Ph_vs_LA);
+            results.Add(Ph_vs_Ch);
 
             MU.Results.Add(MU_vs_MC);
             Milano.Results.Add(Milano_vs_Bayern);
@@ -420,7 +459,7 @@ namespace JinnSports.UnitTests.Services
                 Suns_vs_ChicagoBulls_Result_Dto,
                 Suns_vs_LA_Result_Dto
             };
-            resultsDto = new List<IEnumerable<ResultDto>>
+            resultsDto = new List<List<ResultDto>>
             {
                 Ch_Results_dto,
                 LA_Results_dto,
@@ -454,12 +493,14 @@ namespace JinnSports.UnitTests.Services
         public void GetResults(int teamId, int element)
         {
             TeamDetailsService teamDetailsService = new TeamDetailsService();
-            IEnumerable<ResultDto> resultDtoCollection = new List<ResultDto>();
-            IEnumerable<ResultDto> dtoTest = this.resultsDto.ElementAt(element);
+            List<ResultDto> resultDtoCollection = new List<ResultDto>();
+            List<ResultDto> dtoTest = this.resultsDto.ElementAt(element);
+            ResultDtoComparer dtoComparer = new ResultDtoComparer();
 
-            resultDtoCollection = teamDetailsService.GetResults(teamId);
+            resultDtoCollection = teamDetailsService.GetResults(teamId).ToList();
 
-            CollectionAssert.AreEqual(resultDtoCollection, dtoTest);
+            //Assert.IsTrue(resultDtoCollection.Equals(dtoTest));
+            CollectionAssert.AreEqual(resultDtoCollection, dtoTest, dtoComparer);
         }
     }
 }
