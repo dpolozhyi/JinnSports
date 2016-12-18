@@ -4,7 +4,7 @@
   	<MSBuildCommunityTasksPath>$(teamcity_build_checkoutDir)\packages\MSBuildTasks.$(MSBuildVersion)\tools</MSBuildCommunityTasksPath>
     </PropertyGroup>
 
-	<UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v11.0\Web\Microsoft.Web.Publishing.Tasks.dll"/>
+	<UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll"/>
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 
     <PropertyGroup>
