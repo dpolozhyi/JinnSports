@@ -136,15 +136,6 @@ namespace JinnSports.Parser.App.JsonParsers
             {
                 result += sr.ReadLine();
             }
-            /*for (int i = 1;; i++)
-            {
-                ch = stream.ReadByte();
-                if (ch == -1)
-                {
-                    break;
-                }
-                result += (char)ch;
-            }*/
 
             resp.Close();
             return result;

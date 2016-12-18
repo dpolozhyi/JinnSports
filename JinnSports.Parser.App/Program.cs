@@ -23,51 +23,6 @@ namespace JinnSports.Parser.App
     {
         public static void Main(string[] args)
         {
-            /*Thread jsonThread;
-            JsonParser jp = new JsonParser();
-            jsonThread = new Thread(() => jp.StartParser());
-            jsonThread.Name = "JsonParserThread";
-            jsonThread.Start();
-            int j = 0;
-            while (jsonThread.IsAlive)
-            {
-                Console.Clear();
-                Console.WriteLine("Json parser works for {0}s", j++);
-                Thread.Sleep(1000);
-            }*/
-
-            IUnitOfWork unit = new EFUnitOfWork("SportsContext");
-            List<Team> teams = unit.GetRepository<Team>().Get().ToList();
-            foreach(var t in teams)
-            {
-                Console.WriteLine("{0} {1}", t.Name, t.SportType.Name);
-            }
-
-            /*HTMLParser24score htmlParser = new HTMLParser24score(new EFUnitOfWork("SportsContext"));
-            JsonParser jp = new JsonParser();
-            Thread htmlThread = new Thread(() => htmlParser.Parse());
-            Thread jsonThead = new Thread(() => jp.StartParser());
-            int t = 0;
-            htmlThread.Start();
-            jsonThead.Start();
-            while(htmlThread.IsAlive || jsonThead.IsAlive)
-            {
-                Console.Clear();
-                Console.WriteLine("Parsers are working for {0}s", t++);
-                Thread.Sleep(1000);
-            }*/
-
-            /*string result;
-            JsonResult jsonResults;
-            List<Result> res;
-
-            result = jp.GetJsonFromUrl(jp.SiteUri);
-
-            jsonResults = jp.DeserializeJson(result);
-
-            res = jp.GetResultsList(jsonResults);
-
-            jp.DBSaveChanges(res);*/
 
         }
     }
