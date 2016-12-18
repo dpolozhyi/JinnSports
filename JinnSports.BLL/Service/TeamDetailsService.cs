@@ -46,11 +46,12 @@ namespace JinnSports.BLL.Service
                     {
                         resultDto.Teams.Add(result.Team.Name);
                     }*/
+                    resultDto.Id = teamResult.Id;
                     resultDto.Score = string.Format("{0} : {1}", eventResults.ElementAt(0).Score, eventResults.ElementAt(1).Score);
                     resultDto.TeamFirst = eventResults.ElementAt(0).Team.Name;
                     resultDto.TeamSecond = eventResults.ElementAt(1).Team.Name;
                     resultDto.TeamFirstId = eventResults.ElementAt(0).Team.Id;
-                    resultDto.TeamFirstId = eventResults.ElementAt(1).Team.Id;
+                    resultDto.TeamSecondId = eventResults.ElementAt(1).Team.Id;
                     resultDto.Date = teamResult.SportEvent.Date;
                     orderedTeamResults.Add(resultDto);
                 }

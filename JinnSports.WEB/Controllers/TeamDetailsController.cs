@@ -24,13 +24,13 @@ namespace JinnSports.WEB.Controllers
             return this.View();
         }
         // GET: TeamDetails
-        public ActionResult Details(int? id = 4)
+        public ActionResult Details()
         {
             return this.View();
         }
 
         [HttpPost]
-        public ActionResult LoadResults(int? id = 4)
+        public ActionResult LoadResults(int? id = 3)
         {
             string draw = this.Request.Form.GetValues("draw").FirstOrDefault();
             string start = this.Request.Form.GetValues("start").FirstOrDefault();
@@ -56,8 +56,8 @@ namespace JinnSports.WEB.Controllers
                 new
                 {
                     draw = draw,
-                   // recordsFiltered = recordsTotal,
-                    //recordsTotal = recordsTotal,
+                    recordsFiltered = recordsTotal,
+                    recordsTotal = recordsTotal,
                     data = results
                 },
                 JsonRequestBehavior.AllowGet);
