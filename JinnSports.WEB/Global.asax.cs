@@ -10,6 +10,7 @@ namespace JinnSports.WEB
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            AutoMapperConfiguration.Configure();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }
