@@ -1,5 +1,7 @@
-﻿using AutoMapper;
-using JinnSports.BLL.Mappers;
+﻿using System.Collections.Generic;
+using AutoMapper;
+using JinnSports.BLL.Dtos;
+using JinnSports.Entities.Entities;
 
 namespace JinnSports.WEB
 {
@@ -9,7 +11,10 @@ namespace JinnSports.WEB
         {
             Mapper.Initialize(config =>
             {
-                config.AddProfile<BlMapperConfiguration>();
+                config.CreateMap<Result, KeyValuePair<string, int>>()
+                .ConstructUsing(x => new KeyValuePair<string, int>(x.Team.Name, x.Score));
+
+                config.CreateMap<SportEvent, SportEventDto>();
             });
         }
     }
