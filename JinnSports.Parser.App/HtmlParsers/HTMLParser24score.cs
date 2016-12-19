@@ -55,7 +55,7 @@ namespace JinnSports.Parser.App.HtmlParsers
                     SportType sport;
                     try
                     {
-                        sport = this.Unit.GetRepository<SportType>().Get(t => t.Name == currentSport).FirstOrDefault();
+                        sport = this.Unit.GetRepository<SportType>().Get(t => t.Name.ToLower() == currentSport.ToLower()).FirstOrDefault();
                     }
                     catch(Exception ex)
                     {
@@ -82,7 +82,6 @@ namespace JinnSports.Parser.App.HtmlParsers
                         try
                         {
                             this.PushEntities(results);
-                            Log.Info("New data from html parser was saved to DataBase");
                         }
                         catch (Exception ex)
                         {
@@ -90,6 +89,7 @@ namespace JinnSports.Parser.App.HtmlParsers
                         }
                     }
                 }
+                Log.Info("New data from html parser was saved to DataBase");
                 this.Unit.Dispose();
             }
             catch (GetDataException ex)
@@ -130,7 +130,7 @@ namespace JinnSports.Parser.App.HtmlParsers
                     resp = (HttpWebResponse)reqGet.GetResponse();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new WebResponseException(ex.Message, ex.InnerException);
             }
@@ -148,7 +148,7 @@ namespace JinnSports.Parser.App.HtmlParsers
 
             foreach (IElement htmlTr in document.QuerySelectorAll(".daymatches tr[class]:not(.hidden)"))
             {
-                SportEvent c = new SportEvent() { Date = date };
+                SportEvent c = new SportEvent() { Date = date, SportType=sportType };
 
                 string name1 = htmlTr.Children[1].FirstElementChild.TextContent;
                 string name2 = htmlTr.Children[2].FirstElementChild.TextContent;
