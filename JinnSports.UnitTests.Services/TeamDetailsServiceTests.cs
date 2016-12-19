@@ -496,7 +496,7 @@ namespace JinnSports.UnitTests.Services
             List<ResultDto> resultDtoCollection = new List<ResultDto>();
             List<ResultDto> dtoTest = this.resultsDto.ElementAt(element);
             ResultDtoComparer dtoComparer = new ResultDtoComparer();
-
+            
             resultDtoCollection = teamDetailsService.GetResults(teamId).ToList();
 
             //Assert.IsTrue(resultDtoCollection.Equals(dtoTest));
