@@ -1,48 +1,56 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using JinnSports.BLL.Interfaces;
 using JinnSports.BLL.Service;
-using System.Linq;
 using JinnSports.BLL.Dtos;
-using System;
 
 namespace JinnSports.WEB.Controllers
 {
-    public class TeamController : Controller
+    public class TeamDetailsController : Controller
     {
-        private readonly ITeamService teamService;
+        private readonly ITeamDetailsService teamDetailsService;
 
-        public TeamController()
+        public TeamDetailsController()
         {
-            this.teamService = new TeamService();
+            this.teamDetailsService = new TeamDetailsService();
         }
 
-        // GET: Team
+        // GET: TeamDetails
         public ActionResult Index()
+        {
+            return this.View();
+        }
+        // GET: TeamDetails
+        public ActionResult Details()
         {
             return this.View();
         }
 
         [HttpPost]
-        public ActionResult LoadTeams()
+        public ActionResult LoadResults(int? id = 6)
         {
             string draw = this.Request.Form.GetValues("draw").FirstOrDefault();
             string start = this.Request.Form.GetValues("start").FirstOrDefault();
             string length = this.Request.Form.GetValues("length").FirstOrDefault();
+            //string id = this.Request.Form.GetValues("id").FirstOrDefault();
 
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
-            int recordsTotal = this.teamService.Count();
+            int teamId = id != null ? Convert.ToInt32(id) : 0;
+            int recordsTotal = this.teamDetailsService.Count(id);
 
-            List<TeamDto> teams = this.teamService.GetAllTeams()
+            List<ResultDto> results = this.teamDetailsService.GetResults(teamId)
                 .Skip(skip)
                 .Take(pageSize)
                 .ToList();
 
-            foreach (TeamDto team in teams)
+           /* foreach (ResultDto result in results)
             {
-                team.Results = null;
-            }
+                re.Results = null;
+            }*/
 
             return this.Json(
                 new
@@ -50,7 +58,7 @@ namespace JinnSports.WEB.Controllers
                     draw = draw,
                     recordsFiltered = recordsTotal,
                     recordsTotal = recordsTotal,
-                    data = teams
+                    data = results
                 },
                 JsonRequestBehavior.AllowGet);
         }
