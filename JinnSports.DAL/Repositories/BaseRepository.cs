@@ -22,7 +22,8 @@ namespace JinnSports.DAL.Repositories
             Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             string includeProperties = "",
-            int skip = 0, int take = -1)
+            int skip = 0, 
+            int take = -1)
         {
             IQueryable<T> query = this.DbSet;
 
@@ -39,7 +40,7 @@ namespace JinnSports.DAL.Repositories
             query = orderBy?.Invoke(query) ?? query;
 
             query = query.Skip(skip);
-            if(take > 0)
+            if (take > 0)
             {
                 query.Take(take);
             }
