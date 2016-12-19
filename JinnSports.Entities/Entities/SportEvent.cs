@@ -27,7 +27,7 @@ namespace JinnSports.Entities.Entities
             }
 
             SportEvent sportEvent = obj as SportEvent;
-            if ((object)sportEvent == null || sportEvent.Results == null)
+            if ((object)sportEvent == null || sportEvent.Results == null || sportEvent.Date == null || sportEvent.SportType == null)
             {
                 return false;
             }
@@ -42,7 +42,7 @@ namespace JinnSports.Entities.Entities
                 return false;
             }
 
-            if ((object)sportEvent == null || sportEvent.Results == null)
+            if ((object)sportEvent == null || sportEvent.Results == null || sportEvent.Date == null || sportEvent.SportType == null)
             {
                 return false;
             }
@@ -75,6 +75,11 @@ namespace JinnSports.Entities.Entities
 
         private bool CheckResults(ICollection<Result> foreignResults)
         {
+            if (HasNullResults(Results) || HasNullResults(foreignResults))
+            {
+                return false;
+            }
+
             List<string> thisTeamNames = Results.Select(r => r.Team.Name).ToList();
             List<string> foreignTeamNames = foreignResults.Select(r => r.Team.Name).ToList();
 
@@ -92,6 +97,19 @@ namespace JinnSports.Entities.Entities
             }
 
             return true;
+        }
+
+        private bool HasNullResults(ICollection<Result> results)
+        {
+            foreach (Result res in results)
+            {
+                if (res == null)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
