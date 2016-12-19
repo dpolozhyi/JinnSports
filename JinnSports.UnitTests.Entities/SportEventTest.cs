@@ -56,7 +56,7 @@ namespace JinnSports.UnitTests.Entities
         [Test]
         public void CreateAndAddResults()
         {
-            Assert.DoesNotThrow(() => 
+            Assert.DoesNotThrow(() =>
             {
                 this.sportEvent = new SportEvent();
                 this.sportEvent.Results = new List<Result>();
@@ -95,7 +95,7 @@ namespace JinnSports.UnitTests.Entities
         }
 
         [Test]
-        public void CheckHashCodeNotSameInstances()
+        public void CheckHashCodeDifferentInstances()
         {
             Assert.IsFalse(this.sportEvent1.GetHashCode() == this.sportEvent3.GetHashCode());
         }
@@ -103,13 +103,71 @@ namespace JinnSports.UnitTests.Entities
         [Test]
         public void CheckEquals()
         {
-            Assert.IsTrue(this.sportEvent1.Equals(this.sportEvent2) && this.sportEvent2.Equals(this.sportEvent1));
+            Assert.IsTrue(this.sportEvent1.Equals(this.sportEvent2));
         }
 
         [Test]
         public void CheckNotEquals()
         {
-            Assert.IsFalse(this.sportEvent1.Equals(this.sportEvent3) && this.sportEvent3.Equals(this.sportEvent1));
+            Assert.IsFalse(this.sportEvent1.Equals(this.sportEvent3));
+        }
+
+        [Test]
+        public void CheckContractEquals()
+        {
+            Assert.IsTrue(this.sportEvent1.Equals(this.sportEvent2) && this.sportEvent2.Equals(this.sportEvent1) 
+                          && (this.sportEvent1.GetHashCode() == this.sportEvent2.GetHashCode()));
+        }
+
+        [Test]
+        public void CheckContractNotEquals()
+        {
+            Assert.IsFalse(this.sportEvent1.Equals(this.sportEvent3) || this.sportEvent3.Equals(this.sportEvent1)
+                          || (this.sportEvent1.GetHashCode() == this.sportEvent3.GetHashCode()));
+        }
+
+        [Test]
+        public void CheckNullArgument()
+        {
+            SportEvent nullEvent = null;
+            Assert.IsFalse(this.sportEvent1.Equals(nullEvent) || this.sportEvent1.Equals((object)nullEvent));
+        }
+
+        [Test]
+        public void CheckNullFields()
+        {
+            SportEvent nullDateEvent = new SportEvent();
+            nullDateEvent.SportType = this.sportType;
+            nullDateEvent.Results = new List<Result>();
+            nullDateEvent.Results.Add(this.res1);
+            nullDateEvent.Results.Add(this.res2);
+
+            SportEvent nullSportTypeEvent = new SportEvent();
+            nullSportTypeEvent.Date = new DateTime(2016, 11, 21, 16, 30, 0);
+            nullSportTypeEvent.Results = new List<Result>();
+            nullSportTypeEvent.Results.Add(this.res1);
+            nullSportTypeEvent.Results.Add(this.res2);
+
+            SportEvent nullResultsEvent = new SportEvent();
+            nullResultsEvent.Date = new DateTime(2016, 11, 21, 16, 30, 0);
+            nullResultsEvent.SportType = this.sportType;
+
+            Assert.IsFalse(this.sportEvent1.Equals(nullDateEvent) || nullDateEvent.Equals(this.sportEvent1)
+                           || this.sportEvent1.Equals(nullSportTypeEvent) || nullSportTypeEvent.Equals(this.sportEvent1)
+                           || this.sportEvent1.Equals(nullResultsEvent) || nullResultsEvent.Equals(this.sportEvent1));
+        }
+
+        [Test]
+        public void CheckNullResults()
+        {
+            SportEvent nullResultsEvent = new SportEvent();
+            nullResultsEvent.Date = new DateTime(2016, 11, 21, 16, 30, 0);
+            nullResultsEvent.SportType = this.sportType;
+            nullResultsEvent.Results = new List<Result>();
+            nullResultsEvent.Results.Add(this.res1);
+            nullResultsEvent.Results.Add(null);
+
+            Assert.IsFalse(this.sportEvent1.Equals(nullResultsEvent) || nullResultsEvent.Equals(this.sportEvent1));
         }
 
         [Test]
