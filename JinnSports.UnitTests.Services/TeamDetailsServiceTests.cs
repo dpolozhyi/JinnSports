@@ -8,6 +8,7 @@ using JinnSports.DAL.Repositories;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using System.Linq;
 using System.Collections;
+using JinnSports.BLL.Extentions;
 
 namespace JinnSports.UnitTests.Services
 {
@@ -386,7 +387,7 @@ namespace JinnSports.UnitTests.Services
             //ResultDto formation
             ResultDto ChicagoBulls_vs_LA_Result_Dto = new ResultDto()
             {
-                Date = ChicagoBulls_vs_LA_event.Date,
+                Date = new EventDate(ChicagoBulls_vs_LA_event.Date).ToString(),
                 Id = Ch_vs_LA.Id,
                 Score = String.Format("{0} : {1}", Ch_vs_LA.Score, LA_vs_Ch.Score),
                 TeamFirstId = ChicagoBulls.Id,
@@ -396,7 +397,7 @@ namespace JinnSports.UnitTests.Services
             };
             ResultDto LA_vs_ChicagoBulls_Result_Dto = new ResultDto()
             {
-                Date = LA_vs_Suns_event.Date,
+                Date = new EventDate(LA_vs_Suns_event.Date).ToString(),
                 Id = LA_vs_Ch.Id,
                 Score = String.Format("{0} : {1}", LA_vs_Ch.Score, Ch_vs_LA.Score),
                 TeamFirstId = LALakers.Id,
@@ -406,7 +407,7 @@ namespace JinnSports.UnitTests.Services
             };
             ResultDto Suns_vs_ChicagoBulls_Result_Dto = new ResultDto()
             {
-                Date = ChicagoBulls_vs_Suns_event.Date,
+                Date = new EventDate(ChicagoBulls_vs_Suns_event.Date).ToString(),
                 Id = Ph_vs_Ch.Id,
                 Score = String.Format("{0} : {1}", Ph_vs_Ch.Score, Ch_vs_Ph.Score),
                 TeamFirstId = PhoenixSuns.Id,
@@ -416,7 +417,7 @@ namespace JinnSports.UnitTests.Services
             };
             ResultDto ChicagoBulls_vs_Suns_Result_Dto = new ResultDto()
             {
-                Date = ChicagoBulls_vs_Suns_event.Date,
+                Date = new EventDate(ChicagoBulls_vs_Suns_event.Date).ToString(),
                 Id = Ch_vs_Ph.Id,
                 Score = String.Format("{0} : {1}", Ch_vs_Ph.Score, Ph_vs_Ch.Score),
                 TeamFirstId = ChicagoBulls.Id,
@@ -426,7 +427,7 @@ namespace JinnSports.UnitTests.Services
             };
             ResultDto Suns_vs_LA_Result_Dto = new ResultDto()
             {
-                Date = LA_vs_Suns_event.Date,
+                Date = new EventDate(LA_vs_Suns_event.Date).ToString(),
                 Id = Ph_vs_LA.Id,
                 Score = String.Format("{0} : {1}", Ph_vs_LA.Score, LA_vs_Ph.Score),
                 TeamFirstId = PhoenixSuns.Id,
@@ -436,7 +437,7 @@ namespace JinnSports.UnitTests.Services
             };
             ResultDto LA_vs_Suns_Result_Dto = new ResultDto()
             {
-                Date = LA_vs_Suns_event.Date,
+                Date = new EventDate(LA_vs_Suns_event.Date).ToString(),
                 Id = LA_vs_Ph.Id,
                 Score = String.Format("{0} : {1}", LA_vs_Ph.Score, Ph_vs_LA.Score),
                 TeamFirstId = LALakers.Id,

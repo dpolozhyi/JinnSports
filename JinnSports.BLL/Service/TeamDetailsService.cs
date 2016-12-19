@@ -9,6 +9,7 @@ using JinnSports.DAL.Repositories;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.Entities.Entities;
 using System.Collections;
+using JinnSports.BLL.Extentions;
 
 namespace JinnSports.BLL.Service
 {
@@ -35,7 +36,6 @@ namespace JinnSports.BLL.Service
             using (this.dataUnit = new EFUnitOfWork(SPORTCONTEXT))
             {
                 Team team = this.dataUnit.GetRepository<Team>().GetById(teamId);
-                Result res = this.dataUnit.GetRepository<Result>().GetById(9);
 
                 IEnumerable teamResults = team.Results.ToList();
 
@@ -53,7 +53,7 @@ namespace JinnSports.BLL.Service
                     resultDto.TeamSecond = eventResults.ElementAt(1).Team.Name;
                     resultDto.TeamFirstId = eventResults.ElementAt(0).Team.Id;
                     resultDto.TeamSecondId = eventResults.ElementAt(1).Team.Id;
-                    resultDto.Date = teamResult.SportEvent.Date;
+                    resultDto.Date = new EventDate(teamResult.SportEvent.Date).ToString();
                     orderedTeamResults.Add(resultDto);
                 }
             }
