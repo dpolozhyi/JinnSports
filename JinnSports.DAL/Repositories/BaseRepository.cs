@@ -39,7 +39,11 @@ namespace JinnSports.DAL.Repositories
 
             query = orderBy?.Invoke(query) ?? query;
 
-            query = query.Skip(skip);
+            if (skip > 0)
+            {
+                query = query.Skip(skip);
+            }
+
             if (take > 0)
             {
                 query.Take(take);
