@@ -1,9 +1,0 @@
-D:\Work\SoftServe\JinnLTE\JinnSports.UnitTests.Entities\bin\Debug\JinnSports.UnitTests.Entities.dll
-D:\Work\SoftServe\JinnLTE\JinnSports.UnitTests.Entities\bin\Debug\JinnSports.UnitTests.Entities.pdb
-D:\Work\SoftServe\JinnLTE\JinnSports.UnitTests.Entities\bin\Debug\JinnSports.Entities.dll
-D:\Work\SoftServe\JinnLTE\JinnSports.UnitTests.Entities\bin\Debug\nunit.framework.dll
-D:\Work\SoftServe\JinnLTE\JinnSports.UnitTests.Entities\bin\Debug\JinnSports.Entities.pdb
-D:\Work\SoftServe\JinnLTE\JinnSports.UnitTests.Entities\bin\Debug\nunit.framework.xml
-D:\Work\SoftServe\JinnLTE\JinnSports.UnitTests.Entities\obj\Debug\JinnSports.UnitTests.Entities.csprojResolveAssemblyReference.cache
-D:\Work\SoftServe\JinnLTE\JinnSports.UnitTests.Entities\obj\Debug\JinnSports.UnitTests.Entities.dll
-D:\Work\SoftServe\JinnLTE\JinnSports.UnitTests.Entities\obj\Debug\JinnSports.UnitTests.Entities.pdb
