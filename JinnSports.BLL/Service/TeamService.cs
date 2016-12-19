@@ -37,11 +37,6 @@ namespace JinnSports.BLL.Service
                 {
                     TeamDto teamDto = new TeamDto { Name = team.Name };
 
-                    foreach (Result result in team.Results)
-                    {
-                        teamDto.Results.Add(result.SportEvent.Date, result.Score);
-                    }
-
                     teamDtoList.Add(teamDto);
                 }
             }
