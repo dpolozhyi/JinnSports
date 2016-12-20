@@ -22,8 +22,10 @@ namespace JinnSports.WEB
                 .ForMember(
                      "Score", 
                      opt => opt.MapFrom(
-                         res => string.Format("{0} : {1}", res.SportEvent.Results.ElementAt(0).Score, 
-                         res.SportEvent.Results.ElementAt(1).Score)))
+                         res => string.Format(
+                             "{0} : {1}", 
+                             res.SportEvent.Results.ElementAt(0).Score, 
+                             res.SportEvent.Results.ElementAt(1).Score)))
                 .ForMember(
                      "TeamFirst", 
                      opt => opt.MapFrom(

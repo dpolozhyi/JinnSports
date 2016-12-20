@@ -11,7 +11,6 @@ using JinnSports.Entities.Entities;
 using System.Collections;
 using JinnSports.BLL.Extentions;
 using AutoMapper;
-using JinnSports.BLL.Mapping;
 
 namespace JinnSports.BLL.Service
 {
@@ -41,18 +40,12 @@ namespace JinnSports.BLL.Service
 
                 IEnumerable teamResults = team.Results.ToList();
 
-                var mappingConfig = new AutoMapper.MapperConfiguration(cfg =>
-                {
-                    cfg.AddServiceMapping();
-                });
-
-                IMapper mapper = mappingConfig.CreateMapper();
                 foreach (Result teamResult in teamResults)
                 {
                     IEnumerable<Result> eventResults = teamResult.SportEvent.Results;
                     ResultDto resultDto = new ResultDto();
 
-                    orderedTeamResults.Add(mapper.Map<Result, ResultDto>(teamResult));
+                    orderedTeamResults.Add(Mapper.Map<Result, ResultDto>(teamResult));
                 }
             }
             return orderedTeamResults;

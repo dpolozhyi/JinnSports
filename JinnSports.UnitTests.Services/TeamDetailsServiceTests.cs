@@ -10,7 +10,6 @@ using System.Linq;
 using System.Collections;
 using JinnSports.BLL.Extentions;
 using AutoMapper;
-using JinnSports.BLL.Mapping;
 
 namespace JinnSports.UnitTests.Services
 {
@@ -531,14 +530,8 @@ namespace JinnSports.UnitTests.Services
         [Test]
         public void ResultMapping()
         {
-            var mappingConfig = new AutoMapper.MapperConfiguration(cfg =>
-            {
-                cfg.AddServiceMapping();
-            });
-
-
             ResultDtoComparer dtoComparer = new ResultDtoComparer();
-            IMapper mapper = mappingConfig.CreateMapper();
+          
             List<ResultDto> resultsDto = this.resultsDto;
             List<ResultDto> mappedDto = new List<ResultDto>();
 
@@ -546,7 +539,7 @@ namespace JinnSports.UnitTests.Services
 
             foreach (Result result in testResults)
             {
-                mappedDto.Add(mapper.Map<Result, ResultDto>(result));
+                mappedDto.Add(Mapper.Map<Result, ResultDto>(result));
             }
             
             CollectionAssert.AreEqual(resultsDto, mappedDto, dtoComparer);
