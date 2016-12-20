@@ -5,7 +5,7 @@ namespace JinnSports.Parser.App.Exceptions
 {
     public class GetDataException : Exception
     {
-        public GetDataException()
+        public GetDataException() : base()
         {
 
         }

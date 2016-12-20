@@ -5,7 +5,7 @@ namespace JinnSports.Parser.App.Exceptions
 {
     public class ParseException : Exception
     {
-        public ParseException()
+        public ParseException() : base()
         {
 
         }

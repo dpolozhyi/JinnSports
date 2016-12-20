@@ -57,7 +57,7 @@ namespace JinnSports.Parser.App.HtmlParsers
                     {
                         sport = this.Unit.GetRepository<SportType>().Get(t => t.Name.ToLower() == currentSport.ToLower()).FirstOrDefault();
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         throw new GetDataException(ex.Message, ex.InnerException);
                     }
@@ -89,8 +89,7 @@ namespace JinnSports.Parser.App.HtmlParsers
                         }
                     }
                 }
-                Log.Info("New data from html parser was saved to DataBase");
-                this.Unit.Dispose();
+                Log.Info("New data from HTML parser was saved to DataBase");
             }
             catch (GetDataException ex)
             {
@@ -111,6 +110,10 @@ namespace JinnSports.Parser.App.HtmlParsers
             catch (Exception ex)
             {
                 Log.Error(ex);
+            }
+            finally
+            {
+                this.Unit.Dispose();
             }
         }
 
