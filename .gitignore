@@ -166,3 +166,7 @@ FakesAssemblies/
 # Paket dependency manager
 .paket/paket.exe
 paket-files/
+JinnSports.UnitTests.BLL/bin/Debug/JinnSports.UnitTests.BLL.dll
+JinnSports.UnitTests.BLL/bin/Debug/JinnSports.UnitTests.BLL.dll
+JinnSports.UnitTests.DAL/bin/Debug/JinnSports.UnitTests.DAL.pdb
+JinnSports.UnitTests.BLL/bin/Debug/JinnSports.UnitTests.BLL.dll

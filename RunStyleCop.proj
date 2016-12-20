@@ -34,6 +34,6 @@
 
         <TeamCityReportStatsValue Key="StyleCopViolations" Value="$(StyleCopViolations)" />
 
-        <Error Condition="$(StyleCopViolations) > 256" Text="There were $(StyleCopViolations) StyleCop violations." />
+        <Error Condition="$(StyleCopViolations) > 0" Text="There were $(StyleCopViolations) StyleCop violations." />
     </Target>
 </Project>
