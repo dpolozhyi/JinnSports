@@ -50,6 +50,7 @@
     <Compile Include="Interfaces\IResultService.cs" />
     <Compile Include="Interfaces\ITeamDetailsService.cs" />
     <Compile Include="Interfaces\ITeamService.cs" />
+    <Compile Include="Mapping\MapperConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\EventsService.cs" />
     <Compile Include="Service\TeamDetailsService.cs" />
