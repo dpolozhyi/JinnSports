@@ -5,7 +5,7 @@ namespace JinnSports.Parser.App.Exceptions
 {
     public class WebResponseException : Exception
     {
-        public WebResponseException()
+        public WebResponseException() : base()
         {
 
         }

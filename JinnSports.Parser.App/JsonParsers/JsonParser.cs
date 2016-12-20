@@ -87,7 +87,7 @@ namespace JinnSports.Parser.App.JsonParsers
                 try
                 {
                     this.DBSaveChanges(res);
-                    Log.Info("New data from json parser was saved to DataBase");
+                    Log.Info("New data from JSON parser was saved to DataBase");
                 }
                 catch (Exception ex)
                 {
@@ -109,6 +109,10 @@ namespace JinnSports.Parser.App.JsonParsers
             catch (Exception ex)
             {
                 Log.Error(ex);
+            }
+            finally
+            {
+                this.uow.Dispose();
             }
         }
 
@@ -174,7 +178,14 @@ namespace JinnSports.Parser.App.JsonParsers
 
                     if (this.CheckSportTypeExist(sportName))
                     {
-                        sportType = this.uow.GetRepository<SportType>().Get().Where(n => n.Name == sportName).FirstOrDefault();
+                        try
+                        {
+                            sportType = this.uow.GetRepository<SportType>().Get().Where(n => n.Name == sportName).FirstOrDefault();
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new GetDataException(ex.Message);
+                        }
 
                         team1.SportType = sportType;
                         team2.SportType = sportType;

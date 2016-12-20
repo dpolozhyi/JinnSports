@@ -5,7 +5,7 @@ namespace JinnSports.Parser.App.Exceptions
 {
     public class JsonDeserializeException : Exception
     {
-        public JsonDeserializeException()
+        public JsonDeserializeException() : base()
         {
 
         }
