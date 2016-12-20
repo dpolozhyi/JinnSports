@@ -46,7 +46,7 @@ namespace JinnSports.DAL.Repositories
 
             if (take > 0)
             {
-                query.Take(take);
+                query = query.Take(take);
             }
 
             return query.ToList();
