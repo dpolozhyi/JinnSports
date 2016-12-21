@@ -10,6 +10,10 @@ namespace JinnSports.Entities.Entities
 
         public DateTime Date { get; set; }
 
+        public string Name { get; set; }
+
+        public ICollection<SportEventName> Names { get; set; }
+
         public virtual SportType SportType { get; set; }
 
         public virtual ICollection<Result> Results { get; set; }
@@ -70,7 +74,7 @@ namespace JinnSports.Entities.Entities
 
         public override string ToString()
         {
-            return $"Id: {Id}; Date: {Date}";
+            return $"Id: {Id}; Date: {Date}; Name: {Name}";
         }
 
         private bool CheckResults(ICollection<Result> foreignResults)
