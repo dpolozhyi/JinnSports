@@ -26,26 +26,22 @@ namespace JinnSports.DAL.EFContext
 
         public DbSet<TeamName> TeamNames { get; set; }
 
-        public DbSet<SportEventName> SportEventNames { get; set; }
-
         public DbSet<Conformity> Conformities { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Result>().HasRequired(p => p.Team);
-            modelBuilder.Entity<Result>().HasRequired(p => p.SportEvent);
+            modelBuilder.Entity<Result>().HasRequired(p => p.Team).WithMany(n => n.Results).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Result>().HasRequired(p => p.SportEvent).WithMany(n => n.Results).WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<Team>().HasRequired(p => p.SportType);
-            modelBuilder.Entity<Team>().HasRequired(p => p.Name);
-            modelBuilder.Entity<Team>().Property(p => p.Name).HasMaxLength(0);
+            modelBuilder.Entity<Team>().HasRequired(p => p.SportType).WithMany(n => n.Teams).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Team>().Property(p => p.Name).IsRequired();
+            modelBuilder.Entity<Team>().Property(p => p.Name).HasMaxLength(30);
 
-            modelBuilder.Entity<SportType>().HasRequired(p => p.Name);
+            modelBuilder.Entity<SportType>().Property(p => p.Name).IsRequired();
 
-            modelBuilder.Entity<SportEvent>().HasRequired(p => p.SportType);
-            modelBuilder.Entity<SportEvent>().HasRequired(p => p.Name);
+            modelBuilder.Entity<SportEvent>().HasRequired(p => p.SportType).WithMany(n => n.SportEvents).WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<TeamName>().HasRequired(p => p.Name);
-            modelBuilder.Entity<SportEventName>().HasRequired(p => p.Name);
+            modelBuilder.Entity<TeamName>().Property(p => p.Name).IsRequired();
 
             base.OnModelCreating(modelBuilder);
         }

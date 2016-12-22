@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
 using JinnSports.DAL.Repositories;
+using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.Entities;
 using JinnSports.Parser.App.HtmlParsers;
 using JinnSports.Parser.App.JsonParsers;

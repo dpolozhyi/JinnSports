@@ -63,6 +63,10 @@
     <Compile Include="Migrations\201612121928597_SportEvents.Designer.cs">
       <DependentUpon>201612121928597_SportEvents.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612221843050_NameMatching.cs" />
+    <Compile Include="Migrations\201612221843050_NameMatching.Designer.cs">
+      <DependentUpon>201612221843050_NameMatching.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
@@ -88,6 +92,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612121928597_SportEvents.resx">
       <DependentUpon>201612121928597_SportEvents.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612221843050_NameMatching.resx">
+      <DependentUpon>201612221843050_NameMatching.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
