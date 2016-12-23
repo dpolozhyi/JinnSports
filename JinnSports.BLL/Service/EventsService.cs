@@ -6,6 +6,7 @@ using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.Entities.Entities;
 using System.Linq;
 using AutoMapper;
+using DTO.JSON;
 
 namespace JinnSports.BLL.Service
 {
@@ -51,38 +52,9 @@ namespace JinnSports.BLL.Service
             return results;
         }
 
-        /*
-        public IDictionary<string, List<SportEventDto>> GetSportEvents()
+       public bool SaveSportEvents(ICollection<SportEventDTO> events)
         {
-            IDictionary<string, List<SportEventDto>> orderedEvents = new Dictionary<string, List<SportEventDto>>();
-            
-            using (this.dataUnit = new EFUnitOfWork(SPORTCONTEXT))
-            {
-                IEnumerable<SportEvent> sportEvents = this.dataUnit.GetRepository<SportEvent>().Get();
-                IEnumerable<SportType> sportTypes = this.dataUnit.GetRepository<SportType>().Get();
-
-                foreach (SportType sportType in sportTypes)
-                {
-                    orderedEvents.Add(sportType.Name, new List<SportEventDto>());
-                }
-
-                foreach (SportEvent sportEvent in sportEvents)
-                {
-                    orderedEvents[sportEvent.SportType.Name].Add(Mapper.Map<SportEvent, SportEventDto>(sportEvent));
-                }
-            }
-
-            return orderedEvents;
+            return false;
         }
-
-        public void SortEventsByDate(IDictionary<string, List<SportEventDto>> orderedEvents)
-        {
-            ICollection<List<SportEventDto>> eventsLists = orderedEvents.Values;
-            foreach (List<SportEventDto> eventsList in eventsLists)
-            {
-                eventsList.OrderBy(e => e.Date);
-            }
-        }
-        */
     }
 }
