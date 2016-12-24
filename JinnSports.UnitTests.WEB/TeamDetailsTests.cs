@@ -27,7 +27,7 @@ namespace JinnSports.UnitTests.WEB
             TeamDetailsController controller = new TeamDetailsController();
 
             // Act
-            ActionResult result = controller.Index();
+            ActionResult result = controller.Details();
 
             // Assert
             Assert.IsNotNull(result);

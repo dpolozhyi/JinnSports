@@ -1,5 +1,4 @@
 ﻿@model string
-
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -26,7 +25,6 @@
     @section scripts {
         @Scripts.Render("~/Scripts/DataTable")
         <script>
-
             $(document).ready(function () {
                 $("#teamResultTable").DataTable({
                     "processing": false,
@@ -34,15 +32,16 @@
                     "filter": false,
                     "orderMulti": false,
                     "ajax": {
-                        "url": "@Model",
-                        "type": "POST",
-                        "datatype": "json" 
+                        url: '@Model',
+                        type: 'GET',
+                        datatype: 'json',
+                        dataSrc : ""
                     },
                     "columns": [
-                            { "data": "TeamFirst", "team1": "TeamFirst", "autoWidth": true },
-                            { "data": "Score", "score": "Score", "autoWidth": true },
-                            { "data": "TeamSecond", "team2": "TeamSecond", "autoWidth": true },
-                            { "data": "Date", "date": "Date", "autoWidth": true }
+                              { "data": "TeamFirst", "autoWidth": true },
+                              { "data": "Score", "autoWidth": true },
+                              { "data": "TeamSecond", "autoWidth": true },
+                              { "data": "Date", "autoWidth": true }
                     ]
                 });
             });

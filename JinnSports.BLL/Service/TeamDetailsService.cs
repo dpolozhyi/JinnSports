@@ -20,7 +20,7 @@ namespace JinnSports.BLL.Service
 
         private IUnitOfWork dataUnit;
 
-        public int Count(int? teamId)
+        public int Count(int teamId)
         {
             int count;
 
@@ -30,7 +30,18 @@ namespace JinnSports.BLL.Service
             }
             return count;
         }
-        
+
+        public Team GetTeamById(int teamId)
+        { 
+            const string SPORTCONTEXT = "SportsContext";
+            
+             using (this.dataUnit = new EFUnitOfWork(SPORTCONTEXT))
+            {
+                Team team = this.dataUnit.GetRepository<Team>().GetById(teamId); //изменить
+                return team;
+            }        
+        }
+
         public IEnumerable<ResultDto> GetResults(int teamId)
         {
             List<ResultDto> orderedTeamResults = new List<ResultDto>();
