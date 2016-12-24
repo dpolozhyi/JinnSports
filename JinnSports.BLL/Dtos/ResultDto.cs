@@ -12,24 +12,8 @@ namespace JinnSports.BLL.Dtos
         public int Id { get; set; }
         public string Score { get; set; }
         public string Date { get; set; }
-        public int TeamFirstId { get; set; }
-        public string TeamFirst { get; set; }
-        public int TeamSecondId { get; set; }
-        public string TeamSecond { get; set; }
-
-        public bool Equals(ResultDto resultDto)
-        {
-            if (string.IsNullOrEmpty(this.Date) || string.IsNullOrEmpty(this.Score) || this.Id < 1 || this.TeamFirstId < 1 || this.TeamSecondId < 1 || 
-                string.IsNullOrEmpty(this.TeamFirst) || string.IsNullOrEmpty(this.TeamSecond) || resultDto == null)
-            {
-                return false;
-            }
-
-            return (this.Date == resultDto.Date) && (this.Score == resultDto.Score) && 
-                (this.Id == resultDto.Id) && (this.TeamFirstId == resultDto.TeamFirstId) && 
-                (this.TeamSecondId == resultDto.TeamSecondId) && (this.TeamFirst == resultDto.TeamFirst) &&
-                (this.TeamSecond == resultDto.TeamSecond);
-        }
+        public IEnumerable<string> TeamNames { get; set; } = new List<string>(2);
+        public IEnumerable<int> TeamIds { get; set; } = new List<int>(2);
 
         /*public override int GetHashCode()
         {

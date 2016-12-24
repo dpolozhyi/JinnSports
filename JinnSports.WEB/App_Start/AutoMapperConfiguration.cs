@@ -14,36 +14,28 @@ namespace JinnSports.WEB
             Mapper.Initialize(config =>
             {
                 // Конфигурация отображения SportEvent на SportEventDto
-                 config.CreateMap<Result, ResultDto>()
-                .ForMember(
-                     "Id", 
-                      opt => opt.MapFrom(
-                          res => res.Id))
-                .ForMember(
-                     "Score", 
+                config.CreateMap<Result, ResultDto>()
+               .ForMember(
+                     e => e.Id,
                      opt => opt.MapFrom(
-                         res => string.Format(
-                             "{0} : {1}", 
-                             res.SportEvent.Results.ElementAt(0).Score, 
-                             res.SportEvent.Results.ElementAt(1).Score)))
+                         res => res.Id))
+               .ForMember(
+                    e => e.Score,
+                    opt => opt.MapFrom(
+                        res => string.Format(
+                            "{0} : {1}",
+                            res.SportEvent.Results.ElementAt(0).Score,
+                            res.SportEvent.Results.ElementAt(1).Score)))
+               .ForMember(
+                    e => e.TeamNames,
+                    opt => opt.MapFrom(
+                        res => res.SportEvent.Results.Select(x => x.Team.Name)))                   
                 .ForMember(
-                     "TeamFirst", 
+                     e => e.TeamIds, 
                      opt => opt.MapFrom(
-                         res => res.SportEvent.Results.ElementAt(0).Team.Name))
+                         res => res.SportEvent.Results.Select(x => x.Team.Id)))               
                 .ForMember(
-                     "TeamSecond", 
-                     opt => opt.MapFrom(
-                         res => res.SportEvent.Results.ElementAt(1).Team.Name))
-                .ForMember(
-                     "TeamFirstId", 
-                     opt => opt.MapFrom(
-                         res => res.SportEvent.Results.ElementAt(0).Team.Id))
-                .ForMember(
-                     "TeamSecondId", 
-                     opt => opt.MapFrom(
-                         res => res.SportEvent.Results.ElementAt(1).Team.Id))
-                .ForMember(
-                     "Date", 
+                     e => e.Date, 
                      opt => opt.MapFrom(
                          res => new EventDate(res.SportEvent.Date).ToString()));
 
