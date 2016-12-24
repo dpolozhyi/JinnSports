@@ -13,7 +13,8 @@ namespace JinnSports.WEB.Controllers
         // GET: Team
         public ActionResult Index()
         {
-            return this.View();
+            string url = string.Format("/api/Team/LoadTeams");
+            return this.View((object)url);
         }
     }
 }

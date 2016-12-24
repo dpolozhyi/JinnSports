@@ -1,6 +1,7 @@
 ﻿using JinnSports.BLL.Dtos;
 using JinnSports.BLL.Interfaces;
 using JinnSports.BLL.Service;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -17,7 +18,7 @@ namespace JinnSports.WEB.ApiControllers
         }
         // GET: api/TeamDetails/5
         [HttpGet]
-        public HttpResponseMessage LoadResults(int teamId = 6)
+        public HttpResponseMessage LoadResults(int id)
         {
             //var p = this.Request.Content.ReadAsAsync<JObject>();
             /*string draw = this.Request.Form.GetValues("draw").FirstOrDefault();
@@ -30,7 +31,7 @@ namespace JinnSports.WEB.ApiControllers
             int teamId = id != null ? Convert.ToInt32(id) : 0;
             int recordsTotal = this.teamDetailsService.Count(teamId);*/
 
-            IEnumerable<ResultDto> results = this.teamDetailsService.GetResults(teamId);
+            IEnumerable<ResultDto> results = this.teamDetailsService.GetResults(id);
             /* .Skip(skip)
              .Take(pageSize)
              .ToList();*/

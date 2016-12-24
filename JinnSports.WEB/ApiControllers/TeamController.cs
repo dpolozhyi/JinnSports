@@ -1,5 +1,6 @@
 ﻿using JinnSports.BLL.Dtos;
 using JinnSports.BLL.Interfaces;
+using JinnSports.BLL.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,14 @@ namespace JinnSports.WEB.ApiControllers
     public class TeamController : ApiController
     {
         private ITeamService teamService;
+
+        public TeamController()
+        {
+            this.teamService = new TeamService();
+        }
+
         // GET: api/Team/5
-        [HttpPost]
+        [HttpGet]
         public IHttpActionResult LoadTeams()
         {
             /*string draw = this.Request.Form.GetValues("draw").FirstOrDefault();
