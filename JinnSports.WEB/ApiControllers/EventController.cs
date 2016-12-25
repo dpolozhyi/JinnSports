@@ -22,18 +22,17 @@ namespace JinnSports.WEB.ApiControllers
 
         [HttpGet]
         public IHttpActionResult LoadEvents()
-        {         
-            /*string draw = this.Request.Form.GetValues("draw").FirstOrDefault();
-            string start = this.Request.Form.GetValues("start").FirstOrDefault();
-            string length = this.Request.Form.GetValues("length").FirstOrDefault();
+        {
+            string draw = this.Request.GetQueryNameValuePairs().Where(x => x.Key == "draw").FirstOrDefault().Value;
+            string start = this.Request.GetQueryNameValuePairs().Where(x => x.Key == "start").FirstOrDefault().Value;
+            string length = this.Request.GetQueryNameValuePairs().Where(x => x.Key == "length").FirstOrDefault().Value;
 
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
-
-            int recordsTotal = this.eventService.Count(FOOTBALL);*/
+            int recordsTotal = this.eventService.Count(FOOTBALL);
 
             IEnumerable<ResultDto> results = this.eventService
-                .GetSportEvents(FOOTBALL, 0, 15);
+                .GetSportEvents(FOOTBALL, skip, pageSize);
 
             return this.Ok(results);
         }

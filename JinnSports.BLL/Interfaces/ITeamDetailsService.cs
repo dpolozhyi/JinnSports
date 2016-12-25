@@ -8,7 +8,6 @@ namespace JinnSports.BLL.Interfaces
     public interface ITeamDetailsService
     {
         int Count(int teamId);
-        IEnumerable<ResultDto> GetResults(int teamId);
-        Team GetTeamById(int teamId);
+        IEnumerable<ResultDto> GetResults(int teamId, int skip, int take);
     }
 }

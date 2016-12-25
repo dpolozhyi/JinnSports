@@ -23,18 +23,16 @@ namespace JinnSports.WEB.ApiControllers
         [HttpGet]
         public IHttpActionResult LoadTeams()
         {
-            /*string draw = this.Request.Form.GetValues("draw").FirstOrDefault();
-            string start = this.Request.Form.GetValues("start").FirstOrDefault();
-            string length = this.Request.Form.GetValues("length").FirstOrDefault();
+            string draw = this.Request.GetQueryNameValuePairs().Where(x => x.Key == "draw").FirstOrDefault().Value;
+            string start = this.Request.GetQueryNameValuePairs().Where(x => x.Key == "start").FirstOrDefault().Value;
+            string length = this.Request.GetQueryNameValuePairs().Where(x => x.Key == "length").FirstOrDefault().Value;
 
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
-            int recordsTotal = this.teamService.Count();*/
+            int recordsTotal = this.teamService.Count();
 
-            IEnumerable<TeamDto> teams = this.teamService.GetAllTeams();
-               /* .Skip(skip)
-                .Take(pageSize)
-                .ToList();*/
+
+            IEnumerable<TeamDto> teams = this.teamService.GetAllTeams(skip, pageSize);
 
             foreach (TeamDto team in teams)
             {

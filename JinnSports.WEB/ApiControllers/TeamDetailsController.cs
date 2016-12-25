@@ -1,8 +1,10 @@
 ﻿using JinnSports.BLL.Dtos;
 using JinnSports.BLL.Interfaces;
 using JinnSports.BLL.Service;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -16,31 +18,25 @@ namespace JinnSports.WEB.ApiControllers
         {
             this.teamDetailsService = new TeamDetailsService();
         }
-        // GET: api/TeamDetails/5
+
         [HttpGet]
-        public IHttpActionResult LoadResults(int id)
+        public IHttpActionResult LoadResults(int id = 1)
         {
-            //var p = this.Request.Content.ReadAsAsync<JObject>();
-            /*string draw = this.Request.Form.GetValues("draw").FirstOrDefault();
-            string start = this.Request.Form.GetValues("start").FirstOrDefault();
-            string length = this.Request.Form.GetValues("length").FirstOrDefault();
-            //string id = this.Request.Form.GetValues("id").FirstOrDefault();
+            string draw = this.Request.GetQueryNameValuePairs().Where(x => x.Key == "draw").FirstOrDefault().Value;
+            string start = this.Request.GetQueryNameValuePairs().Where(x => x.Key == "start").FirstOrDefault().Value;
+            string length = this.Request.GetQueryNameValuePairs().Where(x => x.Key == "length").FirstOrDefault().Value;
 
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
-            int teamId = id != null ? Convert.ToInt32(id) : 0;
-            int recordsTotal = this.teamDetailsService.Count(teamId);*/
+            int recordsTotal = this.teamDetailsService.Count(id);
 
-            IEnumerable<ResultDto> results = this.teamDetailsService.GetResults(id);
-            /* .Skip(skip)
-             .Take(pageSize)
-             .ToList();*/
+            IEnumerable<ResultDto> results = this.teamDetailsService.GetResults(id, skip, pageSize);
 
-            /* foreach (ResultDto result in results)
-             {
-                 re.Results = null;
-             }*/
             return this.Ok(results);
+        }
+
+        public void Post([FromBody]string value)
+        {
         }
 
         // PUT: api/TeamDetails/5

@@ -40,6 +40,10 @@ namespace JinnSports.WEB
                          res => new EventDate(res.SportEvent.Date).ToString()));
 
                 config.CreateMap<SportEvent, ResultDto>()
+                .ForMember(
+                    e => e.Id,
+                    opt => opt.MapFrom(
+                        s => s.Id))
                .ForMember(
                     e => e.TeamNames,
                     opt => opt.MapFrom(

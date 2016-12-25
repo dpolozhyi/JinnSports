@@ -26,13 +26,17 @@ namespace JinnSports.BLL.Service
             return count;
         }
 
-        public IEnumerable<TeamDto> GetAllTeams()
+        public IEnumerable<TeamDto> GetAllTeams(int skip, int take)
         {
             IList<TeamDto> teamDtoList = new List<TeamDto>();
 
             using (this.dataUnit = new EFUnitOfWork(SPORTCONTEXT))
             {
-                IEnumerable<Team> teams = this.dataUnit.GetRepository<Team>().Get();
+                IEnumerable<Team> teams = this.dataUnit.GetRepository<Team>().Get(
+                    orderBy: s => s.OrderBy(x => x.Id), 
+                    skip: skip, 
+                    take: take);
+
                 foreach (Team team in teams)
                 {
                     TeamDto teamDto = new TeamDto { Id = team.Id, Name = team.Name };
@@ -44,9 +48,5 @@ namespace JinnSports.BLL.Service
            return teamDtoList;
         }
 
-        public TeamDto GetTeamById(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

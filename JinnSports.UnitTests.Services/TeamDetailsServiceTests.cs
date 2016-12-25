@@ -303,9 +303,6 @@ namespace JinnSports.UnitTests.Services
                 SportEvent = MU_vs_MC_event
             };
 
-
-           // test entities formation
-
             sportTypes.Add(football);
             sportTypes.Add(basketball);
             sportTypes.Add(tennis);
@@ -328,21 +325,6 @@ namespace JinnSports.UnitTests.Services
             sportEvents.Add(MU_vs_MC_event);
             sportEvents.Add(Chelsea_vs_Milano_event);
             sportEvents.Add(Chelsea_vs_MC_event);
-
-            /*results.Add(Ch_vs_LA);
-            results.Add(LA_vs_Ch);
-            results.Add(Ch_vs_Ph);
-            results.Add(Ph_vs_Ch);
-            results.Add(LA_vs_Ph);
-            results.Add(Ph_vs_LA);
-            results.Add(MU_vs_MC);
-            results.Add(MC_vs_MU);
-            results.Add(Bayern_vs_Milano);
-            results.Add(Milano_vs_Bayern);
-            results.Add(Chelsea_vs_MC);
-            results.Add(MC_vs_Chelsea);
-            results.Add(Chelsea_vs_Milano);
-            results.Add(Milano_vs_Chelsea); OLD ID Initialization*/
 
             results.Add(MU_vs_MC);
             results.Add(Milano_vs_Bayern);
@@ -557,10 +539,9 @@ namespace JinnSports.UnitTests.Services
             List<ResultDto> resultDtoCollection = new List<ResultDto>();
             List<ResultDto> dtoTest = this.resultsDtoCollection.ElementAt(element);
             ResultDtoComparer dtoComparer = new ResultDtoComparer();
-            
-            resultDtoCollection = teamDetailsService.GetResults(teamId).ToList();
+            int skip = 0; int take = 10;
+            resultDtoCollection = teamDetailsService.GetResults(teamId, skip, take).ToList();
 
-            //Assert.IsTrue(resultDtoCollection.Equals(dtoTest));
             CollectionAssert.AreEqual(resultDtoCollection, dtoTest, dtoComparer);
         }
 
