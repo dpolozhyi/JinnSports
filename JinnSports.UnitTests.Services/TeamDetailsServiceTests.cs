@@ -10,6 +10,7 @@ using System.Linq;
 using System.Collections;
 using JinnSports.BLL.Extentions;
 using AutoMapper;
+using JinnSports.WEB;
 
 namespace JinnSports.UnitTests.Services
 {
@@ -59,6 +60,7 @@ namespace JinnSports.UnitTests.Services
             this.resultsDto = new List<ResultDto>();
             this.resultsDtoCollection = new List<List<ResultDto>>();
 
+            AutoMapperConfiguration.Configure();
             SportType football = new SportType()
             {
                 Id = 1,

@@ -13,7 +13,6 @@ namespace JinnSports.WEB
         {
             Mapper.Initialize(config =>
             {
-                // Конфигурация отображения SportEvent на SportEventDto
                 config.CreateMap<Result, ResultDto>()
                .ForMember(
                      e => e.Id,
@@ -29,13 +28,13 @@ namespace JinnSports.WEB
                .ForMember(
                     e => e.TeamNames,
                     opt => opt.MapFrom(
-                        res => res.SportEvent.Results.Select(x => x.Team.Name)))                   
+                        res => res.SportEvent.Results.Select(x => x.Team.Name)))
                .ForMember(
-                     e => e.TeamIds, 
+                     e => e.TeamIds,
                      opt => opt.MapFrom(
-                         res => res.SportEvent.Results.Select(x => x.Team.Id)))               
+                         res => res.SportEvent.Results.Select(x => x.Team.Id)))
                .ForMember(
-                     e => e.Date, 
+                     e => e.Date,
                      opt => opt.MapFrom(
                          res => new EventDate(res.SportEvent.Date).ToString()));
 

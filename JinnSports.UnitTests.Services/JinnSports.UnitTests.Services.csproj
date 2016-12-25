@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>JinnSports.UnitTests.Services</RootNamespace>
     <AssemblyName>JinnSports.UnitTests.Services</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -16,6 +16,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -86,6 +87,10 @@
     <ProjectReference Include="..\JinnSports.Entities\JinnSports.Entities.csproj">
       <Project>{fe881c95-44b6-4c3b-8d18-906f050d3cbb}</Project>
       <Name>JinnSports.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JinnSports.WEB\JinnSports.WEB.csproj">
+      <Project>{60699990-4981-4ae2-8043-8120d0ae8249}</Project>
+      <Name>JinnSports.WEB</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
