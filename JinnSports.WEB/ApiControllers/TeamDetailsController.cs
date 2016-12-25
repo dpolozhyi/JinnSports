@@ -18,7 +18,7 @@ namespace JinnSports.WEB.ApiControllers
         }
         // GET: api/TeamDetails/5
         [HttpGet]
-        public HttpResponseMessage LoadResults(int id)
+        public IHttpActionResult LoadResults(int id)
         {
             //var p = this.Request.Content.ReadAsAsync<JObject>();
             /*string draw = this.Request.Form.GetValues("draw").FirstOrDefault();
@@ -40,7 +40,7 @@ namespace JinnSports.WEB.ApiControllers
              {
                  re.Results = null;
              }*/
-            return Request.CreateResponse(HttpStatusCode.OK, results);
+            return this.Ok(results);
         }
 
         // PUT: api/TeamDetails/5

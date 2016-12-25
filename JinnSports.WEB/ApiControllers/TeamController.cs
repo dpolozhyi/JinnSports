@@ -40,7 +40,7 @@ namespace JinnSports.WEB.ApiControllers
             {
                 team.Results = null;
             }
-            return Ok(teams);
+            return this.Ok(teams);
         }
 
         // POST: api/Team

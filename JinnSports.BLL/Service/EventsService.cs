@@ -27,9 +27,9 @@ namespace JinnSports.BLL.Service
             return count;
         }
 
-        public IEnumerable<SportEventDto> GetSportEvents(string sport, int skip, int take)
+        public IEnumerable<ResultDto> GetSportEvents(string sport, int skip, int take)
         {
-            IList<SportEventDto> results = new List<SportEventDto>();
+            IList<ResultDto> results = new List<ResultDto>();
 
             using (this.dataUnit = new EFUnitOfWork(SPORTCONTEXT))
             {
@@ -44,7 +44,7 @@ namespace JinnSports.BLL.Service
                 // Формирование SportEventDto из SportEvent при помощи AutoMapper
                 foreach (SportEvent sportEvent in sportEvents)
                 {
-                    results.Add(Mapper.Map<SportEventDto>(sportEvent));
+                    results.Add(Mapper.Map<ResultDto>(sportEvent));
                 }
             }
 

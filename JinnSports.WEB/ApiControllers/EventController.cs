@@ -1,5 +1,6 @@
 ﻿using JinnSports.BLL.Dtos;
 using JinnSports.BLL.Interfaces;
+using JinnSports.BLL.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,14 +14,14 @@ namespace JinnSports.WEB.ApiControllers
     {
         private const string FOOTBALL = "Football";
         private IEventService eventService;
-        // GET: api/Event
-        public IEnumerable<string> Get()
+
+        public EventController()
         {
-            return new string[] { "value1", "value2" };
+            this.eventService = new EventsService();
         }
-        [HttpPost]
-        // GET: api/Event/5
-        public IHttpActionResult LoadEvents(int id)
+
+        [HttpGet]
+        public IHttpActionResult LoadEvents()
         {         
             /*string draw = this.Request.Form.GetValues("draw").FirstOrDefault();
             string start = this.Request.Form.GetValues("start").FirstOrDefault();
@@ -31,11 +32,10 @@ namespace JinnSports.WEB.ApiControllers
 
             int recordsTotal = this.eventService.Count(FOOTBALL);*/
 
-            IEnumerable<SportEventDto> events = this.eventService
+            IEnumerable<ResultDto> results = this.eventService
                 .GetSportEvents(FOOTBALL, 0, 15);
 
-            return Ok(events);
-
+            return this.Ok(results);
         }
 
         // POST: api/Event

@@ -19,6 +19,6 @@ namespace JinnSports.BLL.Interfaces
         /// <param name="skip"></param>
         /// <param name="take"></param>
         /// <returns></returns>
-        IEnumerable<SportEventDto> GetSportEvents(string sport, int skip, int take);
+        IEnumerable<ResultDto> GetSportEvents(string sport, int skip, int take);
     }
 }

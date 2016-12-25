@@ -30,44 +30,35 @@ namespace JinnSports.WEB
                     e => e.TeamNames,
                     opt => opt.MapFrom(
                         res => res.SportEvent.Results.Select(x => x.Team.Name)))                   
-                .ForMember(
+               .ForMember(
                      e => e.TeamIds, 
                      opt => opt.MapFrom(
                          res => res.SportEvent.Results.Select(x => x.Team.Id)))               
-                .ForMember(
+               .ForMember(
                      e => e.Date, 
                      opt => opt.MapFrom(
                          res => new EventDate(res.SportEvent.Date).ToString()));
 
-                config.CreateMap<SportEvent, SportEventDto>()
-                .ForMember(
-                    e => e.TeamFirst,
+                config.CreateMap<SportEvent, ResultDto>()
+               .ForMember(
+                    e => e.TeamNames,
                     opt => opt.MapFrom(
-                        s => s.Results.ElementAt(0).Team.Name))
-                .ForMember(
-                    e => e.TeamFirstId,
+                        s => s.Results.Select(x => x.Team.Name)))
+               .ForMember(
+                     e => e.TeamIds,
+                     opt => opt.MapFrom(
+                         res => res.Results.Select(x => x.Team.Id)))
+               .ForMember(
+                    e => e.Score,
                     opt => opt.MapFrom(
-                        s => s.Results.ElementAt(0).Team.Id))
-                .ForMember(
-                    e => e.ScoreFirst,
-                    opt => opt.MapFrom(
-                        s => s.Results.ElementAt(0).Score))
-                .ForMember(
-                    e => e.TeamSecond,
-                    opt => opt.MapFrom(
-                        s => s.Results.ElementAt(1).Team.Name))
-                .ForMember(
-                    e => e.TeamSecondId,
-                    opt => opt.MapFrom(
-                        s => s.Results.ElementAt(1).Team.Id))
-                .ForMember(
-                    e => e.ScoreSecond,
-                    opt => opt.MapFrom(
-                        s => s.Results.ElementAt(1).Score))
+                        res => string.Format(
+                            "{0} : {1}",
+                            res.Results.ElementAt(0).Score,
+                            res.Results.ElementAt(1).Score)))
                 .ForMember(
                     e => e.Date,
                     opt => opt.MapFrom(
-                        s => s.Date.ToShortDateString()));
+                        res => new EventDate(res.Date).ToString()));
             });
         }
     }

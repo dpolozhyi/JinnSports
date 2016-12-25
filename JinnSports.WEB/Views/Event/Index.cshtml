@@ -1,4 +1,5 @@
-﻿@{
+﻿@model string
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -15,8 +16,7 @@
             <thead>
                 <tr>
                     <th>First Team</th>
-                    <th>First Score</th>
-                    <th>Second Score</th>
+                    <th>Score</th>
                     <th>Second Team</th>
                     <th>Date</th>
                 </tr>
@@ -34,16 +34,16 @@
             "filter": false,
             "orderMulti": false,
             "ajax": {
-                "url": "/Event/LoadEvents",
-                "type": "POST",
-                "datatype": "json"
+                url: '@Model',
+                type: 'GET',
+                datatype: 'json',
+                dataSrc: ""
             },
             "columns": [
-                    { "data": "TeamFirst", "name": "First Team", "autoWidth": true },
-                    { "data": "ScoreFirst", "name": "First Score", "autoWidth": true },
-                    { "data": "ScoreSecond", "name": "Second Score", "autoWidth": true },
-                    { "data": "TeamSecond", "name": "Second Team", "autoWidth": true },
-                    { "data": "Date", "name": "Date", "autoWidth": true }
+                    { 'data': 'TeamNames.0', 'autoWidth': true },
+                    { 'data': 'Score', 'autoWidth': true },
+                    { 'data': 'TeamNames.1', 'autoWidth': true },
+                    { 'data': 'Date', 'autoWidth': true }
             ]
         });
     });
