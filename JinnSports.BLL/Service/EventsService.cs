@@ -6,6 +6,7 @@ using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.Entities.Entities;
 using System.Linq;
 using AutoMapper;
+using DTO.JSON;
 
 namespace JinnSports.BLL.Service
 {
@@ -49,6 +50,11 @@ namespace JinnSports.BLL.Service
             }
 
             return results;
+        }
+
+        public bool SaveSportEvents(ICollection<SportEventDTO> events)
+        {
+            return false;
         }
     }
 }

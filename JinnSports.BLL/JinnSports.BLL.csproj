@@ -55,6 +55,10 @@
     <Compile Include="Service\TeamService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DTO\DTO.csproj">
+      <Project>{40F1BD33-B3C8-4268-8243-59230825EF9B}</Project>
+      <Name>DTO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\JinnSports.DAL\JinnSports.DAL.csproj">
       <Project>{be36f33a-801a-4b21-8130-ff952c3a5f97}</Project>
       <Name>JinnSports.DAL</Name>

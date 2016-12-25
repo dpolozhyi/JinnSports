@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using JinnSports.BLL.Dtos;
+using DTO.JSON;
 
 namespace JinnSports.BLL.Interfaces
 {
@@ -20,5 +21,7 @@ namespace JinnSports.BLL.Interfaces
         /// <param name="take"></param>
         /// <returns></returns>
         IEnumerable<ResultDto> GetSportEvents(string sport, int skip, int take);
+
+        bool SaveSportEvents(ICollection<SportEventDTO> events);
     }
 }
