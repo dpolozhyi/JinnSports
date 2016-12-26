@@ -16,19 +16,19 @@ namespace JinnSports.BLL.Service
 
         private IUnitOfWork dataUnit;
 
-        public int Count(string sport)
+        public int Count(int sportId)
         {
             int count;
             using (this.dataUnit = new EFUnitOfWork(SPORTCONTEXT))
             {
                 count = this.dataUnit.GetRepository<SportEvent>()
-                    .Get(filter: m => m.SportType.Name == sport)
+                    .Get(filter: m => m.SportType.Id == sportId)
                     .Count();
             }
             return count;
         }
 
-        public IEnumerable<ResultDto> GetSportEvents(string sport, int skip, int take)
+        public IEnumerable<ResultDto> GetSportEvents(int sportId, int skip, int take)
         {
             IList<ResultDto> results = new List<ResultDto>();
 
@@ -37,7 +37,7 @@ namespace JinnSports.BLL.Service
                 // Выбираем результаты заданного вида спорта, сортируя по дате
                 IEnumerable<SportEvent> sportEvents =
                     this.dataUnit.GetRepository<SportEvent>().Get(
-                        filter: m => m.SportType.Name == sport,
+                        filter: m => m.SportType.Id == sportId,
                         orderBy: s => s.OrderByDescending(x => x.Date),
                         skip: skip,
                         take: take);

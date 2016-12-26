@@ -9,28 +9,26 @@ namespace JinnSports.BLL.Dtos
 {
     public class ResultDto
     {
+        public ResultDto()
+        {
+            this.TeamNames = new List<string>(2);
+            this.TeamIds = new List<int>(2);
+        }
+
+        /// <summary>
+        /// Constructor with players per event
+        /// </summary>
+        /// <param name="eventPlayers">Max players in the event</param>
+        public ResultDto(int eventPlayers)
+        {
+            this.TeamNames = new List<string>(eventPlayers);
+            this.TeamIds = new List<int>(eventPlayers);
+        }
+
         public int Id { get; set; }
         public string Score { get; set; }
         public string Date { get; set; }
-        public IEnumerable<string> TeamNames { get; set; } = new List<string>(2);
-        public IEnumerable<int> TeamIds { get; set; } = new List<int>(2);
-
-        /*public override int GetHashCode()
-        {
-            if (Date == null || SportType == null || SportType.Name == null)
-            {
-                return 0;
-            }
-
-            int hashCode = Date.GetHashCode() ^ SportType.Name.GetHashCode();
-            List<string> teamNames = Results.Select(r => r.Team.Name).ToList();
-
-            foreach (string teamName in teamNames)
-            {
-                hashCode ^= teamName.GetHashCode();
-            }
-
-            return hashCode;
-        }*/
+        public IEnumerable<string> TeamNames { get; set; }
+        public IEnumerable<int> TeamIds { get; set; }
     }
 }
