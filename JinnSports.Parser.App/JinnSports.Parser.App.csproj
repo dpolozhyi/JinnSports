@@ -63,13 +63,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiConnection\ApiConnection.cs" />
     <Compile Include="Exceptions\GetDataException.cs" />
     <Compile Include="Exceptions\JsonDeserializeException.cs" />
     <Compile Include="Exceptions\ParseException.cs" />
     <Compile Include="Exceptions\SaveDataException.cs" />
     <Compile Include="Exceptions\WebResponseException.cs" />
     <Compile Include="HtmlParsers\HTMLParser24score.cs" />
-    <Compile Include="Interfaces\ISaver.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Interfaces\IWebConnection.cs" />
     <Compile Include="MyConfigInstanceCollection.cs" />
@@ -104,6 +104,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DTO\DTO.csproj">
+      <Project>{40f1bd33-b3c8-4268-8243-59230825ef9b}</Project>
+      <Name>DTO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\JinnSports.DAL\JinnSports.DAL.csproj">
       <Project>{be36f33a-801a-4b21-8130-ff952c3a5f97}</Project>
       <Name>JinnSports.DAL</Name>

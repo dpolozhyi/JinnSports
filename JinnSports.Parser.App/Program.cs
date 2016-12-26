@@ -1,20 +1,6 @@
-﻿using System;
+﻿using DTO.JSON;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading;
-using JinnSports.DAL.Repositories;
-using JinnSports.DataAccessInterfaces.Interfaces;
-using JinnSports.Entities;
-using JinnSports.Parser.App.HtmlParsers;
 using JinnSports.Parser.App.JsonParsers;
-using JinnSports.Parser.App.JsonParsers.JsonEntities;
-using JinnSports.Parser.App.ProxyService.ProxyParser;
-using JinnSports.Parser.App.ProxyService.ProxyConnection;
-using JinnSports.DataAccessInterfaces.Interfaces;
-using JinnSports.Entities.Entities;
-using System.Net;
-using log4net;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
@@ -24,7 +10,14 @@ namespace JinnSports.Parser.App
     {
         public static void Main(string[] args)
         {
-
+            JsonParser jp = new JsonParser();
+            List<SportEventDTO> sportList = jp.GetSportEventsList(jp.DeserializeJson(jp.GetJsonFromUrl()));
+           /* foreach(var s in sportList)
+            {
+                Console.WriteLine("{0} {1}", s.SportType, s.Date);
+                List<ResultDTO> rList = s.Results.ToList();
+                Console.WriteLine("{0} {1}:{2} {3}\n", rList[0].TeamName, rList[0].Score, rList[1].Score, rList[1].TeamName);
+            }*/
         }
     }
 }
