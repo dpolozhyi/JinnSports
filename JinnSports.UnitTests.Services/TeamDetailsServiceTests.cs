@@ -10,6 +10,7 @@ using System.Linq;
 using System.Collections;
 using JinnSports.BLL.Extentions;
 using AutoMapper;
+using JinnSports.WEB;
 
 namespace JinnSports.UnitTests.Services
 {
@@ -36,16 +37,16 @@ namespace JinnSports.UnitTests.Services
 
             public int Compare(ResultDto ldto, ResultDto rdto)
             {
-                if (ldto.Date == null || string.IsNullOrEmpty(ldto.Score) || ldto.Id < 1 || ldto.TeamFirstId < 1 || ldto.TeamSecondId < 1 ||
-                string.IsNullOrEmpty(ldto.TeamFirst) || string.IsNullOrEmpty(ldto.TeamSecond))
+                if (ldto.Date == null || string.IsNullOrEmpty(ldto.Score) || ldto.Id < 1 || ldto.TeamIds.ElementAt(0) < 1 || ldto.TeamIds.ElementAt(1) < 1 ||
+                string.IsNullOrEmpty(ldto.TeamNames.ElementAt(0)) || string.IsNullOrEmpty(ldto.TeamNames.ElementAt(1)))
                 {
                     return -1;
                 }
 
                 return ((ldto.Date.CompareTo(rdto.Date)) & (ldto.Score.CompareTo(rdto.Score)) &
-                    (ldto.Id.CompareTo(rdto.Id)) & (ldto.TeamFirstId.CompareTo(rdto.TeamFirstId)) &
-                    (ldto.TeamSecondId.CompareTo(rdto.TeamSecondId)) & (ldto.TeamFirst.CompareTo(rdto.TeamFirst)) &
-                    (ldto.TeamSecond.CompareTo(rdto.TeamSecond)));
+                    (ldto.Id.CompareTo(rdto.Id)) & (ldto.TeamIds.ElementAt(0).CompareTo(rdto.TeamIds.ElementAt(0))) &
+                    (ldto.TeamIds.ElementAt(1).CompareTo(rdto.TeamIds.ElementAt(1))) & (ldto.TeamNames.ElementAt(0).CompareTo(rdto.TeamNames.ElementAt(0))) &
+                    (ldto.TeamNames.ElementAt(1).CompareTo(rdto.TeamNames.ElementAt(1))));
             }
         }
         [SetUp]
@@ -59,6 +60,7 @@ namespace JinnSports.UnitTests.Services
             this.resultsDto = new List<ResultDto>();
             this.resultsDtoCollection = new List<List<ResultDto>>();
 
+            AutoMapperConfiguration.Configure();
             SportType football = new SportType()
             {
                 Id = 1,
@@ -303,9 +305,6 @@ namespace JinnSports.UnitTests.Services
                 SportEvent = MU_vs_MC_event
             };
 
-
-           // test entities formation
-
             sportTypes.Add(football);
             sportTypes.Add(basketball);
             sportTypes.Add(tennis);
@@ -328,21 +327,6 @@ namespace JinnSports.UnitTests.Services
             sportEvents.Add(MU_vs_MC_event);
             sportEvents.Add(Chelsea_vs_Milano_event);
             sportEvents.Add(Chelsea_vs_MC_event);
-
-            /*results.Add(Ch_vs_LA);
-            results.Add(LA_vs_Ch);
-            results.Add(Ch_vs_Ph);
-            results.Add(Ph_vs_Ch);
-            results.Add(LA_vs_Ph);
-            results.Add(Ph_vs_LA);
-            results.Add(MU_vs_MC);
-            results.Add(MC_vs_MU);
-            results.Add(Bayern_vs_Milano);
-            results.Add(Milano_vs_Bayern);
-            results.Add(Chelsea_vs_MC);
-            results.Add(MC_vs_Chelsea);
-            results.Add(Chelsea_vs_Milano);
-            results.Add(Milano_vs_Chelsea); OLD ID Initialization*/
 
             results.Add(MU_vs_MC);
             results.Add(Milano_vs_Bayern);
@@ -388,67 +372,104 @@ namespace JinnSports.UnitTests.Services
             Chelsea_vs_Milano_event.Results.Add(Milano_vs_Chelsea);
             Chelsea_vs_MC_event.Results.Add(Chelsea_vs_MC);
             Chelsea_vs_MC_event.Results.Add(MC_vs_Chelsea);
-            
+
             //ResultDto formation
             ResultDto ChicagoBulls_vs_LA_Result_Dto = new ResultDto()
             {
                 Date = new EventDate(ChicagoBulls_vs_LA_event.Date).ToString(),
                 Id = Ch_vs_LA.Id,
                 Score = String.Format("{0} : {1}", Ch_vs_LA.Score, LA_vs_Ch.Score),
-                TeamFirstId = ChicagoBulls.Id,
-                TeamSecondId = LALakers.Id,
-                TeamFirst = ChicagoBulls.Name,
-                TeamSecond = LALakers.Name
+                TeamIds = new List<int>()
+                {
+                    ChicagoBulls.Id,
+                    LALakers.Id
+                },
+                TeamNames = new List<string>()
+                {
+                    ChicagoBulls.Name,
+                    LALakers.Name
+                }
             };
             ResultDto LA_vs_ChicagoBulls_Result_Dto = new ResultDto()
             {
                 Date = new EventDate(LA_vs_Suns_event.Date).ToString(),
                 Id = LA_vs_Ch.Id,
                 Score = String.Format("{0} : {1}", LA_vs_Ch.Score, Ch_vs_LA.Score),
-                TeamFirstId = LALakers.Id,
-                TeamSecondId = ChicagoBulls.Id,
-                TeamFirst = LALakers.Name,
-                TeamSecond = ChicagoBulls.Name
+                TeamIds = new List<int>()
+                {
+                    LALakers.Id,
+                    ChicagoBulls.Id
+                },
+                TeamNames = new List<string>()
+                {
+                    LALakers.Name,
+                    ChicagoBulls.Name
+                }
             };
             ResultDto Suns_vs_ChicagoBulls_Result_Dto = new ResultDto()
             {
                 Date = new EventDate(ChicagoBulls_vs_Suns_event.Date).ToString(),
                 Id = Ph_vs_Ch.Id,
                 Score = String.Format("{0} : {1}", Ph_vs_Ch.Score, Ch_vs_Ph.Score),
-                TeamFirstId = PhoenixSuns.Id,
-                TeamSecondId = ChicagoBulls.Id,
-                TeamFirst = PhoenixSuns.Name,
-                TeamSecond = ChicagoBulls.Name
+                TeamIds = new List<int>()
+                {
+                    PhoenixSuns.Id,
+                    ChicagoBulls.Id
+                },
+                TeamNames = new List<string>()
+                {
+                    PhoenixSuns.Name,
+                    ChicagoBulls.Name
+                }            
             };
             ResultDto ChicagoBulls_vs_Suns_Result_Dto = new ResultDto()
             {
                 Date = new EventDate(ChicagoBulls_vs_Suns_event.Date).ToString(),
                 Id = Ch_vs_Ph.Id,
                 Score = String.Format("{0} : {1}", Ch_vs_Ph.Score, Ph_vs_Ch.Score),
-                TeamFirstId = ChicagoBulls.Id,
-                TeamSecondId = PhoenixSuns.Id,
-                TeamFirst = ChicagoBulls.Name,
-                TeamSecond = PhoenixSuns.Name
+                TeamIds = new List<int>()
+                {
+                    ChicagoBulls.Id,
+                    PhoenixSuns.Id
+                },
+                TeamNames = new List<string>()
+                {
+                    
+                    ChicagoBulls.Name,
+                    PhoenixSuns.Name
+                } 
             };
             ResultDto Suns_vs_LA_Result_Dto = new ResultDto()
             {
                 Date = new EventDate(LA_vs_Suns_event.Date).ToString(),
                 Id = Ph_vs_LA.Id,
                 Score = String.Format("{0} : {1}", Ph_vs_LA.Score, LA_vs_Ph.Score),
-                TeamFirstId = PhoenixSuns.Id,
-                TeamSecondId = LALakers.Id,
-                TeamFirst = PhoenixSuns.Name,
-                TeamSecond = LALakers.Name
+                TeamIds = new List<int>()
+                {
+                    PhoenixSuns.Id,
+                    LALakers.Id
+                },
+                TeamNames = new List<string>()
+                {
+                    PhoenixSuns.Name,
+                    LALakers.Name
+                }
             };
             ResultDto LA_vs_Suns_Result_Dto = new ResultDto()
             {
                 Date = new EventDate(LA_vs_Suns_event.Date).ToString(),
                 Id = LA_vs_Ph.Id,
                 Score = String.Format("{0} : {1}", LA_vs_Ph.Score, Ph_vs_LA.Score),
-                TeamFirstId = LALakers.Id,
-                TeamSecondId = PhoenixSuns.Id,
-                TeamFirst = LALakers.Name,
-                TeamSecond = PhoenixSuns.Name
+                TeamIds = new List<int>()
+                {
+                    LALakers.Id,
+                    PhoenixSuns.Id
+                },
+                TeamNames = new List<string>()
+                {
+                    LALakers.Name,
+                    PhoenixSuns.Name
+                }
             };
             List<ResultDto> Ch_Results_dto = new List<ResultDto>()
             {
@@ -520,10 +541,9 @@ namespace JinnSports.UnitTests.Services
             List<ResultDto> resultDtoCollection = new List<ResultDto>();
             List<ResultDto> dtoTest = this.resultsDtoCollection.ElementAt(element);
             ResultDtoComparer dtoComparer = new ResultDtoComparer();
-            
-            resultDtoCollection = teamDetailsService.GetResults(teamId).ToList();
+            int skip = 0; int take = 10;
+            resultDtoCollection = teamDetailsService.GetResults(teamId, skip, take).ToList();
 
-            //Assert.IsTrue(resultDtoCollection.Equals(dtoTest));
             CollectionAssert.AreEqual(resultDtoCollection, dtoTest, dtoComparer);
         }
 

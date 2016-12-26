@@ -9,8 +9,8 @@ namespace JinnSports.WEB
     {
         protected void Application_Start()
         {
-            GlobalConfiguration.Configure(WebApiConfig.Register);
             AreaRegistration.RegisterAllAreas();
+            GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             AutoMapperConfiguration.Configure();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
