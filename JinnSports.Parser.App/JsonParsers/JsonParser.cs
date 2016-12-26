@@ -157,7 +157,7 @@ namespace JinnSports.Parser.App.JsonParsers
                     this.GetScoresFromEvent(ev, resultList);
 
                     SportEventDTO sportEvent = new SportEventDTO();
-                    sportEvent.Date = this.GetDateTimeFromSec(ev.StartTime).Ticks.ToString();
+                    sportEvent.Date = this.GetDateTimeFromSec(ev.StartTime).Ticks;
                     sportEvent.Results = resultList;
                     sportEvent.SportType = this.ChangeSportTypeName(Locale.RU, sportType);
 
