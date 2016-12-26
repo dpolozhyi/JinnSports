@@ -151,7 +151,7 @@ namespace JinnSports.Parser.App.HtmlParsers
 
             foreach (IElement htmlTr in document.QuerySelectorAll(".daymatches tr[class]:not(.hidden)"))
             {
-                SportEvent c = new SportEvent() { Date = date, SportType=sportType };
+                SportEvent c = new SportEvent() { Date = date, SportType = sportType };
 
                 string name1 = htmlTr.Children[1].FirstElementChild.TextContent;
                 string name2 = htmlTr.Children[2].FirstElementChild.TextContent;
@@ -185,7 +185,7 @@ namespace JinnSports.Parser.App.HtmlParsers
                     bool sc2 = int.TryParse(scores[1], out score2);
 
                     result1.Score = score1;
-                    result2.Score = score2;                
+                    result2.Score = score2;
                 }
                 else
                 {
