@@ -7,20 +7,20 @@ namespace JinnSports.BLL.Interfaces
     public interface IEventService
     {
         /// <summary>
-        /// Метод подсчёта количества результатов в заданном виде спорта
+        /// Counts events for sport type
         /// </summary>
-        /// <param name="sport"></param>
+        /// <param name="sportId">Sport type ID</param>
         /// <returns></returns>                        
-        int Count(string sport);
+        int Count(int sportId);
         
         /// <summary>
-        /// Метод выдачи результатов по заданному виду спорта
+        /// Get events for sport type
         /// </summary>
-        /// <param name="sport"></param>
+        /// <param name="sportId">Sport type ID</param>
         /// <param name="skip"></param>
         /// <param name="take"></param>
         /// <returns></returns>
-        IEnumerable<ResultDto> GetSportEvents(string sport, int skip, int take);
+        IEnumerable<ResultDto> GetSportEvents(int sportId, int skip, int take);
 
         bool SaveSportEvents(ICollection<SportEventDTO> eventDTOs);
     }
