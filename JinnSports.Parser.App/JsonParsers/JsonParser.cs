@@ -36,7 +36,7 @@ namespace JinnSports.Parser.App.JsonParsers
         }
 
         public JsonParser(IUnitOfWork unit) :
-            this(new Uri("http://results.fbwebdn.com/results.json.php"), new EFUnitOfWork("SportsContext"))
+            this(new Uri("http://results.fbwebdn.com/results.json.php"), unit)
         {
         }
 
@@ -194,7 +194,9 @@ namespace JinnSports.Parser.App.JsonParsers
                         this.GetResultFromEvent(e, resTeam1, team1, false);
                         this.GetResultFromEvent(e, resTeam2, team2, true);
                         resTeam1.SportEvent = compEvent;
+                        resTeam1.IsHome = true;
                         resTeam2.SportEvent = compEvent;
+                        resTeam2.IsHome = false;
 
                         resultList.Add(resTeam1);
                         resultList.Add(resTeam2);

@@ -36,10 +36,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Conformity.cs" />
     <Compile Include="Entities\SportEvent.cs" />
     <Compile Include="Entities\Result.cs" />
     <Compile Include="Entities\SportType.cs" />
     <Compile Include="Entities\Team.cs" />
+    <Compile Include="Entities\TeamName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
