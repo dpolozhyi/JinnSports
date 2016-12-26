@@ -16,7 +16,7 @@ namespace JinnSports.WEB.Areas.Admin.Controllers
     {
         private IEventService eventService;
 
-        public IHttpActionResult PostResults(List<SportEventDTO> events)
+        public IHttpActionResult PostEvents(List<SportEventDTO> events)
         {
             this.eventService = new EventsService();
 
