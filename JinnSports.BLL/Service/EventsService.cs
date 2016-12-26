@@ -67,20 +67,17 @@ namespace JinnSports.BLL.Service
 
                 foreach (SportEventDTO eventDTO in eventDTOs)
                 {
-                    SportType sportType = sportTypes.FirstOrDefault(st => st.Name == eventDTO.SportType);
-                    DateTime date = new DateTime(eventDTO.Date);
-                    SportEvent sportEvent = new SportEvent() { SportType = sportType, Date = date };
+                    SportType sportType = sportTypes.FirstOrDefault(st => st.Name == eventDTO.SportType) 
+                                            ?? new SportType() { Name = eventDTO.SportType };
+
+                    SportEvent sportEvent = new SportEvent() { SportType = sportType, Date = new DateTime(eventDTO.Date) };
 
                     foreach (ResultDTO resultDTO in eventDTO.Results)
                     {
-                        Team team = teams.FirstOrDefault(t => t.Name == resultDTO.TeamName);
-                        // TODO change nullable convertion for incoming events
-                        Result res = new Result() { SportEvent = sportEvent, Team = team, Score = resultDTO.Score ?? -1 };
-                        if (sportEvent.Results == null)
-                        {
-                            sportEvent.Results = new List<Result>();
-                        }
-                        sportEvent.Results.Add(res);
+                        Team team = teams.FirstOrDefault(t => t.Name == resultDTO.TeamName) 
+                                        ?? new Team() { Name = resultDTO.TeamName, SportType = sportType };
+
+                        AddResult(sportEvent, team, resultDTO.Score);
                     }
                     dataUnit.GetRepository<SportEvent>().Insert(sportEvent);
                 }
@@ -88,7 +85,7 @@ namespace JinnSports.BLL.Service
             }
             catch (Exception ex)
             {
-
+                Log.Error("Exception when trying to save SportEvents to DB", ex);
                 return false;
             }
             finally
@@ -99,6 +96,17 @@ namespace JinnSports.BLL.Service
                 }
             }
             return true;
+        }
+
+        private void AddResult(SportEvent sportEvent, Team team, int? score)
+        {
+            // TODO change nullable convertion for incoming events
+            Result res = new Result() { SportEvent = sportEvent, Team = team, Score = score ?? -1 };
+            if (sportEvent.Results == null)
+            {
+                sportEvent.Results = new List<Result>();
+            }
+            sportEvent.Results.Add(res);
         }
     }
 }

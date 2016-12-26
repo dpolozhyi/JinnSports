@@ -12,7 +12,7 @@ using JinnSports.BLL.Service;
 
 namespace JinnSports.WEB.Areas.Admin.Controllers
 {
-    public class ParserController : ApiController
+    public class SportEventsController : ApiController
     {
         private IEventService eventService;
 
