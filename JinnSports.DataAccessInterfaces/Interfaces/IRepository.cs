@@ -27,6 +27,8 @@ namespace JinnSports.DataAccessInterfaces.Interfaces
 
         void InsertAll(T[] entitiesToInsert);
 
+        void Update(T entity);
+
         void Delete(object id);
 
         void Delete(T entityToDelete);
