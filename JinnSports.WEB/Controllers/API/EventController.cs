@@ -34,7 +34,13 @@ namespace JinnSports.WEB.ApiControllers
             IEnumerable<ResultDto> results = this.eventService
                 .GetSportEvents(FOOTBALL, skip, pageSize);
 
-            return this.Ok(results);
+            return this.Ok(new
+            {
+                draw = draw,
+                recordsFiltered = recordsTotal,
+                recordsTotal = recordsTotal,
+                data = results
+            });
         }
 
         // POST: api/Event

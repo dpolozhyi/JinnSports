@@ -32,7 +32,13 @@ namespace JinnSports.WEB.ApiControllers
 
             IEnumerable<ResultDto> results = this.teamDetailsService.GetResults(id, skip, pageSize);
 
-            return this.Ok(results);
+            return this.Ok(new
+            {
+                    draw = draw,
+                    recordsFiltered = recordsTotal,
+                    recordsTotal = recordsTotal,
+                    data = results
+            });
         }
 
         public void Post([FromBody]string value)

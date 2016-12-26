@@ -34,11 +34,13 @@ namespace JinnSports.WEB.ApiControllers
 
             IEnumerable<TeamDto> teams = this.teamService.GetAllTeams(skip, pageSize);
 
-            foreach (TeamDto team in teams)
+            return this.Ok(new
             {
-                team.Results = null;
-            }
-            return this.Ok(teams);
+                draw = draw,
+                recordsFiltered = recordsTotal,
+                recordsTotal = recordsTotal,
+                data = teams
+            });
         }
 
         // POST: api/Team
