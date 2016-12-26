@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace DTO.JSON
 {
-    [DataContract]
+    
     public class SportEventDTO
     {
-        [DataMember]
+        
         public string Date { get; set; }
 
-        [DataMember]
+        
         public string SportType { get; set; }
 
-        [DataMember]
+        
         public ICollection<ResultDTO> Results { get; set; } = new List<ResultDTO>();
     }
 }
