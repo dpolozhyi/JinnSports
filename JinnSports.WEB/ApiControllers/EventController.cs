@@ -1,10 +1,8 @@
 ﻿using JinnSports.BLL.Dtos;
 using JinnSports.BLL.Interfaces;
-using JinnSports.BLL.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
@@ -13,11 +11,11 @@ namespace JinnSports.WEB.ApiControllers
     public class EventController : ApiController
     {
         private const int FOOTBALL = 1;
-        private IEventService eventService;
+        private readonly IEventService eventService;
 
-        public EventController()
+        public EventController(IEventService eventService)
         {
-            this.eventService = new EventsService();
+            this.eventService = eventService;
         }
 
         [HttpGet]

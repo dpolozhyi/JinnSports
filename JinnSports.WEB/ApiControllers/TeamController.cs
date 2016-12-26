@@ -1,10 +1,8 @@
 ﻿using JinnSports.BLL.Dtos;
 using JinnSports.BLL.Interfaces;
-using JinnSports.BLL.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
@@ -12,11 +10,11 @@ namespace JinnSports.WEB.ApiControllers
 {
     public class TeamController : ApiController
     {
-        private ITeamService teamService;
+        private readonly ITeamService teamService;
 
-        public TeamController()
+        public TeamController(ITeamService teamService)
         {
-            this.teamService = new TeamService();
+            this.teamService = teamService;
         }
 
         // GET: api/Team/5
