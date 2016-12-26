@@ -31,13 +31,8 @@ namespace JinnSports.WEB.ApiControllers
             int skip = start != null ? Convert.ToInt32(start) : 0;
             int recordsTotal = this.teamService.Count();
 
-
             IEnumerable<TeamDto> teams = this.teamService.GetAllTeams(skip, pageSize);
-
-            foreach (TeamDto team in teams)
-            {
-                team.Results = null;
-            }
+            
             return this.Ok(teams);
         }
 
