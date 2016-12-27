@@ -8,8 +8,10 @@ using JinnSports.DAL.Repositories;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using System.Linq;
 using System.Collections;
+using System.Data.Entity;
 using JinnSports.BLL.Extentions;
 using AutoMapper;
+using JinnSports.DAL.EFContext;
 using JinnSports.WEB;
 
 namespace JinnSports.UnitTests.Services
@@ -545,7 +547,7 @@ namespace JinnSports.UnitTests.Services
         public void TeamResultsCount(int teamId, int result)
         {
 
-            TeamDetailsService teamDelailsService = new TeamDetailsService();
+            TeamDetailsService teamDelailsService = new TeamDetailsService(new EFUnitOfWork(new SportsContext("SportsContext")));
             int count;
 
             count = teamDelailsService.Count(teamId);
@@ -559,7 +561,7 @@ namespace JinnSports.UnitTests.Services
         [TestCase(8, 2)]
         public void GetTeamResults(int teamId, int element)
         {
-            TeamDetailsService teamDetailsService = new TeamDetailsService();
+            TeamDetailsService teamDetailsService = new TeamDetailsService(new EFUnitOfWork(new SportsContext("SportsContext")));
             List<ResultDto> resultDtoCollection = new List<ResultDto>();
             List<ResultDto> dtoTest = this.resultsDtoCollection.ElementAt(element);
             ResultDtoComparer dtoComparer = new ResultDtoComparer();

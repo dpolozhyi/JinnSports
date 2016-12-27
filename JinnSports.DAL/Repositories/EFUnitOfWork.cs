@@ -11,9 +11,9 @@ namespace JinnSports.DAL.Repositories
 
         private bool disposed = false;
 
-        public EFUnitOfWork(string connectionString)
+        public EFUnitOfWork(SportsContext context)
         {
-            this.db = new SportsContext(connectionString);            
+            this.db = context;            
         }
 
         public IRepository<T> GetRepository<T>() where T : class

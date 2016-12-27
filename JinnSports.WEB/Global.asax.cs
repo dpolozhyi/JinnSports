@@ -13,6 +13,7 @@ namespace JinnSports.WEB
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             AutoMapperConfiguration.Configure();
+            AutofacConfig.Configure();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }

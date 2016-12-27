@@ -20,6 +20,7 @@ namespace Services
 
         protected override void OnStart(string[] args)
         {
+            Thread.Sleep(20000);
             EventLog.WriteEntry("begin");
             HTMLParser24score parser = new HTMLParser24score(new EFUnitOfWork("SportsContext"));
             EventLog.WriteEntry("parser created");
