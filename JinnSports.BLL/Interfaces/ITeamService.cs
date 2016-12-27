@@ -8,5 +8,7 @@ namespace JinnSports.BLL.Interfaces
         int Count();
 
         IEnumerable<TeamDto> GetAllTeams(int skip, int take);
+
+        TeamDto GetTeamById(int teamId);
     }
 }

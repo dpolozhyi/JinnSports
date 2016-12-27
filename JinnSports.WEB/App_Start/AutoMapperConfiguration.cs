@@ -62,7 +62,17 @@ namespace JinnSports.WEB
                     e => e.Date,
                     opt => opt.MapFrom(
                         res => new EventDate(res.Date).ToString()));
-            });
+
+                config.CreateMap<Team, TeamDto>()
+                    .ForMember(
+                        e => e.Id,
+                        opt => opt.MapFrom(
+                            s => s.Id))
+                   .ForMember(
+                        e => e.Name,
+                        opt => opt.MapFrom(
+                            s => s.Name));
+           });
         }
     }
 }
