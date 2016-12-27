@@ -1,4 +1,5 @@
-﻿using JinnSports.DAL.Repositories;
+﻿using JinnSports.DAL.EFContext;
+using JinnSports.DAL.Repositories;
 using JinnSports.Parser.App.HtmlParsers;
 using System.ServiceProcess;
 using System.Threading;
