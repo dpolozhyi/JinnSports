@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace JinnSports.Parser.App.ApiConnection
+namespace JinnSports.Parser
 {
     public class ApiConnection
     {
@@ -36,7 +36,7 @@ namespace JinnSports.Parser.App.ApiConnection
         /// </summary>
         /// <param name="events"></param>
         /// <exception cref="SaveDataException"></exception>
-        async void SendEvents(ICollection<SportEventDTO> events)
+        public async void SendEvents(ICollection<SportEventDTO> events)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace JinnSports.Parser.App.ApiConnection
                 if (response.IsSuccessStatusCode)
                 {
                     Log.Info("Data sucsessfully transfered");
-                } 
+                }
                 else
                 {
                     Log.Info("Error occured during Data transfer");

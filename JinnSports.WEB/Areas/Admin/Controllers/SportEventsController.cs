@@ -5,16 +5,16 @@ using JinnSports.BLL.Interfaces;
 
 namespace JinnSports.WEB.Areas.Admin.Controllers
 {
-    public class ParserController : ApiController
+    public class SportEventsController : ApiController
     {
         private readonly IEventService eventService;
-
-        public ParserController(IEventService eventService)
+        
+        public SportEventsController(IEventService eventService)
         {
             this.eventService = eventService;
         }
 
-        public IHttpActionResult PostResults(List<SportEventDTO> events)
+        public IHttpActionResult PostEvents(List<SportEventDTO> events)
         {
             if (this.eventService.SaveSportEvents(events))
             {

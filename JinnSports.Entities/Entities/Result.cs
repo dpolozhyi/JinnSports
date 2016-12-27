@@ -8,11 +8,13 @@
 
         public virtual SportEvent SportEvent { get; set; }
 
-        public int Score { get; set; }
+        public int? Score { get; set; }
+
+        public bool IsHome { get; set; }
 
         public override string ToString()
         {
-            return $"Id: {Id}; EventId: {SportEvent.Id}; Team: {Team.Name}; Score: {Score}";
+            return $"Id: {Id}; EventId: {SportEvent.Id}; Team: {Team.Name}; Score: {Score}; IsHome: {IsHome}";
         }
     }
 }
