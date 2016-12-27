@@ -54,7 +54,7 @@ namespace JinnSports.Parser
                 if (response.IsSuccessStatusCode)
                 {
                     Log.Info("Data sucsessfully transfered");
-                } 
+                }
                 else
                 {
                     Log.Info("Error occured during Data transfer");

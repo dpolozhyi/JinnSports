@@ -32,8 +32,14 @@ namespace JinnSports.WEB.ApiControllers
             int recordsTotal = this.teamService.Count();
 
             IEnumerable<TeamDto> teams = this.teamService.GetAllTeams(skip, pageSize);
-            
-            return this.Ok(teams);
+
+            return this.Ok(new
+            {
+                draw = draw,
+                recordsFiltered = recordsTotal,
+                recordsTotal = recordsTotal,
+                data = teams
+            });
         }
 
         // POST: api/Team

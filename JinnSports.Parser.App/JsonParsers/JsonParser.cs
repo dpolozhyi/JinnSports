@@ -1,17 +1,14 @@
-﻿using System;
+﻿using DTO.JSON;
+using log4net;
+using Newtonsoft.Json;
+using JinnSports.Parser.App.Exceptions;
+using JinnSports.Parser.App.JsonParsers.JsonEntities;
+using JinnSports.Parser.App.ProxyService.ProxyConnection;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using log4net;
-using Newtonsoft.Json;
-using JinnSports.DAL.Repositories;
-using JinnSports.DataAccessInterfaces.Interfaces;
-using JinnSports.Entities.Entities;
-using JinnSports.Parser.App.Exceptions;
-using JinnSports.Parser.App.Interfaces;
-using JinnSports.Parser.App.JsonParsers.JsonEntities;
-using JinnSports.Parser.App.ProxyService.ProxyConnection;
 
 namespace JinnSports.Parser.App.JsonParsers
 {
@@ -20,30 +17,18 @@ namespace JinnSports.Parser.App.JsonParsers
         EN, RU
     }
 
-    public class JsonParser : ISaver
+    public class JsonParser
     {
-        private static readonly ILog Log = 
+        private static readonly ILog Log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
-        private IUnitOfWork uow;
 
         public JsonParser() : this(new Uri("http://results.fbwebdn.com/results.json.php"))
         {
         }
 
-        public JsonParser(Uri uri) : this(uri, new EFUnitOfWork("SportsContext"))
-        {
-        }
-
-        public JsonParser(IUnitOfWork unit) :
-            this(new Uri("http://results.fbwebdn.com/results.json.php"), unit)
-        {
-        }
-
-        public JsonParser(Uri uri, IUnitOfWork unit)
+        public JsonParser(Uri uri)
         {
             this.SiteUri = uri;
-            this.uow = unit;
         }
 
         public Uri SiteUri { get; private set; }
@@ -55,7 +40,7 @@ namespace JinnSports.Parser.App.JsonParsers
             {
                 string result;
                 JsonResult jsonResults;
-                List<Result> res;
+                List<SportEventDTO> sportEventsList;
 
                 try
                 {
@@ -77,7 +62,7 @@ namespace JinnSports.Parser.App.JsonParsers
 
                 try
                 {
-                    res = this.GetResultsList(jsonResults);
+                    sportEventsList = this.GetSportEventsList(jsonResults);
                 }
                 catch (Exception ex)
                 {
@@ -86,8 +71,8 @@ namespace JinnSports.Parser.App.JsonParsers
 
                 try
                 {
-                    this.DBSaveChanges(res);
-                    Log.Info("New data from JSON parser was saved to DataBase");
+                    this.SendEvents(sportEventsList);
+                    Log.Info("New data from JSON parser was sent");
                 }
                 catch (Exception ex)
                 {
@@ -109,10 +94,6 @@ namespace JinnSports.Parser.App.JsonParsers
             catch (Exception ex)
             {
                 Log.Error(ex);
-            }
-            finally
-            {
-                this.uow.Dispose();
             }
         }
 
@@ -150,65 +131,45 @@ namespace JinnSports.Parser.App.JsonParsers
             return res;
         }
 
-        public void DBSaveChanges(List<Result> results)
+        public void SendEvents(List<SportEventDTO> eventsList)
         {
-            this.uow.GetRepository<Result>().InsertAll(results.ToArray());
-            this.uow.SaveChanges();
+            ApiConnection apiConnection = new ApiConnection();
+            apiConnection.SendEvents(eventsList);
         }
 
-        public List<Result> GetResultsList(JsonResult result)
+        public List<SportEventDTO> GetSportEventsList(JsonResult result)
         {
-            List<Result> resultList = new List<Result>();
+            List<SportEventDTO> eventList = new List<SportEventDTO>();
+            List<ResultDTO> resultList;
+            string sportType;
 
-            foreach (var e in result.Events)
+            foreach (var ev in result.Events)
             {
-                Team team1 = new Team();
-                Team team2 = new Team();
+                resultList = new List<ResultDTO>();
 
-                if (this.GetTeamsFromEvent(e, team1, team2))
+                sportType = result.Sports
+                    .Where(n => result.Sections.Where(s => s.Events.Contains(ev.Id))
+                    .FirstOrDefault().Sport == n.Id).FirstOrDefault().Name;
+
+                if (this.GetTeamsNamesFromEvent(ev, sportType, resultList)
+                    && this.AcceptSportType(this.ChangeSportTypeName(Locale.RU, sportType)))
                 {
-                    SportType sportType = new SportType();
-                    Result resTeam1 = new Result();
-                    Result resTeam2 = new Result();
-                    SportEvent compEvent = new SportEvent { Date = this.GetEventDate(e) };
+                    this.GetScoresFromEvent(ev, resultList);
 
-                    List<Section> sports = result.Sections.Where(n => n.Events.Contains(e.Id)).Select(n => n).ToList();
-                    string sportName = result.Sports.Where(n => n.Id == sports[0].Sport).Select(n => n).FirstOrDefault().Name;
-                    sportName = this.ChangeSportTypeName(Locale.RU, sportName);
+                    SportEventDTO sportEvent = new SportEventDTO();
+                    sportEvent.Date = this.GetDateTimeFromSec(ev.StartTime).Ticks;
+                    sportEvent.Results = resultList;
+                    sportEvent.SportType = this.ChangeSportTypeName(Locale.RU, sportType);
 
-                    if (this.CheckSportTypeExist(sportName))
-                    {
-                        try
-                        {
-                            sportType = this.uow.GetRepository<SportType>().Get().Where(n => n.Name == sportName).FirstOrDefault();
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new GetDataException(ex.Message);
-                        }
-
-                        team1.SportType = sportType;
-                        team2.SportType = sportType;
-                        compEvent.SportType = sportType;
-
-                        this.GetResultFromEvent(e, resTeam1, team1, false);
-                        this.GetResultFromEvent(e, resTeam2, team2, true);
-                        resTeam1.SportEvent = compEvent;
-                        resTeam1.IsHome = true;
-                        resTeam2.SportEvent = compEvent;
-                        resTeam2.IsHome = false;
-
-                        resultList.Add(resTeam1);
-                        resultList.Add(resTeam2);
-                    }
+                    eventList.Add(sportEvent);
                 }
             }
-            return resultList;
+
+            return eventList;
         }
 
-        private void GetResultFromEvent(Event ev, Result res, Team team, bool invertScore)
+        private void GetScoresFromEvent(Event ev, List<ResultDTO> resultList)
         {
-            res.Team = team;
             string mainScore;
             int score;
 
@@ -223,18 +184,14 @@ namespace JinnSports.Parser.App.JsonParsers
 
             string[] scores = mainScore.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 
-            if (!invertScore)
-            {
-                int.TryParse(scores[0], out score);
-            }
-            else
-            {
-                int.TryParse(scores[1], out score);
-            }
-            res.Score = score;
+            int.TryParse(scores[0], out score);
+            resultList[0].Score = score;
+
+            int.TryParse(scores[1], out score);
+            resultList[1].Score = score;
         }
 
-        private bool GetTeamsFromEvent(Event ev, Team team1, Team team2)
+        private bool GetTeamsNamesFromEvent(Event ev, string sportType, List<ResultDTO> resultList)
         {
             if (ev.Name.Contains("-") && !ev.Name.Contains(":") && !ev.Name.Contains("1st")
                 && !ev.Name.Contains("2nd") && !ev.Name.Contains("1-") && !ev.Name.Contains("2-")
@@ -245,8 +202,22 @@ namespace JinnSports.Parser.App.JsonParsers
                 {
                     teams[i] = teams[i].Trim(' ');
                 }
-                team1.Name = teams[0];
-                team2.Name = teams[1];
+
+                resultList.Add(new ResultDTO() { TeamName = teams[0] });
+                resultList.Add(new ResultDTO() { TeamName = teams[1] });
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool AcceptSportType(string sportType)
+        {
+            if (sportType == "Football" || sportType == "Basketball" || sportType == "Hockey")
+            {
                 return true;
             }
             else
@@ -283,22 +254,9 @@ namespace JinnSports.Parser.App.JsonParsers
             return name;
         }
 
-        private bool CheckSportTypeExist(string name)
+        private DateTime GetDateTimeFromSec(long timeSec)
         {
-            List<SportType> stypeList = this.uow.GetRepository<SportType>().Get().ToList();
-            foreach (var type in stypeList)
-            {
-                if (type.Name == name)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private DateTime GetEventDate(Event ev)
-        {
-            int startTime = (int)ev.StartTime;
+            int startTime = (int)timeSec;
             int hour, min;
             hour = (startTime / 60 / 60) % 24;
             min = (startTime / 60) % 60;
