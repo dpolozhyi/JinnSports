@@ -11,6 +11,11 @@ namespace JinnSports.DAL.EFContext
             Database.SetInitializer(new SportsDbInitializer());
         }
 
+        public SportsContext() : base("SportsContext")
+        {
+
+        }
+
         public DbSet<SportEvent> SportEvents { get; set; }
 
         public DbSet<Result> Results { get; set; }
