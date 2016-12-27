@@ -1,12 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using JinnSports.BLL.Exceptions;
 using JinnSports.BLL.Interfaces;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.DAL.Repositories;
 using JinnSports.Entities.Entities;
 using JinnSports.BLL.Dtos;
-using System;
 using AutoMapper;
 
 namespace JinnSports.BLL.Service

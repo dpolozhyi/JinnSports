@@ -12,7 +12,7 @@ namespace JinnSports.WEB.ApiControllers
 {
     public class EventController : ApiController
     {
-        private const string FOOTBALL = "Football";
+        private const int FOOTBALL = 1;
         private IEventService eventService;
 
         public EventController()
