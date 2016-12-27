@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using JinnSports.BLL.Dtos;
 using JinnSports.BLL.Interfaces;
-using JinnSports.DAL.Repositories;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.Entities.Entities;
 using System.Linq;
@@ -14,43 +13,39 @@ namespace JinnSports.BLL.Service
 {
     public class EventsService : IEventService
     {
+        private readonly IUnitOfWork dataUnit;
+
         private static readonly ILog Log = LogManager.GetLogger(typeof(EventsService));
 
-        private const string SPORTCONTEXT = "SportsContext";
-
-        private IUnitOfWork dataUnit;
+        public EventsService(IUnitOfWork unitOfWork)
+        {
+            this.dataUnit = unitOfWork;
+        }
 
         public int Count(int sportId)
         {
-            int count;
-            using (this.dataUnit = new EFUnitOfWork(SPORTCONTEXT))
-            {
-                count = this.dataUnit.GetRepository<SportEvent>()
-                    .Get(filter: m => m.SportType.Id == sportId)
-                    .Count();
-            }
+            var count = this.dataUnit.GetRepository<SportEvent>()
+                .Get(filter: m => m.SportType.Id == sportId)
+                .Count();
             return count;
         }
 
         public IEnumerable<ResultDto> GetSportEvents(int sportId, int skip, int take)
         {
             IList<ResultDto> results = new List<ResultDto>();
+            
+            // Выбираем результаты заданного вида спорта, сортируя по дате
+            IEnumerable<SportEvent> sportEvents =
+                this.dataUnit.GetRepository<SportEvent>().Get(
+                    filter: m => m.SportType.Id == sportId,
+                    orderBy: s => s.OrderByDescending(x => x.Date),
+                    skip: skip,
+                    take: take);
 
-            using (this.dataUnit = new EFUnitOfWork(SPORTCONTEXT))
+            // Формирование SportEventDto из SportEvent при помощи AutoMapper
+            foreach (SportEvent sportEvent in sportEvents)
             {
-                // Выбираем результаты заданного вида спорта, сортируя по дате
-                IEnumerable<SportEvent> sportEvents =
-                    this.dataUnit.GetRepository<SportEvent>().Get(
-                        filter: m => m.SportType.Id == sportId,
-                        orderBy: s => s.OrderByDescending(x => x.Date),
-                        skip: skip,
-                        take: take);
-
-                // Формирование SportEventDto из SportEvent при помощи AutoMapper
-                foreach (SportEvent sportEvent in sportEvents)
-                {
-                    results.Add(Mapper.Map<SportEvent, ResultDto>(sportEvent));
-                }
+                results.Add(Mapper.Map<SportEvent, ResultDto>(sportEvent));
             }
 
             return results;
@@ -60,8 +55,6 @@ namespace JinnSports.BLL.Service
         {
             try
             {
-                dataUnit = new EFUnitOfWork(SPORTCONTEXT);
-
                 IEnumerable<Team> teams = dataUnit.GetRepository<Team>().Get();
                 IEnumerable<SportType> sportTypes = dataUnit.GetRepository<SportType>().Get();
 

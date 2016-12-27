@@ -1,16 +1,16 @@
 ﻿using System.Web.Mvc;
 using JinnSports.BLL.Interfaces;
-using JinnSports.BLL.Service;
 using JinnSports.BLL.Dtos;
 
 namespace JinnSports.WEB.Controllers
 {
     public class TeamDetailsController : Controller
     {
-        private ITeamService teamService;
-        public TeamDetailsController()
+        private readonly ITeamService teamService;
+
+        public TeamDetailsController(ITeamService teamService)
         {
-            this.teamService = new TeamService();
+            this.teamService = teamService;
         }
 
         public ActionResult Details(int id = 0)

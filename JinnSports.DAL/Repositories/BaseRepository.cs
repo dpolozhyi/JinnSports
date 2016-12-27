@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using JinnSports.DAL.EFContext;
 using System.Data.Entity;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using System.Linq.Expressions;
@@ -11,7 +10,7 @@ namespace JinnSports.DAL.Repositories
 {
     public class BaseRepository<T> : IRepository<T> where T : class
     {
-        public BaseRepository(SportsContext db)
+        public BaseRepository(DbContext db)
         {
             this.DbSet = db.Set<T>();
         }

@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using JinnSports.DAL.EFContext;
+using JinnSports.DAL.Repositories;
 
 namespace JinnSports.UnitTests.Services
 {
