@@ -14,11 +14,11 @@ namespace JinnSports.BLL.Dtos
             this.TeamNames = new List<string>(2);
             this.TeamIds = new List<int>(2);
         }
-
         /// <summary>
         /// Constructor with players per event
         /// </summary>
         /// <param name="eventPlayers">Max players in the event</param>
+        /// 
         public ResultDto(int eventPlayers)
         {
             this.TeamNames = new List<string>(eventPlayers);

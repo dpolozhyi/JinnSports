@@ -10,6 +10,7 @@ using JinnSports.Parser.App.Exceptions;
 using JinnSports.Parser.App.ProxyService.ProxyConnection;
 using JinnSports.Entities.Entities;
 using log4net;
+using DTO.JSON;
 
 namespace JinnSports.Parser.App.HtmlParsers
 {
@@ -19,11 +20,9 @@ namespace JinnSports.Parser.App.HtmlParsers
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public HTMLParser24score(IUnitOfWork unit)
-        {
-            this.Unit = unit;
+        {            
         }
-
-        public IUnitOfWork Unit { get; private set; }
+        
         public uint DaysCount { get; set; }
 
         public void Parse(uint daysCount = 1)
@@ -31,48 +30,42 @@ namespace JinnSports.Parser.App.HtmlParsers
             Log.Info("Html parser was started");
             try
             {
+                ApiConnection api = new ApiConnection();
+
                 Uri footballUrl = new Uri("https://24score.com/?date=");
                 Uri basketballUrl = new Uri("https://24score.com/basketball/?date=");
                 Uri hokkeyUrl = new Uri("https://24score.com/ice_hockey/?date=");
                 List<Uri> selectedUris = new List<Uri> { footballUrl, basketballUrl, hokkeyUrl };
-
-                foreach (Uri baseUrl in selectedUris)
+                
+                foreach (Uri baseUrl in selectedUris)                
                 {
                     string currentSport;
-                    if (baseUrl.OriginalString.Contains("basketball"))
+                    if (baseUrl.OriginalString.ToUpper().Contains("BASKETBALL"))
                     {
                         currentSport = "Basketball";
                     }
-                    else if (baseUrl.OriginalString.Contains("ice_hockey"))
+                    else if (baseUrl.OriginalString.ToUpper().Contains("HOCKEY"))
                     {
                         currentSport = "Hockey";
                     }
                     else
                     {
                         currentSport = "Football";
-                    }
-
-                    SportType sport;
-                    try
-                    {
-                        sport = this.Unit.GetRepository<SportType>().Get(t => t.Name.ToLower() == currentSport.ToLower()).FirstOrDefault();
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new GetDataException(ex.Message, ex.InnerException);
-                    }
+                    }                    
+                    
                     DateTime now = DateTime.Now;
 
                     for (int i = 1; i < daysCount + 1; i++)
                     {
-                        DateTime date = now.Subtract(new TimeSpan(i, 0, 0, 0));
-                        string url = baseUrl.ToString() + date.Date.ToString("yyyy-MM-dd");
+                        DateTime dateTime = now.Subtract(new TimeSpan(i, 0, 0, 0));
+                        long date = dateTime.Ticks;
+                        string url = baseUrl.ToString() + dateTime.Date.ToString("yyyy-MM-dd");
                         string html = this.GetHtml(url);
-                        List<Result> results;
+                        List<SportEventDTO> events;
 
                         try
                         {
-                            results = this.ParseHtml(html, sport, date);
+                            events = this.ParseHtml(html, currentSport, date);
                         }
                         catch (Exception ex)
                         {
@@ -81,7 +74,7 @@ namespace JinnSports.Parser.App.HtmlParsers
 
                         try
                         {
-                            this.PushEntities(results);
+                            api.SendEvents(events);
                         }
                         catch (Exception ex)
                         {
@@ -110,11 +103,7 @@ namespace JinnSports.Parser.App.HtmlParsers
             catch (Exception ex)
             {
                 Log.Error(ex);
-            }
-            finally
-            {
-                this.Unit.Dispose();
-            }
+            }            
         }
 
         private string GetHtml(string url)
@@ -143,30 +132,18 @@ namespace JinnSports.Parser.App.HtmlParsers
             return html;
         }
 
-        private List<Result> ParseHtml(string html, SportType sportType, DateTime date)
+        private List<SportEventDTO> ParseHtml(string html, string currentSport, long date)
         {
             var parser = new HtmlParser();
             var document = parser.Parse(html);
-            List<Result> results = new List<Result>();
+            List<SportEventDTO> events = new List<SportEventDTO>();
 
             foreach (IElement htmlTr in document.QuerySelectorAll(".daymatches tr[class]:not(.hidden)"))
             {
-                SportEvent c = new SportEvent() { Date = date, SportType=sportType };
+                SportEventDTO currentEvent = new SportEventDTO() { Date = date, SportType = currentSport };
 
-                string name1 = htmlTr.Children[1].FirstElementChild.TextContent;
-                string name2 = htmlTr.Children[2].FirstElementChild.TextContent;
-
-                Team t1 = this.Unit.GetRepository<Team>().Get(t => t.Name == name1).FirstOrDefault();
-                if (t1 == null)
-                {
-                    t1 = new Team { Name = name1, SportType = sportType };
-                }
-
-                Team t2 = this.Unit.GetRepository<Team>().Get(t => t.Name == name2).FirstOrDefault();
-                if (t2 == null)
-                {
-                    t2 = new Team { Name = name2, SportType = sportType };
-                }
+                string teamName1 = htmlTr.Children[1].FirstElementChild.TextContent;
+                string teamName2 = htmlTr.Children[2].FirstElementChild.TextContent;                                
 
                 var score = htmlTr.QuerySelectorAll("span[id*='score']")[0].TextContent;
                 score = score.Replace("\n", string.Empty).Replace("\t", string.Empty);
@@ -175,38 +152,35 @@ namespace JinnSports.Parser.App.HtmlParsers
                 int score1;
                 int score2;
 
-                Result result1 = new Result { Team = t1, SportEvent = c };
-                Result result2 = new Result { Team = t2, SportEvent = c };
+                ResultDTO result1 = new ResultDTO { TeamName = teamName1 };
+                ResultDTO result2 = new ResultDTO { TeamName = teamName2 };
 
                 if (score.Contains(":"))
                 {
                     var scores = score.Split(':');
-                    bool sc1 = int.TryParse(scores[0], out score1);
-                    bool sc2 = int.TryParse(scores[1], out score2);
+                    int.TryParse(scores[0], out score1);
+                    int.TryParse(scores[1], out score2);
 
                     result1.Score = score1;
-                    result2.Score = score2;                
+                    result2.Score = score2;
+                }
+                else if (score.Contains("— —"))
+                {
+                    result1.Score = null;
+                    result2.Score = null;
                 }
                 else
                 {
                     continue;
                 }
 
-                results.Add(result1);
-                results.Add(result2);
+                currentEvent.Results.Add(result1);
+                currentEvent.Results.Add(result2);
+
+                events.Add(currentEvent);
             }
 
-            return results;
-        }
-
-        private void PushEntities(List<Result> results)
-        {
-            foreach (Result item in results)
-            {
-                this.Unit.GetRepository<Result>().Insert(item);
-            }
-
-            this.Unit.SaveChanges();
-        }
+            return events;
+        }        
     }
 }

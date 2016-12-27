@@ -42,19 +42,19 @@ namespace JinnSports.Parser
             {
                 Log.Info("Starting Data transfer");
 
-                client = new HttpClient();
-                client.BaseAddress = new Uri(baseUrl);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                this.client = new HttpClient();
+                this.client.BaseAddress = new Uri(this.baseUrl);
+                this.client.DefaultRequestHeaders.Accept.Clear();
+                this.client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 string json = JsonConvert.SerializeObject(events, Formatting.Indented);
                 StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await client.PostAsync(controllerUrn, content);
+                HttpResponseMessage response = await this.client.PostAsync(this.controllerUrn, content);
                 if (response.IsSuccessStatusCode)
                 {
                     Log.Info("Data sucsessfully transfered");
-                } 
+                }
                 else
                 {
                     Log.Info("Error occured during Data transfer");
@@ -66,9 +66,9 @@ namespace JinnSports.Parser
             }
             finally
             {
-                if (client != null)
+                if (this.client != null)
                 {
-                    client.Dispose();
+                    this.client.Dispose();
                     Log.Info("Data transfer closed");
                 }
             }

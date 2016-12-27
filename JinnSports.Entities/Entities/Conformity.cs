@@ -10,7 +10,7 @@ namespace JinnSports.Entities.Entities
     {
         public int Id { get; set; }
 
-        public Team InputTeam { get; set; }
+        public string InputTeamName { get; set; }
 
         public Team ExistedTeam { get; set; }
 
