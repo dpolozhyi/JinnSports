@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using JinnSports.BLL.Dtos;
 using JinnSports.BLL.Interfaces;
-using JinnSports.DAL.Repositories;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.Entities.Entities;
 using System.Linq;
@@ -14,17 +13,18 @@ namespace JinnSports.BLL.Service
 {
     public class EventsService : IEventService
     {
+        private readonly IUnitOfWork dataUnit;
+
         private static readonly ILog Log = LogManager.GetLogger(typeof(EventsService));
 
-        private const string SPORTCONTEXT = "SportsContext";
-
-        private IUnitOfWork dataUnit;
+        public EventsService(IUnitOfWork unitOfWork)
+        {
+            this.dataUnit = unitOfWork;
+        }
 
         public int Count(int sportTypeId)
         {
             int count;
-            using (this.dataUnit = new EFUnitOfWork(SPORTCONTEXT))
-            {
                 if (sportTypeId != 0)
                 {
                     count = this.dataUnit.GetRepository<SportEvent>()
@@ -36,7 +36,6 @@ namespace JinnSports.BLL.Service
                     count = this.dataUnit.GetRepository<SportEvent>()
                     .Get().Count();
                 }
-            }
             return count;
         }
 
@@ -44,8 +43,6 @@ namespace JinnSports.BLL.Service
         {
             IList<ResultDto> results = new List<ResultDto>();
 
-            using (this.dataUnit = new EFUnitOfWork(SPORTCONTEXT))
-            {
                 IEnumerable<SportEvent> sportEvents;
                 if (sportTypeId != 0)
                 {
@@ -70,15 +67,13 @@ namespace JinnSports.BLL.Service
                 {
                     results.Add(Mapper.Map<SportEvent, ResultDto>(sportEvent));
                 }
-            }
             return results;
         }
 
         public IEnumerable<SportTypeDto> GetSportTypes()
         {
             IList<SportTypeDto> sportTypeDto = new List<SportTypeDto>();
-            using (this.dataUnit = new EFUnitOfWork(SPORTCONTEXT))
-            {
+          
                 // Выбираем результаты заданного вида спорта, сортируя по дате
                 IEnumerable<SportType> sportTypes =
                     this.dataUnit.GetRepository<SportType>().Get();
@@ -88,7 +83,6 @@ namespace JinnSports.BLL.Service
                 {
                     sportTypeDto.Add(Mapper.Map<SportType, SportTypeDto>(sportType));
                 }
-            }
             return sportTypeDto;
         }
 
@@ -96,8 +90,6 @@ namespace JinnSports.BLL.Service
         {
             try
             {
-                dataUnit = new EFUnitOfWork(SPORTCONTEXT);
-
                 IEnumerable<Team> teams = dataUnit.GetRepository<Team>().Get();
                 IEnumerable<SportType> sportTypes = dataUnit.GetRepository<SportType>().Get();
 
