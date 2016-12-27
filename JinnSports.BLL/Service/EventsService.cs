@@ -53,10 +53,13 @@ namespace JinnSports.BLL.Service
 
         public bool SaveSportEvents(ICollection<SportEventDTO> eventDTOs)
         {
+            Log.Info("Writing transferred data...");
             try
             {
+                
                 IEnumerable<Team> teams = dataUnit.GetRepository<Team>().Get();
                 IEnumerable<SportType> sportTypes = dataUnit.GetRepository<SportType>().Get();
+                IEnumerable<SportEvent> exustingEvents = dataUnit.GetRepository<SportEvent>().Get();
 
                 foreach (SportEventDTO eventDTO in eventDTOs)
                 {
@@ -72,13 +75,16 @@ namespace JinnSports.BLL.Service
 
                         AddResult(sportEvent, team, resultDTO.Score);
                     }
-                    dataUnit.GetRepository<SportEvent>().Insert(sportEvent);
+                    if (!exustingEvents.Contains(sportEvent))
+                    {
+                        dataUnit.GetRepository<SportEvent>().Insert(sportEvent);
+                    }
                 }
-                dataUnit.SaveChanges();
+                dataUnit.SaveChanges();   
             }
             catch (Exception ex)
             {
-                Log.Error("Exception when trying to save SportEvents to DB", ex);
+                Log.Error("Exception when trying to save transferred data to DB", ex);
                 return false;
             }
             finally
@@ -88,6 +94,7 @@ namespace JinnSports.BLL.Service
                     dataUnit.Dispose();
                 }
             }
+            Log.Info("Transferred data sucessfully saved");
             return true;
         }
 
