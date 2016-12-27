@@ -359,15 +359,28 @@ namespace JinnSports.UnitTests.Services
             {
                 Assert.AreEqual(expectedResultDtos[i].Id, actualResultDtos[i].Id);
                 Assert.AreEqual(expectedResultDtos[i].Date, actualResultDtos[i].Date);
-                Assert.AreEqual(expectedResultDtos[i].TeamIds.Count(), actualResultDtos[i].TeamIds.Count());
-
+                Assert.AreEqual(expectedResultDtos[i].TeamIds.Count(), 
+                    actualResultDtos[i].TeamIds.Count());
+                Assert.AreEqual(expectedResultDtos[i].TeamNames.Count(), 
+                    actualResultDtos[i].TeamIds.Count());
 
                 for (int j = 0; j < expectedResultDtos[i].TeamIds.Count(); j++)
                 {
-                    Assert.AreEqual(expectedResultDtos[i].TeamIds.ElementAt(j),
-                        actualResultDtos[i].TeamIds.ElementAt(j));
-                    Assert.AreEqual(expectedResultDtos[i].TeamNames.ElementAt(j),
-                        actualResultDtos[i].TeamNames.ElementAt(j));
+                    bool idComparing =
+                        expectedResultDtos[i].TeamIds.ElementAt(0) == actualResultDtos[i].TeamIds.ElementAt(0)
+                        && expectedResultDtos[i].TeamIds.ElementAt(1) == actualResultDtos[i].TeamIds.ElementAt(1)
+                        ||
+                        expectedResultDtos[i].TeamIds.ElementAt(0) == actualResultDtos[i].TeamIds.ElementAt(1)
+                        && expectedResultDtos[i].TeamIds.ElementAt(1) == actualResultDtos[i].TeamIds.ElementAt(0);
+                    Assert.AreEqual(true, idComparing);
+
+                    bool nameComparing = expectedResultDtos[i].TeamNames.ElementAt(0) == actualResultDtos[i].TeamNames.ElementAt(0)
+                        && expectedResultDtos[i].TeamNames.ElementAt(1) == actualResultDtos[i].TeamNames.ElementAt(1)
+                        ||
+                        expectedResultDtos[i].TeamNames.ElementAt(0) == actualResultDtos[i].TeamNames.ElementAt(1)
+                        && expectedResultDtos[i].TeamNames.ElementAt(1) == actualResultDtos[i].TeamNames.ElementAt(0);
+
+                    Assert.AreEqual(true, nameComparing);                    
                 }
             }
 
