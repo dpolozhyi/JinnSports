@@ -8,18 +8,18 @@ using System.Web.Http;
 
 namespace JinnSports.WEB.ApiControllers
 {
-    public class TeamController : ApiController
+    public class EventController : ApiController
     {
-        private readonly ITeamService teamService;
+        private const int FOOTBALL = 1;
+        private readonly IEventService eventService;
 
-        public TeamController(ITeamService teamService)
+        public EventController(IEventService eventService)
         {
-            this.teamService = teamService;
+            this.eventService = eventService;
         }
 
-        // GET: api/Team/5
         [HttpGet]
-        public IHttpActionResult LoadTeams()
+        public IHttpActionResult LoadEvents()
         {
             string draw = this.Request.GetQueryNameValuePairs().Where(x => x.Key == "draw").FirstOrDefault().Value;
             string start = this.Request.GetQueryNameValuePairs().Where(x => x.Key == "start").FirstOrDefault().Value;
@@ -27,24 +27,31 @@ namespace JinnSports.WEB.ApiControllers
 
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
-            int recordsTotal = this.teamService.Count();
+            int recordsTotal = this.eventService.Count(FOOTBALL);
 
-            IEnumerable<TeamDto> teams = this.teamService.GetAllTeams(skip, pageSize);
-            
-            return this.Ok(teams);
+            IEnumerable<ResultDto> results = this.eventService
+                .GetSportEvents(FOOTBALL, skip, pageSize);
+
+            return this.Ok(new
+            {
+                draw = draw,
+                recordsFiltered = recordsTotal,
+                recordsTotal = recordsTotal,
+                data = results
+            });
         }
 
-        // POST: api/Team
+        // POST: api/Event
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT: api/Team/5
+        // PUT: api/Event/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE: api/Team/5
+        // DELETE: api/Event/5
         public void Delete(int id)
         {
         }

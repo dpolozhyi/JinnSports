@@ -4,6 +4,7 @@ using JinnSports.BLL.Interfaces;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.Entities.Entities;
 using JinnSports.BLL.Dtos;
+using AutoMapper;
 
 namespace JinnSports.BLL.Service
 {
@@ -30,15 +31,20 @@ namespace JinnSports.BLL.Service
                 orderBy: s => s.OrderBy(x => x.Id), 
                 skip: skip, 
                 take: take);
-
+            
             foreach (Team team in teams)
             {
                 TeamDto teamDto = new TeamDto { Id = team.Id, Name = team.Name };
-
                 teamDtoList.Add(teamDto);
             }
 
-           return teamDtoList;
+            return teamDtoList;
+        }
+        public TeamDto GetTeamById(int teamId)
+        {
+            Team team = this.dataUnit.GetRepository<Team>().GetById(teamId);
+            TeamDto teamDto = Mapper.Map<Team, TeamDto>(team);
+            return teamDto;
         }
     }
 }

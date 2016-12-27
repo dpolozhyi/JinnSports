@@ -26,7 +26,7 @@ namespace JinnSports.UnitTests.Services
         List<SportEvent> sportEvents;
         IEnumerable<List<ResultDto>> resultsDtoCollection;
         List<ResultDto> resultsDto;
-        List<Result> testDtoResults; 
+        List<Result> testResults;
         public class ResultDtoComparer : IComparer, IComparer<ResultDto>
         {
             public int Compare(object x, object y)
@@ -51,14 +51,36 @@ namespace JinnSports.UnitTests.Services
                     (ldto.TeamNames.ElementAt(1).CompareTo(rdto.TeamNames.ElementAt(1))));
             }
         }
-        [SetUp]
+        public class TeamDtoComparer : IComparer, IComparer<TeamDto>
+        {
+                public int Compare(object x, object y)
+                {
+                    var ldto = x as TeamDto;
+                    var rdto = y as TeamDto;
+                    if (ldto == null || rdto == null) throw new InvalidOperationException();
+                    return Compare(ldto, rdto);
+                }
+
+                public int Compare(TeamDto ldto, TeamDto rdto)
+                {
+                    if (string.IsNullOrEmpty(ldto.Name) || ldto.Id < 1)
+                    {
+                        return -1;
+                    }
+
+                    return ((ldto.Name.CompareTo(rdto.Name)) &
+                        (ldto.Id.CompareTo(rdto.Id)));
+                }
+         }
+       [SetUp]
        public void Init()
         {
             this.sportTypes = new List<SportType>();
             this.teams = new List<Team>();
             this.results = new List<Result>();
-            this.testDtoResults = new List<Result>();
             this.sportEvents = new List<SportEvent>();
+
+            this.testResults = new List<Result>();
             this.resultsDto = new List<ResultDto>();
             this.resultsDtoCollection = new List<List<ResultDto>>();
 
@@ -503,7 +525,7 @@ namespace JinnSports.UnitTests.Services
                 Suns_vs_LA_Result_Dto,
                 LA_vs_Suns_Result_Dto
             };
-            testDtoResults = new List<Result>()
+            testResults = new List<Result>()
             {
                 Ch_vs_LA,
                 LA_vs_Ch,
@@ -522,7 +544,7 @@ namespace JinnSports.UnitTests.Services
         [TestCase(6, 2)]
         [TestCase(7, 2)]
         [TestCase(8, 2)]
-        public void Count(int teamId, int result)
+        public void TeamResultsCount(int teamId, int result)
         {
 
             TeamDetailsService teamDelailsService = new TeamDetailsService(new EFUnitOfWork(new SportsContext("SportContext")));
@@ -537,7 +559,7 @@ namespace JinnSports.UnitTests.Services
         [TestCase(6, 0)]
         [TestCase(7, 1)]
         [TestCase(8, 2)]
-        public void GetResults(int teamId, int element)
+        public void GetTeamResults(int teamId, int element)
         {
             TeamDetailsService teamDetailsService = new TeamDetailsService(new EFUnitOfWork(new SportsContext("SportContext")));
             List<ResultDto> resultDtoCollection = new List<ResultDto>();
@@ -550,21 +572,41 @@ namespace JinnSports.UnitTests.Services
         }
 
         [Test]
-        public void ResultMapping()
+        public void ResultToResultDtoMapping()
         {
             ResultDtoComparer dtoComparer = new ResultDtoComparer();
           
             List<ResultDto> resultsDto = this.resultsDto;
             List<ResultDto> mappedDto = new List<ResultDto>();
-
-            List<Result> testResults = this.testDtoResults;
+            List<Result> testResults = this.testResults;
 
             foreach (Result result in testResults)
             {
                 mappedDto.Add(Mapper.Map<Result, ResultDto>(result));
             }
-            
+                 
             CollectionAssert.AreEqual(resultsDto, mappedDto, dtoComparer);
+        }
+
+        [Test]
+        public void TeamToTeamDtoMapping()
+        {
+            List<Team> teams = this.teams;
+            List<TeamDto> teamsTestDto = new List<TeamDto>();
+            List<TeamDto>mappedDto = new List<TeamDto>();
+            TeamDtoComparer dtoComparer = new TeamDtoComparer();
+
+            foreach (Team team in teams)
+            {
+                teamsTestDto.Add(new TeamDto
+                {
+                    Name = team.Name,
+                    Id = team.Id
+                });
+                mappedDto.Add(Mapper.Map<Team, TeamDto>(team));
+            }
+
+            CollectionAssert.AreEqual(teamsTestDto, mappedDto, dtoComparer);
         }
     }
 }

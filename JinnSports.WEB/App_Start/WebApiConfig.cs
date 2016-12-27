@@ -15,6 +15,11 @@ namespace JinnSports.WEB
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional });
+
+            config.Routes.MapHttpRoute(
+                name: "ApiTeamDetails",
+                routeTemplate: "api/{controller}/{action}/{id}",
+                defaults: new { controller = "TeamDetails", action = "LoadResults", id = RouteParameter.Optional });
         }
     }
 }
