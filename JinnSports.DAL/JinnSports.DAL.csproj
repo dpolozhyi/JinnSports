@@ -67,6 +67,10 @@
     <Compile Include="Migrations\201612221843050_NameMatching.Designer.cs">
       <DependentUpon>201612221843050_NameMatching.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612262337249_IntputTeamNameStringConformity.cs" />
+    <Compile Include="Migrations\201612262337249_IntputTeamNameStringConformity.Designer.cs">
+      <DependentUpon>201612262337249_IntputTeamNameStringConformity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
@@ -95,6 +99,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612221843050_NameMatching.resx">
       <DependentUpon>201612221843050_NameMatching.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612262337249_IntputTeamNameStringConformity.resx">
+      <DependentUpon>201612262337249_IntputTeamNameStringConformity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

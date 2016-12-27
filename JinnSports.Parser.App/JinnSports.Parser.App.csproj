@@ -77,7 +77,6 @@
     <Compile Include="MyConfigInstanceCollection.cs" />
     <Compile Include="MyConfigInstanceElement.cs" />
     <Compile Include="MyConfigSection.cs" />
-    <Compile Include="NamingMatcher\NamingMatcher.cs" />
     <Compile Include="ProxyService\ProxyConnection\ProxyConnection.cs" />
     <Compile Include="ProxyService\ProxyEntities\BaseProxyServer.cs" />
     <Compile Include="ProxyService\ProxyEntities\HtmlProxyServerCollection.cs" />
