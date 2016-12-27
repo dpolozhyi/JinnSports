@@ -15,9 +15,9 @@ namespace JinnSports.WEB.Controllers
 
         public ActionResult Details(int id = 0)
         {
-            if (id != 0)
+            TeamDto team = this.teamService.GetTeamById(id);
+            if (team != null)
             {
-                TeamDto team = this.teamService.GetTeamById(id);
                 return this.View(team);
             }
             else
