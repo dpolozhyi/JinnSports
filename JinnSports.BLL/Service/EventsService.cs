@@ -53,7 +53,7 @@ namespace JinnSports.BLL.Service
                     sportEvents =
                         this.dataUnit.GetRepository<SportEvent>().Get(
                         filter: m => m.SportType.Id == sportTypeId,
-                        orderBy: s => s.OrderByDescending(x => x.Date),
+                        orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
                         skip: skip,
                         take: take);
                 }
@@ -61,7 +61,7 @@ namespace JinnSports.BLL.Service
                 {
                     sportEvents =
                         this.dataUnit.GetRepository<SportEvent>().Get(
-                        orderBy: s => s.OrderByDescending(x => x.Date),
+                        orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
                         skip: skip,
                         take: take);
                 }
