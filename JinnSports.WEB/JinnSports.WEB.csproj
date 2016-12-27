@@ -450,9 +450,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
-    <Compile Include="Controllers\API\EventController.cs" />
-    <Compile Include="Controllers\API\TeamController.cs" />
-    <Compile Include="Controllers\API\TeamDetailsController.cs" />
+    <Compile Include="Controllers\Api\EventController.cs" />
+    <Compile Include="Controllers\Api\TeamController.cs" />
+    <Compile Include="Controllers\Api\TeamDetailsController.cs" />
     <Compile Include="Areas\Admin\Controllers\SportEventsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
