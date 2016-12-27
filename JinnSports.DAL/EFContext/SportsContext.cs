@@ -34,8 +34,7 @@ namespace JinnSports.DAL.EFContext
             modelBuilder.Entity<Result>().HasRequired(p => p.SportEvent).WithMany(n => n.Results).WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Team>().HasRequired(p => p.SportType).WithMany(n => n.Teams).WillCascadeOnDelete(false);
-            modelBuilder.Entity<Team>().Property(p => p.Name).IsRequired();
-            modelBuilder.Entity<Team>().Property(p => p.Name).HasMaxLength(30);
+            modelBuilder.Entity<Team>().Property(p => p.Name).IsRequired();            
 
             modelBuilder.Entity<SportType>().Property(p => p.Name).IsRequired();
 
