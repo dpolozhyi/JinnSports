@@ -12,7 +12,6 @@ namespace JinnSports.WEB.ApiControllers
 {
     public class EventController : ApiController
     {
-        private const int FOOTBALL = 1;
         private IEventService eventService;
 
         public EventController()
@@ -21,18 +20,21 @@ namespace JinnSports.WEB.ApiControllers
         }
 
         [HttpGet]
-        public IHttpActionResult LoadEvents()
+        public IHttpActionResult LoadEvents(int sportTypeId)
         {
+            var a = sportTypeId;
+
             string draw = this.Request.GetQueryNameValuePairs().Where(x => x.Key == "draw").FirstOrDefault().Value;
             string start = this.Request.GetQueryNameValuePairs().Where(x => x.Key == "start").FirstOrDefault().Value;
             string length = this.Request.GetQueryNameValuePairs().Where(x => x.Key == "length").FirstOrDefault().Value;
 
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
-            int recordsTotal = this.eventService.Count(FOOTBALL);
+
+            int recordsTotal = this.eventService.Count(sportTypeId);
 
             IEnumerable<ResultDto> results = this.eventService
-                .GetSportEvents(FOOTBALL, skip, pageSize);
+                .GetSportEvents(sportTypeId, skip, pageSize);
 
             return this.Ok(new
             {
