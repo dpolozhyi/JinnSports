@@ -12,8 +12,7 @@ namespace JinnSports.WEB.Controllers
     {
         public ActionResult Index()
         {
-            string url = string.Format("/api/Event/LoadEvents");
-            return this.View((object)url);
+            return this.View();
         }
 
     }

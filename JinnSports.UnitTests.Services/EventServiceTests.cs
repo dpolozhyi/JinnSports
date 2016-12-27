@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace JinnSports.UnitTests.Services
 {
     [TestFixture]
-    public class EventsServiceTests
+    public class EventServiceTests
     {
         private IEventService eventService;
 
@@ -29,7 +29,7 @@ namespace JinnSports.UnitTests.Services
         {
             this.eventService = new EventsService();
             comparer = new TeamDetailsServiceTests.ResultDtoComparer();
-            this.databaseSportEvents = new List<SportEvent>();
+            this.databaseSportEvents = new List<SportEvent>();            
 
             AutoMapperConfiguration.Configure();
 
@@ -205,7 +205,7 @@ namespace JinnSports.UnitTests.Services
                 Team = chelsea,
                 Score = 0,
                 SportEvent = Chelsea_vs_MC_event
-            };
+            };            
             Result Chelsea_vs_Milano = new Result()
             {
                 Id = 7,
@@ -219,7 +219,7 @@ namespace JinnSports.UnitTests.Services
                 Team = Bayern,
                 Score = 4,
                 SportEvent = bayern_vs_Milano_event
-            };
+            };            
             Result Ch_vs_LA = new Result()
             {
                 Id = 9,
@@ -255,7 +255,7 @@ namespace JinnSports.UnitTests.Services
                 Score = 64,
                 Team = phoenixSuns,
                 SportEvent = lA_vs_Suns_event
-            };
+            };           
             Result Ph_vs_Ch = new Result()
             {
                 Id = 14,
@@ -320,7 +320,7 @@ namespace JinnSports.UnitTests.Services
                 .Where(e => e.SportType.Id == sportId)
                 .Count();
             int actualCount = eventService.Count(sportId);
-        }
+        }        
 
         [Test]
         [TestCase(1, 0, 10)]
@@ -355,14 +355,16 @@ namespace JinnSports.UnitTests.Services
                 .GetSportEvents(sportId, skip, take).ToList();
 
             Assert.AreEqual(expectedResultDtos.Count, actualResultDtos.Count);
-            for (int i = 0; i < expectedResultDtos.Count; i++)
+            for(int i = 0; i < expectedResultDtos.Count; i++)
             {
                 Assert.AreEqual(expectedResultDtos[i].Id, actualResultDtos[i].Id);
                 Assert.AreEqual(expectedResultDtos[i].Date, actualResultDtos[i].Date);
                 Assert.AreEqual(expectedResultDtos[i].TeamIds.Count(), actualResultDtos[i].TeamIds.Count());
 
 
-                for (int j = 0; j < expectedResultDtos[i].TeamIds.Count(); j++)
+
+
+                for(int j = 0; j < expectedResultDtos[i].TeamIds.Count(); j++)
                 {
                     Assert.AreEqual(expectedResultDtos[i].TeamIds.ElementAt(j),
                         actualResultDtos[i].TeamIds.ElementAt(j));
