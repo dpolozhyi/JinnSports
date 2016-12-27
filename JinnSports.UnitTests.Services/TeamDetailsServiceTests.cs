@@ -547,7 +547,7 @@ namespace JinnSports.UnitTests.Services
         public void TeamResultsCount(int teamId, int result)
         {
 
-            TeamDetailsService teamDelailsService = new TeamDetailsService(new EFUnitOfWork(new SportsContext("SportContext")));
+            TeamDetailsService teamDelailsService = new TeamDetailsService(new EFUnitOfWork(new SportsContext("SportsContext")));
             int count;
 
             count = teamDelailsService.Count(teamId);
@@ -561,7 +561,7 @@ namespace JinnSports.UnitTests.Services
         [TestCase(8, 2)]
         public void GetTeamResults(int teamId, int element)
         {
-            TeamDetailsService teamDetailsService = new TeamDetailsService(new EFUnitOfWork(new SportsContext("SportContext")));
+            TeamDetailsService teamDetailsService = new TeamDetailsService(new EFUnitOfWork(new SportsContext("SportsContext")));
             List<ResultDto> resultDtoCollection = new List<ResultDto>();
             List<ResultDto> dtoTest = this.resultsDtoCollection.ElementAt(element);
             ResultDtoComparer dtoComparer = new ResultDtoComparer();
