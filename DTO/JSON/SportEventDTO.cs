@@ -6,8 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DTO.JSON
-{
-    
+{  
     public class SportEventDTO
     {
         public long Date { get; set; }

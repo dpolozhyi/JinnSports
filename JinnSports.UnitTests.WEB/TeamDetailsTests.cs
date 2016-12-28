@@ -1,33 +1,32 @@
-﻿using System;
-using JinnSports.WEB.Controllers;
+﻿using JinnSports.WEB.Controllers;
 using System.Web.Mvc;
+using JinnSports.BLL.Service;
+using JinnSports.DataAccessInterfaces.Interfaces;
+using JinnSports.DAL.EFContext;
+using JinnSports.DAL.Repositories;
+using JinnSports.Entities.Entities;
 using NUnit.Framework;
+using JinnSports.WEB;
 
 namespace JinnSports.UnitTests.WEB
 {
     [TestFixture]
     public class TeamDetailsTest
     {
-        [Test]
-        public void Index()
+        [SetUp]
+        public void Init()
         {
-            // Arrange
-            TeamDetailsController controller = new TeamDetailsController();
-
-            // Act
-            ActionResult result = controller.Index();
-
-            // Assert
-            Assert.IsNotNull(result);
+            AutoMapperConfiguration.Configure();
+            AutofacConfig.Configure();
         }
         [Test]
-        public void Details()
+        public void Details([Values(0, 1)] int id)
         {
             // Arrange
-            TeamDetailsController controller = new TeamDetailsController();
+            TeamDetailsController controller = new TeamDetailsController(new TeamService(new EFUnitOfWork(new SportsContext("SportsContext"))));
 
             // Act
-            ActionResult result = controller.Details();
+            ActionResult result = controller.Details(id);
 
             // Assert
             Assert.IsNotNull(result);

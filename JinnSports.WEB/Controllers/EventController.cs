@@ -10,10 +10,24 @@ namespace JinnSports.WEB.Controllers
 {
     public class EventController : Controller
     {
+        private IEventService eventService;
+
+        public EventController(IEventService eventService)
+        {
+            this.eventService = eventService;
+        }
+
         public ActionResult Index()
         {
-            string url = string.Format("/api/Event/LoadEvents");
-            return this.View((object)url);
+            IEnumerable<SportTypeDto> sportTypes = this.eventService.GetSportTypes();
+            if (sportTypes != null)
+            {
+                return this.View(sportTypes);
+            }
+            else
+            {
+                return this.HttpNotFound();
+            }
         }
 
     }

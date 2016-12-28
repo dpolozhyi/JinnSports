@@ -1,27 +1,24 @@
 ﻿using JinnSports.BLL.Dtos;
 using JinnSports.BLL.Interfaces;
-using JinnSports.BLL.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
 namespace JinnSports.WEB.ApiControllers
 {
-    public class EventController : ApiController
+    public class TeamDetailsController : ApiController
     {
-        private const int FOOTBALL = 1;
-        private IEventService eventService;
+        private readonly ITeamDetailsService teamDetailsService;
 
-        public EventController()
+        public TeamDetailsController(ITeamDetailsService teamDetailsService)
         {
-            this.eventService = new EventsService();
+            this.teamDetailsService = teamDetailsService;
         }
 
         [HttpGet]
-        public IHttpActionResult LoadEvents()
+        public IHttpActionResult LoadResults(int id = 1)
         {
             string draw = this.Request.GetQueryNameValuePairs().Where(x => x.Key == "draw").FirstOrDefault().Value;
             string start = this.Request.GetQueryNameValuePairs().Where(x => x.Key == "start").FirstOrDefault().Value;
@@ -29,25 +26,29 @@ namespace JinnSports.WEB.ApiControllers
 
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
-            int recordsTotal = this.eventService.Count(FOOTBALL);
+            int recordsTotal = this.teamDetailsService.Count(id);
 
-            IEnumerable<ResultDto> results = this.eventService
-                .GetSportEvents(FOOTBALL, skip, pageSize);
+            IEnumerable<ResultDto> results = this.teamDetailsService.GetResults(id, skip, pageSize);
 
-            return this.Ok(results);
+            return this.Ok(new
+            {
+                    draw = draw,
+                    recordsFiltered = recordsTotal,
+                    recordsTotal = recordsTotal,
+                    data = results
+            });
         }
 
-        // POST: api/Event
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT: api/Event/5
+        // PUT: api/TeamDetails/5
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE: api/Event/5
+        // DELETE: api/TeamDetails/5
         public void Delete(int id)
         {
         }

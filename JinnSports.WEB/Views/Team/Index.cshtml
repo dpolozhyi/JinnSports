@@ -1,10 +1,9 @@
-﻿@model string
-@{
+﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @section styles {
-    @Styles.Render("~/Content/DataTable")
+    @Styles.Render("~/Content/DataTableStyles")
 }
 
 <div class="box">
@@ -31,10 +30,10 @@
             "filter": false,
             "orderMulti": false,
             "ajax": {
-                url: '@Model',
+                url: '/api/Team/LoadTeams',
                 type: 'GET',
                 datatype: 'json',
-                dataSrc: ""
+                dataSrc: 'data'
             },
             "columns": [
                     {

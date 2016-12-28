@@ -18,52 +18,81 @@ namespace JinnSports.BLL.Service
     {
         private const string SPORTCONTEXT = "SportsContext";
 
-        private static readonly ILog Log = LogManager.GetLogger(typeof(EventsService));        
+        private static readonly ILog Log = LogManager.GetLogger(typeof(EventsService));  
 
-        private IUnitOfWork dataUnit;
+        private readonly IUnitOfWork dataUnit;        
 
-        public int Count(int sportId)
+        public EventsService(IUnitOfWork unitOfWork)
+        {
+            this.dataUnit = unitOfWork;
+        }
+
+        public int Count(int sportTypeId)
         {
             int count;
-            using (this.dataUnit = new EFUnitOfWork(SPORTCONTEXT))
-            {
-                count = this.dataUnit.GetRepository<SportEvent>()
-                    .Get(filter: m => m.SportType.Id == sportId)
+                if (sportTypeId != 0)
+                {
+                    count = this.dataUnit.GetRepository<SportEvent>()
+                    .Get(filter: m => m.SportType.Id == sportTypeId)
                     .Count();
-            }
+                }
+                else
+                {
+                    count = this.dataUnit.GetRepository<SportEvent>()
+                    .Get().Count();
+                }
             return count;
         }
 
-        public IEnumerable<ResultDto> GetSportEvents(int sportId, int skip, int take)
+        public IEnumerable<ResultDto> GetSportEvents(int sportTypeId, int skip, int take)
         {
             IList<ResultDto> results = new List<ResultDto>();
 
-            using (this.dataUnit = new EFUnitOfWork(SPORTCONTEXT))
-            {
-                // Выбираем результаты заданного вида спорта, сортируя по дате
-                IEnumerable<SportEvent> sportEvents =
-                    this.dataUnit.GetRepository<SportEvent>().Get(
-                        filter: m => m.SportType.Id == sportId,
-                        orderBy: s => s.OrderByDescending(x => x.Date),
+                IEnumerable<SportEvent> sportEvents;
+                if (sportTypeId != 0)
+                {
+                    sportEvents =
+                        this.dataUnit.GetRepository<SportEvent>().Get(
+                        filter: m => m.SportType.Id == sportTypeId,
+                        orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
                         skip: skip,
                         take: take);
-
-                // Формирование SportEventDto из SportEvent при помощи AutoMapper
+                }
+                else
+                {
+                    sportEvents =
+                        this.dataUnit.GetRepository<SportEvent>().Get(
+                        orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
+                        skip: skip,
+                        take: take);
+                }                
                 foreach (SportEvent sportEvent in sportEvents)
                 {
                     results.Add(Mapper.Map<SportEvent, ResultDto>(sportEvent));
                 }
-            }
-
             return results;
+        }
+
+        public IEnumerable<SportTypeDto> GetSportTypes()
+        {
+            IList<SportTypeDto> sportTypeDto = new List<SportTypeDto>();
+          
+                IEnumerable<SportType> sportTypes =
+                    this.dataUnit.GetRepository<SportType>().Get();
+                
+                foreach (SportType sportType in sportTypes)
+                {
+                    sportTypeDto.Add(Mapper.Map<SportType, SportTypeDto>(sportType));
+                }
+            return sportTypeDto;
         }
 
         public bool SaveSportEvents(ICollection<SportEventDTO> eventDTOs)
         {
+            Log.Info("Writing transferred data...");
             try
             {
-                Log.Info("Writing transferred data...");
-                this.dataUnit = new EFUnitOfWork(SPORTCONTEXT);
+                Log.Info("Writing transferred data...");                
                 NamingMatcher matcher = new NamingMatcher(this.dataUnit);
 
                 IEnumerable<SportType> sportTypes = this.dataUnit.GetRepository<SportType>().Get();

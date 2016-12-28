@@ -7,14 +7,14 @@ namespace JinnSports.DAL.EFContext
 {
     public class SportsContext : DbContext
     {
-        public SportsContext() : base(GetConnectionString("SportsContext"))
+        public SportsContext(string connectionName) : base(GetConnectionString(connectionName))
         {
             Database.SetInitializer(new SportsDbInitializer());
         }
 
-        public SportsContext(string connectionName) : base(GetConnectionString(connectionName))
+        public SportsContext() : base("SportsContext")
         {
-            Database.SetInitializer(new SportsDbInitializer());
+
         }
 
         public DbSet<SportEvent> SportEvents { get; set; }
