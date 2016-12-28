@@ -76,10 +76,10 @@ namespace JinnSports.BLL.Service
         public IEnumerable<SportTypeDto> GetSportTypes()
         {
             IList<SportTypeDto> sportTypeDto = new List<SportTypeDto>();
-          
+                          
                 IEnumerable<SportType> sportTypes =
                     this.dataUnit.GetRepository<SportType>().Get();
-                
+               
                 foreach (SportType sportType in sportTypes)
                 {
                     sportTypeDto.Add(Mapper.Map<SportType, SportTypeDto>(sportType));

@@ -378,23 +378,7 @@ namespace JinnSports.UnitTests.Services
                     bool existTeamName =
                         expectedResultDtos[i].TeamNames.Contains(actualResultDtos[i].TeamNames.ElementAt(j));
                     Assert.AreEqual(true, existTeamName);
-
-                    /*
-                    bool idComparing =
-                        expectedResultDtos[i].TeamIds.ElementAt(0) == actualResultDtos[i].TeamIds.ElementAt(0)
-                        && expectedResultDtos[i].TeamIds.ElementAt(1) == actualResultDtos[i].TeamIds.ElementAt(1)
-                        ||
-                        expectedResultDtos[i].TeamIds.ElementAt(0) == actualResultDtos[i].TeamIds.ElementAt(1)
-                        && expectedResultDtos[i].TeamIds.ElementAt(1) == actualResultDtos[i].TeamIds.ElementAt(0);
-                    Assert.AreEqual(true, idComparing);
-
-                    bool nameComparing = expectedResultDtos[i].TeamNames.ElementAt(0) == actualResultDtos[i].TeamNames.ElementAt(0)
-                        && expectedResultDtos[i].TeamNames.ElementAt(1) == actualResultDtos[i].TeamNames.ElementAt(1)
-                        ||
-                        expectedResultDtos[i].TeamNames.ElementAt(0) == actualResultDtos[i].TeamNames.ElementAt(1)
-                        && expectedResultDtos[i].TeamNames.ElementAt(1) == actualResultDtos[i].TeamNames.ElementAt(0);
-                    Assert.AreEqual(true, nameComparing);  
-                    */                  
+           
                 }
             }
         }
