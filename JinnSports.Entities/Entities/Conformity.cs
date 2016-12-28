@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JinnSports.Entities.Entities.Temp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,10 +11,12 @@ namespace JinnSports.Entities.Entities
     {
         public int Id { get; set; }
 
-        public string InputTeamName { get; set; }
+        public string InputName { get; set; }
 
-        public Team ExistedTeam { get; set; }
+        public string ExistedName { get; set; }
 
         public bool IsConfirmed { get; set; }
+
+        public TempResult TempResult { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 using System.Configuration;
 using System.Data.Entity;
 using JinnSports.Entities.Entities;
+using JinnSports.Entities.Entities.Temp;
 
 namespace JinnSports.DAL.EFContext
 {
@@ -27,6 +28,10 @@ namespace JinnSports.DAL.EFContext
         public DbSet<TeamName> TeamNames { get; set; }
 
         public DbSet<Conformity> Conformities { get; set; }
+
+        public DbSet<TempResult> TempResults { get; set; }
+
+        public DbSet<TempSportEvent> TempSportEvents { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

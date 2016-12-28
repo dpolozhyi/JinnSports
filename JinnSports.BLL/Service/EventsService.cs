@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using JinnSports.BLL.Dtos;
 using JinnSports.BLL.Interfaces;
+using JinnSports.BLL.Matcher;
 using JinnSports.DAL.Repositories;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.Entities.Entities;
@@ -9,14 +10,15 @@ using AutoMapper;
 using DTO.JSON;
 using System;
 using log4net;
+using JinnSports.Entities.Entities.Temp;
 
 namespace JinnSports.BLL.Service
 {
     public class EventsService : IEventService
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(EventsService));
-
         private const string SPORTCONTEXT = "SportsContext";
+
+        private static readonly ILog Log = LogManager.GetLogger(typeof(EventsService));        
 
         private IUnitOfWork dataUnit;
 
@@ -60,53 +62,92 @@ namespace JinnSports.BLL.Service
         {
             try
             {
-                dataUnit = new EFUnitOfWork(SPORTCONTEXT);
+                Log.Info("Writing transferred data...");
+                this.dataUnit = new EFUnitOfWork(SPORTCONTEXT);
+                NamingMatcher matcher = new NamingMatcher(this.dataUnit);
 
-                IEnumerable<Team> teams = dataUnit.GetRepository<Team>().Get();
-                IEnumerable<SportType> sportTypes = dataUnit.GetRepository<SportType>().Get();
+                IEnumerable<SportType> sportTypes = this.dataUnit.GetRepository<SportType>().Get();
+                IEnumerable<SportEvent> exustingEvents = this.dataUnit.GetRepository<SportEvent>().Get();
 
                 foreach (SportEventDTO eventDTO in eventDTOs)
                 {
                     SportType sportType = sportTypes.FirstOrDefault(st => st.Name == eventDTO.SportType) 
-                                            ?? new SportType() { Name = eventDTO.SportType };
-
-                    SportEvent sportEvent = new SportEvent() { SportType = sportType, Date = new DateTime(eventDTO.Date) };
+                                            ?? new SportType { Name = eventDTO.SportType };
+                    
+                    bool isConflictExist = false;
+                    List<Result> results = new List<Result>();
+                    List<TempResult> tempResults = new List<TempResult>();
 
                     foreach (ResultDTO resultDTO in eventDTO.Results)
                     {
-                        Team team = teams.FirstOrDefault(t => t.Name == resultDTO.TeamName) 
-                                        ?? new Team() { Name = resultDTO.TeamName, SportType = sportType };
+                        List<Conformity> conformities = new List<Conformity>();
 
-                        AddResult(sportEvent, team, resultDTO.Score);
+                        Team team = new Team { Name = resultDTO.TeamName, SportType = sportType };
+                        Team resolvedTeam = matcher.ResolveNaming(team, out conformities);
+
+                        if (resolvedTeam != null)
+                        {
+                            Result result = new Result { Team = team, Score = resultDTO.Score };
+                            results.Add(result);                            
+                        }
+                        else
+                        {
+                            isConflictExist = true;
+
+                            TempResult result = new TempResult { Team = team, Score = resultDTO.Score };
+                            
+                            foreach (Conformity conformity in conformities)
+                            {
+                                result.Conformities.Add(conformity);
+                            }
+                            conformities.Clear();
+                            tempResults.Add(result);                            
+                        }                        
                     }
-                    dataUnit.GetRepository<SportEvent>().Insert(sportEvent);
+
+                    if (isConflictExist)
+                    {
+                        TempSportEvent tempSportEvent = new TempSportEvent { SportType = sportType, Date = new DateTime(eventDTO.Date) };
+                        foreach (TempResult tempResult in tempResults)
+                        {
+                            tempSportEvent.TempResults.Add(tempResult);
+                        }
+                        foreach (Result result in results)
+                        {
+                            TempResult tempRes = new TempResult { Team = result.Team, Score = result.Score, IsHome = result.IsHome };
+                            tempSportEvent.TempResults.Add(tempRes);
+                        }
+                        this.dataUnit.GetRepository<TempSportEvent>().Insert(tempSportEvent);
+                    }
+                    else
+                    {
+                        SportEvent sportEvent = new SportEvent { SportType = sportType, Date = new DateTime(eventDTO.Date) };
+                        foreach (Result result in results)
+                        {
+                            sportEvent.Results.Add(result);
+                        }
+                        if (!exustingEvents.Contains(sportEvent))
+                        {
+                            this.dataUnit.GetRepository<SportEvent>().Insert(sportEvent); 
+                        }
+                    }
                 }
-                dataUnit.SaveChanges();
+                this.dataUnit.SaveChanges();
             }
             catch (Exception ex)
             {
-                Log.Error("Exception when trying to save SportEvents to DB", ex);
+                Log.Error("Exception when trying to save transferred data to DB", ex);
                 return false;
             }
             finally
             {
-                if (dataUnit != null)
+                if (this.dataUnit != null)
                 {
-                    dataUnit.Dispose();
+                    this.dataUnit.Dispose();
                 }
             }
+            Log.Info("Transferred data sucessfully saved");
             return true;
-        }
-
-        private void AddResult(SportEvent sportEvent, Team team, int? score)
-        {
-            // TODO change nullable convertion for incoming events
-            Result res = new Result() { SportEvent = sportEvent, Team = team, Score = score ?? -1 };
-            if (sportEvent.Results == null)
-            {
-                sportEvent.Results = new List<Result>();
-            }
-            sportEvent.Results.Add(res);
-        }
+        }        
     }
 }

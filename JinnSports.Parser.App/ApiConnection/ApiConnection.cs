@@ -14,7 +14,7 @@ namespace JinnSports.Parser
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ApiConnection));
 
-        private string baseUrl = "http://localhost:55714/Admin";
+        private string baseUrl = "http://localhost:29579/Admin";
         private string controllerUrn = "api/Data";
 
         private HttpClient client;
