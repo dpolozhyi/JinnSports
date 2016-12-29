@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using JinnSports.Entities.Entities.Temp;
+using System.Collections.Generic;
 
 namespace JinnSports.Entities.Entities
 {
@@ -13,6 +14,8 @@ namespace JinnSports.Entities.Entities
         public ICollection<TeamName> Names { get; set; }
 
         public virtual ICollection<Result> Results { get; set; }
+
+        public virtual ICollection<TempResult> TempResults { get; set; }
 
         public override string ToString()
         {
