@@ -61,7 +61,7 @@ namespace JinnSports.DAL.Repositories
             return this.DbSet.FindAsync(id);
         }
 
-        public virtual int Count(Func<T, bool> filter = null)
+        public virtual int Count(Expression<Func<T, bool>> filter = null)
         {
             return filter == null
                 ? this.DbSet.Count()
