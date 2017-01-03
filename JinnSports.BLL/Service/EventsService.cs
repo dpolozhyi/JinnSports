@@ -32,14 +32,13 @@ namespace JinnSports.BLL.Service
             int count;
                 if (sportTypeId != 0)
                 {
-                    count = this.dataUnit.GetRepository<SportEvent>()
-                    .Get(filter: m => m.SportType.Id == sportTypeId)
-                    .Count();
+                    count = this.dataUnit.GetRepository<SportEvent>()                    
+                    .Count(m => m.SportType.Id == sportTypeId);
                 }
                 else
                 {
                     count = this.dataUnit.GetRepository<SportEvent>()
-                    .Get().Count();
+                    .Count();
                 }
             return count;
         }
@@ -54,6 +53,7 @@ namespace JinnSports.BLL.Service
                     sportEvents =
                         this.dataUnit.GetRepository<SportEvent>().Get(
                         filter: m => m.SportType.Id == sportTypeId,
+                        includeProperties: "Results,SportType,Results.Team",
                         orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
                         skip: skip,
                         take: take);
@@ -62,6 +62,7 @@ namespace JinnSports.BLL.Service
                 {
                     sportEvents =
                         this.dataUnit.GetRepository<SportEvent>().Get(
+                        includeProperties: "Results,SportType,Results.Team",
                         orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
                         skip: skip,
                         take: take);
