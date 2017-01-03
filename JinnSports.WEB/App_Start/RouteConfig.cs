@@ -17,11 +17,12 @@ namespace JinnSports.WEB
             routes.MapRoute(
                 name: "Teams",
                 url: "Teams",
-                defaults: new { controller = "Team", action = "Index" });
+                defaults: new { controller = "Team", action = "Index" },
+                namespaces: new[] { "JinnSports.WEB.Controllers" });
 
-
+            //MVC presentation part Routing
             routes.MapRoute(
-                name: "TeamDetails",
+                name: "MainPage",
                 url: string.Empty,
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional });
 

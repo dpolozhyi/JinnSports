@@ -49,17 +49,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dtos\ResultDto.cs" />
-    <Compile Include="Dtos\SportTypeDto.cs" />
+    <Compile Include="Dtos\SportType\SportTypeDto.cs" />
+    <Compile Include="Dtos\SportType\SportTypeListDto.cs" />
+    <Compile Include="Dtos\SportType\SportTypeSelectDto.cs" />
     <Compile Include="Dtos\TeamDto.cs" />
+    <Compile Include="Dtos\TeamResultsDto.cs" />
     <Compile Include="Exceptions\TeamNotFoundException.cs" />
     <Compile Include="Extentions\EventDate.cs" />
     <Compile Include="Interfaces\IEventService.cs" />
     <Compile Include="Interfaces\IResultService.cs" />
+    <Compile Include="Interfaces\ISportTypeService.cs" />
     <Compile Include="Interfaces\ITeamDetailsService.cs" />
     <Compile Include="Interfaces\ITeamService.cs" />
     <Compile Include="Matcher\NamingMatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\EventsService.cs" />
+    <Compile Include="Service\SportTypesService.cs" />
     <Compile Include="Service\TeamDetailsService.cs" />
     <Compile Include="Service\TeamService.cs" />
     <Compile Include="Utilities\AutofacConfig.cs" />
