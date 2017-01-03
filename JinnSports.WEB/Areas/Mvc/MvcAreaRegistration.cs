@@ -15,15 +15,16 @@ namespace JinnSports.WEB.Areas.Mvc
         public override void RegisterArea(AreaRegistrationContext context) 
         {
             context.MapRoute(
-                "Mvc_default",
+                "Mvc_Default",
                 "Mvc/{controller}/{action}",
                 new { action = "Index", id = UrlParameter.Optional }
             );
             context.MapRoute(
-               "Mvc_select",
+               "Mvc_Select",
                "Mvc/{controller}/{action}/{id}",
                new { action = "SportTypeSelect", id = UrlParameter.Optional }
            );
+            
         }
     }
 }
