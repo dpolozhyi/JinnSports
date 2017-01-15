@@ -7,6 +7,7 @@ using HtmlAgilityPack;
 using System.Globalization;
 using System.Collections.Generic;
 using JinnSports.Parser.App.ProxyService.ProxyEntities;
+using JinnSports.Parser.App.ProxyService.ProxyEnums;
 
 namespace JinnSports.Parser.App.ProxyService.ProxyParser
 {
@@ -40,15 +41,16 @@ namespace JinnSports.Parser.App.ProxyService.ProxyParser
                     if (service_proxy.Ping < 15)
                     {
                         proxy.Priority = 0;
-                        proxy.Status = "New";
+                        proxy.Status = ProxyStatus.PS_New;
                     }
                     else
                     {
                         proxy.Priority = 1;
-                        proxy.Status = "Bad";
+                        proxy.Status = ProxyStatus.PS_Bad;
                     }
                     proxy.Ip = service_proxy.Ip;
                     proxy.LastUsed = defaultLastUsed;
+                    proxy.IsBusy = false;
                     //здесь приоритет будет 1 также если низкая защищенность, после разбора кодировки
                     proxyCollection.Add(proxy);
                 }
@@ -65,7 +67,6 @@ namespace JinnSports.Parser.App.ProxyService.ProxyParser
             while (!lastPage)
             {
                 string result = string.Empty;
-                //проход по всему сайту
                 req = (HttpWebRequest)WebRequest.Create(url + "?page=" + page++);
 
                 //test block

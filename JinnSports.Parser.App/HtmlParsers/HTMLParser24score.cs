@@ -7,7 +7,7 @@ using System.Linq;
 using System.Net;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.Parser.App.Exceptions;
-using JinnSports.Parser.App.ProxyService.ProxyConnection;
+using JinnSports.Parser.App.ProxyService.ProxyConnections;
 using JinnSports.Entities.Entities;
 using log4net;
 using DTO.JSON;
@@ -91,20 +91,21 @@ namespace JinnSports.Parser.App.HtmlParsers
 
             try
             {
-                resp = pc.MakeProxyRequest(url, 0);
+                /*resp = pc.GetProxyResponse(url, 0);
                 if (resp == null)
                 {
                     resp = (HttpWebResponse)reqGet.GetResponse();
-                }
+                }*/
             }
             catch (Exception ex)
             {
                 throw new WebResponseException(ex.Message, ex.InnerException);
             }
 
-            string html = new StreamReader(resp.GetResponseStream()).ReadToEnd();
+            // string html = new StreamReader(resp.GetResponseStream()).ReadToEnd();
 
-            return html;
+            //return html;
+            return "";
         }
 
         private List<SportEventDTO> ParseHtml(string html, string currentSport, long date)

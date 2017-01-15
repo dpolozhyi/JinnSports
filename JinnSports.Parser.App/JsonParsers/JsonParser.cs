@@ -3,12 +3,12 @@ using log4net;
 using Newtonsoft.Json;
 using JinnSports.Parser.App.Exceptions;
 using JinnSports.Parser.App.JsonParsers.JsonEntities;
-using JinnSports.Parser.App.ProxyService.ProxyConnection;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using JinnSports.Parser.App.ProxyService.ProxyConnections;
 
 namespace JinnSports.Parser.App.JsonParsers
 {
@@ -67,13 +67,13 @@ namespace JinnSports.Parser.App.JsonParsers
 
             try
             {
-                resp = pc.MakeProxyRequest(uri.ToString(), 0);
+                /*resp = pc.MakeProxyRequest(uri.ToString(), 0);
                 if (resp == null)
                 {
                     HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
                     resp = (HttpWebResponse)req.GetResponse();
                 }
-                stream = resp.GetResponseStream();
+                stream = resp.GetResponseStream();*/
             }
             catch (Exception ex)
             {
@@ -87,7 +87,7 @@ namespace JinnSports.Parser.App.JsonParsers
                     result += sr.ReadLine();
                 }
             }
-            resp.Close();
+            //resp.Close();
 
             return result;
         }
