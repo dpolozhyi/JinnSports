@@ -16,6 +16,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyTerminal
     {
         ICommand getProxyAsyncCommand;
         private ProxyConnection pc;
+        private HttpWebRequest request;
 
         public ProxyTerminal()
         {
@@ -31,11 +32,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyTerminal
         {
             getProxyAsyncCommand = new ProxyAsyncCommand(this.pc, uri);
 
-            while (true)
-            {
-                Thread.Sleep(2000);
-                getProxyAsyncCommand.Execute();
-            }
+            getProxyAsyncCommand.Execute();
         }
 
     }

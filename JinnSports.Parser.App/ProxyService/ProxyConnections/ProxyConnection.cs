@@ -212,7 +212,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyConnections
                 Trace.WriteLine("************************************");
                 if (proxy != string.Empty)
                 {
-                    if (this.CanPing(proxy) == true)
+                    if (this.CanPing(proxy))
                     {
                         try
                         {

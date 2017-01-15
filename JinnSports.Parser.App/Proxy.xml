@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfProxyServer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <ProxyServer Status="PS_Eliminated" Priority="3">
+  <ProxyServer Status="PS_Bad" Priority="2">
     <Ip>125.253.32.158</Ip>
-    <LastUsed>2017-01-15T13:39:40.7725912+02:00</LastUsed>
+    <LastUsed>2017-01-15T16:23:32.6982013+02:00</LastUsed>
     <IsBusy>false</IsBusy>
   </ProxyServer>
-  <ProxyServer Status="PS_Eliminated" Priority="3">
+  <ProxyServer Status="PS_Bad" Priority="2">
     <Ip>41.220.28.138</Ip>
-    <LastUsed>2017-01-15T13:42:41.829337+02:00</LastUsed>
+    <LastUsed>2017-01-15T16:23:33.2606207+02:00</LastUsed>
     <IsBusy>false</IsBusy>
   </ProxyServer>
-  <ProxyServer Status="PS_Eliminated" Priority="3">
+  <ProxyServer Status="PS_Bad" Priority="2">
     <Ip>46.16.226.10</Ip>
-    <LastUsed>2017-01-15T13:38:37.1366807+02:00</LastUsed>
+    <LastUsed>2017-01-15T16:23:32.2300995+02:00</LastUsed>
+    <IsBusy>false</IsBusy>
+  </ProxyServer>
+  <ProxyServer Status="PS_Bad" Priority="2">
+    <Ip>178.215.111.70</Ip>
+    <LastUsed>2017-01-15T16:23:52.6156914+02:00</LastUsed>
+    <IsBusy>false</IsBusy>
+  </ProxyServer>
+  <ProxyServer Status="PS_Bad" Priority="2">
+    <Ip>202.59.163.129</Ip>
+    <LastUsed>2017-01-15T16:23:33.0292866+02:00</LastUsed>
     <IsBusy>false</IsBusy>
   </ProxyServer>
   <ProxyServer Status="PS_Unstable" Priority="1">
-    <Ip>178.215.111.70</Ip>
-    <LastUsed>2017-01-15T13:57:56.4626076+02:00</LastUsed>
-    <IsBusy>false</IsBusy>
-  </ProxyServer>
-  <ProxyServer Status="PS_Eliminated" Priority="3">
-    <Ip>202.59.163.129</Ip>
-    <LastUsed>2017-01-15T13:42:40.5261732+02:00</LastUsed>
-    <IsBusy>false</IsBusy>
-  </ProxyServer>
-  <ProxyServer Status="PS_Eliminated" Priority="3">
     <Ip>118.97.191.205</Ip>
-    <LastUsed>2017-01-15T13:39:38.6087143+02:00</LastUsed>
+    <LastUsed>2017-01-15T16:19:16.8196682+02:00</LastUsed>
     <IsBusy>false</IsBusy>
   </ProxyServer>
 </ArrayOfProxyServer>
