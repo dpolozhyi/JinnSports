@@ -18,9 +18,9 @@ namespace JinnSports.BLL.Service
     {
         private const string SPORTCONTEXT = "SportsContext";
 
-        private static readonly ILog Log = LogManager.GetLogger(typeof(EventsService));  
+        private static readonly ILog Log = LogManager.GetLogger(typeof(EventsService));
 
-        private readonly IUnitOfWork dataUnit;        
+        private readonly IUnitOfWork dataUnit;
 
         public EventsService(IUnitOfWork unitOfWork)
         {
@@ -30,16 +30,16 @@ namespace JinnSports.BLL.Service
         public int Count(int sportTypeId)
         {
             int count;
-                if (sportTypeId != 0)
-                {
-                    count = this.dataUnit.GetRepository<SportEvent>()                    
-                    .Count(m => m.SportType.Id == sportTypeId);
-                }
-                else
-                {
-                    count = this.dataUnit.GetRepository<SportEvent>()
-                    .Count();
-                }
+            if (sportTypeId != 0)
+            {
+                count = this.dataUnit.GetRepository<SportEvent>()
+                .Count(m => m.SportType.Id == sportTypeId);
+            }
+            else
+            {
+                count = this.dataUnit.GetRepository<SportEvent>()
+                .Count();
+            }
             return count;
         }
 
@@ -47,44 +47,44 @@ namespace JinnSports.BLL.Service
         {
             IList<ResultDto> results = new List<ResultDto>();
 
-                IEnumerable<SportEvent> sportEvents;
-                if (sportTypeId != 0)
-                {
-                    sportEvents =
-                        this.dataUnit.GetRepository<SportEvent>().Get(
-                        filter: m => m.SportType.Id == sportTypeId,
-                        includeProperties: "Results,SportType,Results.Team",
-                        orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
-                        skip: skip,
-                        take: take);
-                }
-                else
-                {
-                    sportEvents =
-                        this.dataUnit.GetRepository<SportEvent>().Get(
-                        includeProperties: "Results,SportType,Results.Team",
-                        orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
-                        skip: skip,
-                        take: take);
-                }                
-                foreach (SportEvent sportEvent in sportEvents)
-                {
-                    results.Add(Mapper.Map<SportEvent, ResultDto>(sportEvent));
-                }
+            IEnumerable<SportEvent> sportEvents;
+            if (sportTypeId != 0)
+            {
+                sportEvents =
+                    this.dataUnit.GetRepository<SportEvent>().Get(
+                    filter: m => m.SportType.Id == sportTypeId,
+                    includeProperties: "Results,SportType,Results.Team",
+                    orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
+                    skip: skip,
+                    take: take);
+            }
+            else
+            {
+                sportEvents =
+                    this.dataUnit.GetRepository<SportEvent>().Get(
+                    includeProperties: "Results,SportType,Results.Team",
+                    orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
+                    skip: skip,
+                    take: take);
+            }
+            foreach (SportEvent sportEvent in sportEvents)
+            {
+                results.Add(Mapper.Map<SportEvent, ResultDto>(sportEvent));
+            }
             return results;
         }
 
         public IEnumerable<SportTypeDto> GetSportTypes()
         {
             IList<SportTypeDto> sportTypeDto = new List<SportTypeDto>();
-                          
-                IEnumerable<SportType> sportTypes =
-                    this.dataUnit.GetRepository<SportType>().Get();
-               
-                foreach (SportType sportType in sportTypes)
-                {
-                    sportTypeDto.Add(Mapper.Map<SportType, SportTypeDto>(sportType));
-                }
+
+            IEnumerable<SportType> sportTypes =
+                this.dataUnit.GetRepository<SportType>().Get();
+
+            foreach (SportType sportType in sportTypes)
+            {
+                sportTypeDto.Add(Mapper.Map<SportType, SportTypeDto>(sportType));
+            }
             return sportTypeDto;
         }
 
@@ -111,13 +111,12 @@ namespace JinnSports.BLL.Service
 
                         foreach (ResultDTO resultDTO in eventDTO.Results)
                         {
-                            List<Conformity> conformities = new List<Conformity>();
-
                             Team team = new Team { Name = resultDTO.TeamName, SportType = sportType };
-                            Team resolvedTeam = matcher.ResolveNaming(team, out conformities);
+                            List<Conformity> conformities = matcher.ResolveNaming(team);                            
 
-                            if (resolvedTeam != null)
+                            if (conformities == null)
                             {
+                                team = this.dataUnit.GetRepository<Team>().Get((x) => x.Names.Contains(new TeamName { Name = team.Name })).FirstOrDefault();
                                 Result result = new Result { Team = team, Score = resultDTO.Score ?? -1, IsHome = resultDTO.IsHome };
                                 results.Add(result);
                             }
@@ -174,11 +173,11 @@ namespace JinnSports.BLL.Service
             Log.Info("Transferred data sucessfully saved");
             return true;
         }
-        
+
         private DateTime ConvertAndTrimDate(long dateTicks)
         {
             DateTime temp = new DateTime(dateTicks);
             return new DateTime(temp.Year, temp.Month, temp.Day);
-        }         
+        }
     }
-}
+    }
