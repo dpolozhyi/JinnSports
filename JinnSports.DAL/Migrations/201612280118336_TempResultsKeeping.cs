@@ -9,7 +9,7 @@ namespace JinnSports.DAL.Migrations
         {
             this.DropForeignKey("dbo.Conformities", "ExistedTeam_Id", "dbo.Teams");
             this.DropIndex("dbo.Conformities", new[] { "ExistedTeam_Id" });
-            CreateTable(
+            this.CreateTable(
                 "dbo.TempResults",
                 c => new
                     {
@@ -24,8 +24,8 @@ namespace JinnSports.DAL.Migrations
                 .ForeignKey("dbo.TempSportEvents", t => t.TempSportEvent_Id)
                 .Index(t => t.Team_Id)
                 .Index(t => t.TempSportEvent_Id);
-            
-            CreateTable(
+
+            this.CreateTable(
                 "dbo.TempSportEvents",
                 c => new
                     {

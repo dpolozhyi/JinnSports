@@ -88,6 +88,10 @@
     <Compile Include="Migrations\201612280118336_TempResultsKeeping.Designer.cs">
       <DependentUpon>201612280118336_TempResultsKeeping.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201701031921416_FixStringTypes.cs" />
+    <Compile Include="Migrations\201701031921416_FixStringTypes.Designer.cs">
+      <DependentUpon>201701031921416_FixStringTypes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\201701110206112_SolidIdentity.cs" />
     <Compile Include="Migrations\201701110206112_SolidIdentity.Designer.cs">
       <DependentUpon>201701110206112_SolidIdentity.cs</DependentUpon>
@@ -130,6 +134,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201612280118336_TempResultsKeeping.resx">
       <DependentUpon>201612280118336_TempResultsKeeping.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201701031921416_FixStringTypes.resx">
+      <DependentUpon>201701031921416_FixStringTypes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701110206112_SolidIdentity.resx">
       <DependentUpon>201701110206112_SolidIdentity.cs</DependentUpon>

@@ -11,7 +11,7 @@ namespace JinnSports.DAL.Migrations
             this.DropIndex("dbo.Results", new[] { "SportEvent_Id" });
             this.DropIndex("dbo.Results", new[] { "Team_Id" });
             this.DropIndex("dbo.Teams", new[] { "SportType_Id" });
-            CreateTable(
+            this.CreateTable(
                 "dbo.Conformities",
                 c => new
                     {
@@ -26,7 +26,7 @@ namespace JinnSports.DAL.Migrations
                 .Index(t => t.ExistedTeam_Id)
                 .Index(t => t.InputTeam_Id);
             
-            CreateTable(
+            this.CreateTable(
                 "dbo.TeamNames",
                 c => new
                     {
@@ -37,7 +37,7 @@ namespace JinnSports.DAL.Migrations
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Teams", t => t.Team_Id)
                 .Index(t => t.Team_Id);
-
+				
             this.AddColumn("dbo.Results", "IsHome", c => c.Boolean(nullable: false));
             this.AlterColumn("dbo.SportEvents", "SportType_Id", c => c.Int(nullable: false));
             this.AlterColumn("dbo.Results", "Score", c => c.Int());
