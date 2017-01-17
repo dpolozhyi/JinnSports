@@ -37,7 +37,7 @@ namespace JinnSports.DAL.Migrations
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Teams", t => t.Team_Id)
                 .Index(t => t.Team_Id);
-				
+                
             this.AddColumn("dbo.Results", "IsHome", c => c.Boolean(nullable: false));
             this.AlterColumn("dbo.SportEvents", "SportType_Id", c => c.Int(nullable: false));
             this.AlterColumn("dbo.Results", "Score", c => c.Int());
