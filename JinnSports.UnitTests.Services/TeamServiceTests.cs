@@ -46,6 +46,8 @@ namespace JinnSports.UnitTests.Services
                 .Database.BeginTransaction(System.Data.IsolationLevel.Serializable);
 
             // Clear tables
+            this.databaseSportsContext.TeamNames.RemoveRange(
+                this.databaseSportsContext.TeamNames);
             this.databaseSportsContext.Results.RemoveRange(
                 this.databaseSportsContext.Results);
             this.databaseSportsContext.SportEvents.RemoveRange(

@@ -40,6 +40,8 @@ namespace JinnSports.UnitTests.Services
                 .Database.BeginTransaction(IsolationLevel.Serializable);
 
             // Clear tables
+            this.databaseSportsContext.TeamNames.RemoveRange(
+                this.databaseSportsContext.TeamNames);
             this.databaseSportsContext.Results.RemoveRange(
                 this.databaseSportsContext.Results);
             this.databaseSportsContext.SportEvents.RemoveRange(
@@ -215,7 +217,7 @@ namespace JinnSports.UnitTests.Services
         [TestCase(4, 0, 10)]
         [TestCase(4, 1, 1)]
         [TestCase(4, 10, 10)]
-        public void GetSportEventsSportTypeExistEventsNotExist(int sportId, int skip, int take)
+        public void GetSportEventsCheckEventsNotExist(int sportId, int skip, int take)
         {
             // Get SportEvents from database directly and check, that they are not exist
             List<SportEvent> expectedSportEvents = this.databaseSportsContext.SportEvents
