@@ -10,6 +10,7 @@ namespace JinnSports.DAL.Migrations
             this.DropForeignKey("dbo.Conformities", "ExistedTeam_Id", "dbo.Teams");
             this.DropIndex("dbo.Conformities", new[] { "ExistedTeam_Id" });
             this.CreateTable(
+            CreateTable(
                 "dbo.TempResults",
                 c => new
                     {
