@@ -189,7 +189,8 @@ namespace JinnSports.UnitTests.Services
                 Assert.AreEqual(
                     expectedResultDtos[i].TeamIds.Count(), 
                     actualResultDtos[i].TeamIds.Count());
-                Assert.AreEqual(expectedResultDtos[i].TeamNames.Count(), 
+                Assert.AreEqual(
+                    expectedResultDtos[i].TeamNames.Count(), 
                     actualResultDtos[i].TeamIds.Count());  
 
                 for (int j = 0; j < expectedResultDtos[i].TeamIds.Count(); j++)
@@ -233,7 +234,7 @@ namespace JinnSports.UnitTests.Services
         }
 
         [Test]
-        public void MapSportEvent()
+        public void CheckSportEventToResultDtoMapping()
         {
             List<ResultDto> expectedResultDtos = new List<ResultDto>();
             List<ResultDto> actualResultDtos = new List<ResultDto>();

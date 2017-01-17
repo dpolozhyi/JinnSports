@@ -78,8 +78,8 @@ namespace JinnSports.UnitTests.Services
                 (8, 'Phoenix Suns', 2);               
                 SET IDENTITY_INSERT [dbo].[Teams] OFF;");
 
-            databaseSportsContext.SaveChanges();
-            this.teamService = new TeamService(new EFUnitOfWork(databaseSportsContext));
+            this.databaseSportsContext.SaveChanges();
+            this.teamService = new TeamService(new EFUnitOfWork(this.databaseSportsContext));
         }
 
         [OneTimeTearDown]
@@ -115,7 +115,7 @@ namespace JinnSports.UnitTests.Services
                 .Skip(skip)
                 .Take(take);
             List<TeamDto> expectedTeams = new List<TeamDto>();
-            foreach(Team team in teams)
+            foreach (Team team in teams)
             {
                 expectedTeams.Add(Mapper.Map<Team, TeamDto>(team));
             } 
