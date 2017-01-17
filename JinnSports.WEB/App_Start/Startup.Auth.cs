@@ -5,6 +5,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 using System;
+using System.Web.Configuration;
 
 namespace JinnSports.WEB
 {
@@ -31,11 +32,14 @@ namespace JinnSports.WEB
                 //}
             });
             // Use a cookie to temporarily store information about a user logging in with a third party login provider
-            app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);   
-           
-            app.UseFacebookAuthentication(
-               appId: "r",
-               appSecret: "r");            
+            app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
+
+            if (WebConfigurationManager.AppSettings["appId"] != string.Empty && WebConfigurationManager.AppSettings["appSecret"] != string.Empty)
+            {
+                app.UseFacebookAuthentication(
+                       appId: WebConfigurationManager.AppSettings["appId"],
+                       appSecret: WebConfigurationManager.AppSettings["appSecret"]);
+            }
         }
     }
 }
