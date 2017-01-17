@@ -105,7 +105,7 @@ namespace JinnSports.BLL.Service
                         SportType sportType = sportTypes.FirstOrDefault(st => st.Name == eventDTO.SportType)
                                                 ?? new SportType { Name = eventDTO.SportType };
 
-                        bool isConflictExist = false;
+                        bool ConflictExist = false;
                         List<Result> results = new List<Result>();
                         List<TempResult> tempResults = new List<TempResult>();
 
@@ -122,7 +122,7 @@ namespace JinnSports.BLL.Service
                             }
                             else
                             {
-                                isConflictExist = true;
+                                ConflictExist = true;
 
                                 TempResult result = new TempResult { Team = team, Score = resultDTO.Score };
 
@@ -135,9 +135,9 @@ namespace JinnSports.BLL.Service
                             }
                         }
 
-                        if (isConflictExist)
+                        if (ConflictExist)
                         {
-                            TempSportEvent tempSportEvent = new TempSportEvent { SportType = sportType, Date = ConvertAndTrimDate(eventDTO.Date) };
+                            TempSportEvent tempSportEvent = new TempSportEvent { SportType = sportType, Date = this.ConvertAndTrimDate(eventDTO.Date) };
                             foreach (TempResult tempResult in tempResults)
                             {
                                 tempSportEvent.TempResults.Add(tempResult);
@@ -151,7 +151,7 @@ namespace JinnSports.BLL.Service
                         }
                         else
                         {
-                            SportEvent sportEvent = new SportEvent { SportType = sportType, Date = ConvertAndTrimDate(eventDTO.Date) };
+                            SportEvent sportEvent = new SportEvent { SportType = sportType, Date = this.ConvertAndTrimDate(eventDTO.Date) };
                             foreach (Result result in results)
                             {
                                 sportEvent.Results.Add(result);
