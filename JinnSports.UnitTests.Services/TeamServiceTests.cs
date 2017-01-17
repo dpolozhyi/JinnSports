@@ -10,18 +10,21 @@ using System.Text;
 using System.Threading.Tasks;
 using JinnSports.DAL.EFContext;
 using JinnSports.DAL.Repositories;
+using System.Data.Entity;
+using JinnSports.Entities.Entities;
+using JinnSports.WEB;
+using AutoMapper;
 
 namespace JinnSports.UnitTests.Services
 {
     [TestFixture]
     public class TeamServiceTests
     {
-        /// <summary>
-        /// TeamDto's in database
-        /// </summary>
-        private List<TeamDto> databaseTeams;
-
         private ITeamService teamService;
+
+        private SportsContext databaseSportsContext;
+
+        private DbContextTransaction databaseTransaction;
 
         /// <summary>
         /// TeamDto comparer for comparing collections
@@ -33,61 +36,69 @@ namespace JinnSports.UnitTests.Services
         /// </summary>
         [OneTimeSetUp]
         public void Init()
-        {
-            this.databaseTeams = new List<TeamDto>();
+        { 
             this.comparer = new TeamDtoComparer();
-            this.teamService = new TeamService(new EFUnitOfWork(new SportsContext("SportsContext")));
+            AutoMapperConfiguration.Configure();
 
-            this.databaseTeams.Add(new TeamDto()
-            {
-                Id = 1,
-                Name = "Manchester United"
-            });
-            this.databaseTeams.Add(new TeamDto()
-            {
-                Id = 2,
-                Name = "Milano"
-            });
-            this.databaseTeams.Add(new TeamDto()
-            {
-                Id = 3,
-                Name = "Manchester City"
-            });
-            this.databaseTeams.Add(new TeamDto()
-            {
-                Id = 4,
-                Name = "Chelsea"
-            });
-            this.databaseTeams.Add(new TeamDto()
-            {
-                Id = 5,
-                Name = "Bayern"
-            });
-            this.databaseTeams.Add(new TeamDto()
-            {
-                Id = 6,
-                Name = "Chicago Bulls"
-            });
-            this.databaseTeams.Add(new TeamDto()
-            {
-                Id = 7,
-                Name = "Los Angeles Lakers"
-            });
-            this.databaseTeams.Add(new TeamDto()
-            {
-                Id = 8,
-                Name = "Phoenix Suns"
-            });
+            this.databaseSportsContext = new SportsContext("SportsContext");
+
+            this.databaseTransaction = this.databaseSportsContext
+                .Database.BeginTransaction(System.Data.IsolationLevel.Serializable);
+
+            // Clear tables
+            this.databaseSportsContext.Results.RemoveRange(
+                this.databaseSportsContext.Results);
+            this.databaseSportsContext.SportEvents.RemoveRange(
+                this.databaseSportsContext.SportEvents);
+            this.databaseSportsContext.Teams.RemoveRange(
+                this.databaseSportsContext.Teams);
+            this.databaseSportsContext.SportTypes.RemoveRange(
+                this.databaseSportsContext.SportTypes);
+            this.databaseSportsContext.SaveChanges();
+
+            this.databaseSportsContext.Database.ExecuteSqlCommand(
+                @"SET IDENTITY_INSERT [dbo].[SportTypes] ON;
+                INSERT INTO [dbo].[SportTypes] ([Id], [Name])
+                VALUES
+                (1, 'Football'),
+                (2, 'Basketball');               
+                SET IDENTITY_INSERT [dbo].[SportTypes] OFF;");
+
+            this.databaseSportsContext.Database.ExecuteSqlCommand(
+                @"SET IDENTITY_INSERT [dbo].[Teams] ON;
+                INSERT INTO [dbo].[Teams] ([Id], [Name], [SportType_Id])
+                VALUES
+                (1, 'Manchester United', 1),
+                (2, 'Milano', 1),
+                (3, 'Manchester City', 1),
+                (4, 'Chelsea', 1),
+                (5, 'Bayern', 1),
+                (6, 'Chicago Bulls', 2),
+                (7, 'Los Angeles Lakers', 2),
+                (8, 'Phoenix Suns', 2);               
+                SET IDENTITY_INSERT [dbo].[Teams] OFF;");
+
+            databaseSportsContext.SaveChanges();
+            this.teamService = new TeamService(new EFUnitOfWork(databaseSportsContext));
+        }
+
+        [OneTimeTearDown]
+        public void Clean()
+        {
+            this.databaseTransaction.Rollback();
+            this.databaseTransaction.Dispose();
         }
 
         /// <summary>
         /// Check team counts
         /// </summary>
         [Test]
-        public void TeamCount()
+        public void CountCheckTeamsExist()
         {
+            int expectedCount = this.databaseSportsContext.Teams.Count();
+            Assert.Greater(expectedCount, 0);
+
             int actualCount = this.teamService.Count();
-            int expectedCount = this.databaseTeams.Count();
             Assert.AreEqual(expectedCount, actualCount);
         }
 
@@ -95,17 +106,41 @@ namespace JinnSports.UnitTests.Services
         [TestCase(0, 4)]
         [TestCase(0, 10)]
         [TestCase(4, 2)]
-        [TestCase(4, 10)]
-        [TestCase(10, 0)]
-        public void GetTeams(int skip, int take)
+        [TestCase(4, 10)]        
+        public void GetAllTeamsCheckTeamsExist(int skip, int take)
         {
-            List<TeamDto> expectedTeams = this.databaseTeams.OrderBy(t => t.Id)
+            // Get teams from database and check, that they are exist
+            IQueryable<Team> teams = this.databaseSportsContext.Teams
+                .OrderBy(t => t.Id)
                 .Skip(skip)
-                .Take(take)
-                .ToList();
+                .Take(take);
+            List<TeamDto> expectedTeams = new List<TeamDto>();
+            foreach(Team team in teams)
+            {
+                expectedTeams.Add(Mapper.Map<Team, TeamDto>(team));
+            } 
+            Assert.Greater(expectedTeams.Count, 0);
+
             List<TeamDto> actualTeams = this.teamService.GetAllTeams(skip, take).ToList();
 
             CollectionAssert.AreEqual(expectedTeams, actualTeams, this.comparer);
+        }
+
+        [Test]
+        [TestCase(100, 0)]
+        public void GetAllTeamsCheckTeamsNotExist(int skip, int take)
+        {
+            // Get teams from database and check, that we don't have them
+            int expectedCount = this.databaseSportsContext
+                .Teams.OrderBy(t => t.Id)
+                .Skip(skip)
+                .Take(take)
+                .Count();
+            Assert.AreEqual(expectedCount, 0);
+
+            List<TeamDto> actualTeams = this.teamService.GetAllTeams(skip, take).ToList();
+
+            Assert.AreEqual(0, actualTeams.Count);
         }
 
         [Test]
@@ -115,23 +150,36 @@ namespace JinnSports.UnitTests.Services
         [TestCase(4)]
         [TestCase(5)]
         [TestCase(6)]
-        [TestCase(7)]
-        [TestCase(8)]
-        [TestCase(9)]
-        public void GetTeamById(int teamId)
+        [TestCase(7)]        
+        public void GetTeamByIdCheckTeamExist(int teamId)
         {
-            TeamDto expeactedTeam = this.databaseTeams.Where(t => t.Id == teamId).FirstOrDefault();
+            Team databaseTeam = this.databaseSportsContext.Teams.Where(t => t.Id == teamId).First();
+            Assert.IsNotNull(databaseTeam);
+
+            TeamDto expectedTeam = new TeamDto()
+            {
+                Id = databaseTeam.Id,
+                Name = databaseTeam.Name
+            };
+
             TeamDto actualTeam = this.teamService.GetTeamById(teamId);
-            if (expeactedTeam == null)
-            {
-                Assert.AreEqual(expeactedTeam, actualTeam);
-            }
-            else
-            {
-                Assert.AreEqual(expeactedTeam.Id, actualTeam.Id);
-                Assert.AreEqual(expeactedTeam.Name, actualTeam.Name);
-            }
+
+            Assert.AreEqual(expectedTeam.Id, actualTeam.Id);
+            Assert.AreEqual(expectedTeam.Name, actualTeam.Name);           
         }
+
+        [Test]
+        [TestCase(-1)]
+        public void GetTeamByIdCheckTeamNotExist(int teamId)
+        {
+            Team databaseTeam = this.databaseSportsContext.Teams.Where(t => t.Id == teamId).FirstOrDefault();
+            Assert.IsNull(databaseTeam);
+
+            TeamDto actualTeam = this.teamService.GetTeamById(teamId);
+
+            Assert.IsNull(actualTeam);
+        }
+
 
         /// <summary>
         /// Comparer for comparing TeamDto collections 

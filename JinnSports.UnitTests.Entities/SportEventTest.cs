@@ -54,7 +54,7 @@ namespace JinnSports.UnitTests.Entities
         }
 
         [Test]
-        public void CreateAndAddResults()
+        public void CreateAndAddResultsCheckExceptionNotThrow()
         {
             Assert.DoesNotThrow(() =>
             {
@@ -70,7 +70,7 @@ namespace JinnSports.UnitTests.Entities
         }
 
         [Test]
-        public void CheckHashIsCorrect()
+        public void GetHashCodeCheckHashIsCorrect()
         {
             this.sportEvent = new SportEvent();
             this.sportEvent.Results = new List<Result>();
@@ -89,13 +89,13 @@ namespace JinnSports.UnitTests.Entities
         }
 
         [Test]
-        public void CheckHashCodeSameInstances()
+        public void GetHashCodeCheckHashCodeSameInstances()
         {
             Assert.IsTrue(this.sportEvent1.GetHashCode() == this.sportEvent2.GetHashCode());
         }
 
         [Test]
-        public void CheckHashCodeDifferentInstances()
+        public void GetHashCodeCheckHashCodeDifferentInstances()
         {
             Assert.IsFalse(this.sportEvent1.GetHashCode() == this.sportEvent3.GetHashCode());
         }

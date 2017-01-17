@@ -18,7 +18,7 @@ namespace JinnSports.UnitTests.Parser.App
         }
 
         [Test]
-        public void ShouldGetRuJsonStringFromUrl()
+        public void CheckReturnRuJsonString()
         {
             Regex pattern = new Regex("^{.+}$");
             string jsonString = jsonParser.GetJsonFromUrl();
@@ -27,7 +27,7 @@ namespace JinnSports.UnitTests.Parser.App
         }
 
         [Test]
-        public void ShouldGetEnJsonStringFromUrl()
+        public void CheckReturnEnJsonString()
         {
             Regex pattern = new Regex("^{[^А-Яа-я]+}$");
             string jsonString = jsonParser.GetJsonFromUrl(jsonParser.SiteUri, Locale.EN);
@@ -36,13 +36,13 @@ namespace JinnSports.UnitTests.Parser.App
         }
 
         [Test]
-        public void ShouldDeserializeJson()
+        public void CheckDeserializeJson()
         {
             Assert.NotNull(jsonParser.DeserializeJson(jsonParser.GetJsonFromUrl()));
         }
 
         [Test]
-        public void ShouldGiveSportEventsList()
+        public void CheckReturnSportEvents()
         {
             List<SportEventDTO> eventList = jsonParser.GetSportEventsList(jsonParser.DeserializeJson(jsonParser.GetJsonFromUrl()));
 

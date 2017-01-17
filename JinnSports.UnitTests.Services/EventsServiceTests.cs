@@ -10,6 +10,8 @@ using JinnSports.WEB;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,333 +24,152 @@ namespace JinnSports.UnitTests.Services
     {
         private IEventService eventService;
 
-        /// <summary>
-        /// Expected sport events in database
-        /// </summary>
-        private List<SportEvent> databaseSportEvents;
-
         private TeamDetailsServiceTests.ResultDtoComparer comparer;
+
+        private SportsContext databaseSportsContext;
+
+        private DbContextTransaction databaseTransaction;
 
         [OneTimeSetUp]
         public void Init()
         {
-            this.eventService = new EventsService(new EFUnitOfWork(new SportsContext("SportsContext")));
-            this.comparer = new TeamDetailsServiceTests.ResultDtoComparer();
-            this.databaseSportEvents = new List<SportEvent>();
+            this.databaseSportsContext = new SportsContext("SportsContext");
+
+            // Other transactions can't update and insert data
+            this.databaseTransaction = this.databaseSportsContext
+                .Database.BeginTransaction(IsolationLevel.Serializable);
+
+            // Clear tables
+            this.databaseSportsContext.Results.RemoveRange(
+                this.databaseSportsContext.Results);
+            this.databaseSportsContext.SportEvents.RemoveRange(
+                this.databaseSportsContext.SportEvents);
+            this.databaseSportsContext.Teams.RemoveRange(
+                this.databaseSportsContext.Teams);
+            this.databaseSportsContext.SportTypes.RemoveRange(
+                this.databaseSportsContext.SportTypes);
+
+            this.databaseSportsContext.SaveChanges();
+
+            this.eventService = new EventsService(new EFUnitOfWork(this.databaseSportsContext));
+            this.comparer = new TeamDetailsServiceTests.ResultDtoComparer();            
 
             AutoMapperConfiguration.Configure();
 
-            // --- Init sport types ---
-            SportType football = new SportType()
-            {
-                Id = 1,
-                Name = "Football",
-            };
-            SportType basketball = new SportType()
-            {
-                Id = 2,
-                Name = "Basketball"
-            };
-            SportType tennis = new SportType()
-            {
-                Id = 3,
-                Name = "Hockey"
-            };
+            this.databaseSportsContext.Database.ExecuteSqlCommand(
+                @"SET IDENTITY_INSERT [dbo].[SportTypes] ON;
+                INSERT INTO [dbo].[SportTypes] ([Id], [Name])
+                VALUES
+                (1, 'Football'),
+                (2, 'Basketball'),
+                (3, 'Hockey');               
+                SET IDENTITY_INSERT [dbo].[SportTypes] OFF;");
 
-            // ---- Init teams ----
-            // Football teams
-            Team mu = new Team()
-            {
-                Id = 1,
-                Name = "Manchester United",
-                SportType = football,
-                Results = new List<Result>()
-            };
-            Team milano = new Team()
-            {
-                Id = 2,
-                Name = "Milano",
-                SportType = football,
-                Results = new List<Result>()
-            };
-            Team mc = new Team()
-            {
-                Id = 3,
-                Name = "Manchester City",
-                SportType = football,
-                Results = new List<Result>()
-            };
-            Team chelsea = new Team()
-            {
-                Id = 4,
-                Name = "Chelsea",
-                SportType = football,
-                Results = new List<Result>()
-            };
-            Team bayern = new Team()
-            {
-                Id = 5,
-                Name = "Bayern",
-                SportType = football,
-                Results = new List<Result>()
-            };
+            this.databaseSportsContext.Database.ExecuteSqlCommand(
+                @"SET IDENTITY_INSERT [dbo].[Teams] ON;
+                INSERT INTO [dbo].[Teams] ([Id], [Name], [SportType_Id])
+                VALUES
+                (1, 'Manchester United', 1),
+                (2, 'Milano', 1),
+                (3, 'Manchester City', 1),
+                (4, 'Chelsea', 1),
+                (5, 'Bayern', 1),
+                (6, 'Chicago Bulls', 2),
+                (7, 'Los Angeles Lakers', 2),
+                (8, 'Phoenix Suns', 2);               
+                SET IDENTITY_INSERT [dbo].[Teams] OFF;");
 
-            // Basketball teams
-            Team chicagoBulls = new Team()
-            {
-                Id = 6,
-                Name = "Chicago Bulls",
-                SportType = basketball,
-                Results = new List<Result>()
-            };
-            Team laLakers = new Team()
-            {
-                Id = 7,
-                Name = "Los Angeles Lakers",
-                SportType = basketball,
-                Results = new List<Result>()
-            };
-            Team phoenixSuns = new Team()
-            {
-                Id = 8,
-                Name = "Phoenix Suns",
-                SportType = basketball,
-                Results = new List<Result>()
-            };
+            this.databaseSportsContext.Database.ExecuteSqlCommand(
+                @"SET IDENTITY_INSERT [dbo].[SportEvents] ON;
+                INSERT INTO [dbo].[SportEvents] ([Id], [Date], [SportType_Id])
+                VALUES
+                (1, '20161119 17:00', 1),
+                (2, '20161028 17:00', 1),
+                (3, '20161017 18:00', 1),
+                (4, '20161103 16:00', 1),
+                (5, '20161105 16:00', 2),
+                (6, '20161129 16:00', 2),
+                (7, '20161115 16:00', 2);               
+                SET IDENTITY_INSERT [dbo].[SportEvents] OFF;");
 
-            //    --- Init Events --- 
-            SportEvent mu_vs_MC_event = new SportEvent()
-            {
-                Id = 1,
-                Date = new DateTime(2016, 11, 19, 17, 0, 0),
-                SportType = football,
-                Results = new List<Result>()
-            };
-
-            SportEvent bayern_vs_Milano_event = new SportEvent()
-            {
-                Id = 2,
-                Date = new DateTime(2016, 10, 28, 17, 0, 0),
-                SportType = football,
-                Results = new List<Result>()
-            };
-            SportEvent chelsea_vs_MC_event = new SportEvent()
-            {
-                Id = 3,
-                Date = new DateTime(2016, 10, 17, 18, 0, 0),
-                SportType = football,
-                Results = new List<Result>()
-            };
-            SportEvent chelsea_vs_Milano_event = new SportEvent()
-            {
-                Id = 4,
-                Date = new System.DateTime(2016, 11, 3, 16, 0, 0),
-                SportType = football,
-                Results = new List<Result>()
-            };
-            SportEvent chicagoBulls_vs_LA_event = new SportEvent()
-            {
-                Id = 5,
-                Date = new DateTime(2016, 11, 5, 16, 0, 0),
-                SportType = basketball,
-                Results = new List<Result>()
-            };
-            SportEvent chicagoBulls_vs_Suns_event = new SportEvent()
-            {
-                Id = 6,
-                Date = new DateTime(2016, 11, 29, 16, 0, 0),
-                SportType = basketball,
-                Results = new List<Result>()
-            };
-            SportEvent la_vs_Suns_event = new SportEvent()
-            {
-                Id = 7,
-                Date = new DateTime(2016, 11, 15, 16, 0, 0),
-                SportType = basketball,
-                Results = new List<Result>()
-            };
-
-            // --- Init results ---
-            Result mu_vs_MC = new Result()
-            {
-                Id = 1,
-                Score = 2,
-                Team = mu,
-                SportEvent = mu_vs_MC_event
-            };
-            Result milano_vs_Bayern = new Result()
-            {
-                Id = 2,
-                Team = milano,
-                Score = 1,
-                SportEvent = bayern_vs_Milano_event
-            };
-            Result milano_vs_Chelsea = new Result()
-            {
-                Id = 3,
-                Team = milano,
-                Score = 3,
-                SportEvent = chelsea_vs_Milano_event
-            };
-            Result mc_vs_MU = new Result()
-            {
-                Id = 4,
-                Score = 1,
-                Team = mc,
-                SportEvent = mu_vs_MC_event
-            };
-            Result mc_vs_Chelsea = new Result()
-            {
-                Id = 5,
-                Team = mc,
-                Score = 0,
-                SportEvent = chelsea_vs_MC_event
-            };
-            Result chelsea_vs_MC = new Result()
-            {
-                Id = 6,
-                Team = chelsea,
-                Score = 0,
-                SportEvent = chelsea_vs_MC_event
-            };
-            Result chelsea_vs_Milano = new Result()
-            {
-                Id = 7,
-                Team = chelsea,
-                Score = 2,
-                SportEvent = chelsea_vs_Milano_event
-            };
-            Result bayern_vs_Milano = new Result()
-            {
-                Id = 8,
-                Team = bayern,
-                Score = 4,
-                SportEvent = bayern_vs_Milano_event
-            };
-            Result ch_vs_LA = new Result()
-            {
-                Id = 9,
-                Score = 68,
-                Team = chicagoBulls,
-                SportEvent = chicagoBulls_vs_LA_event
-            };
-            Result ch_vs_Ph = new Result()
-            {
-                Id = 10,
-                Score = 52,
-                Team = chicagoBulls,
-                SportEvent = chicagoBulls_vs_Suns_event
-            };
-            Result la_vs_Ch = new Result()
-            {
-                Id = 11,
-                Score = 65,
-                Team = laLakers,
-                SportEvent = chicagoBulls_vs_LA_event
-            };
-
-            Result la_vs_Ph = new Result()
-            {
-                Id = 12,
-                Score = 65,
-                Team = laLakers,
-                SportEvent = la_vs_Suns_event
-            };
-            Result ph_vs_LA = new Result()
-            {
-                Id = 13,
-                Score = 64,
-                Team = phoenixSuns,
-                SportEvent = la_vs_Suns_event
-            };
-            Result ph_vs_Ch = new Result()
-            {
-                Id = 14,
-                Score = 52,
-                Team = phoenixSuns,
-                SportEvent = chicagoBulls_vs_Suns_event
-            };
-
-            mu.Results.Add(mu_vs_MC);
-            milano.Results.Add(milano_vs_Bayern);
-            milano.Results.Add(milano_vs_Chelsea);
-            mc.Results.Add(mc_vs_Chelsea);
-            mc.Results.Add(mc_vs_MU);
-            chelsea.Results.Add(chelsea_vs_MC);
-            chelsea.Results.Add(chelsea_vs_Milano);
-            bayern.Results.Add(bayern_vs_Milano);
-            chicagoBulls.Results.Add(ch_vs_LA);
-            chicagoBulls.Results.Add(ch_vs_Ph);
-            laLakers.Results.Add(la_vs_Ch);
-            laLakers.Results.Add(la_vs_Ph);
-            phoenixSuns.Results.Add(ph_vs_Ch);
-            phoenixSuns.Results.Add(ph_vs_LA);
-
-            chicagoBulls_vs_LA_event.Results.Add(ch_vs_LA);
-            chicagoBulls_vs_LA_event.Results.Add(la_vs_Ch);
-            la_vs_Suns_event.Results.Add(la_vs_Ph);
-            la_vs_Suns_event.Results.Add(ph_vs_LA);
-            chicagoBulls_vs_Suns_event.Results.Add(ch_vs_Ph);
-            chicagoBulls_vs_Suns_event.Results.Add(ph_vs_Ch);
-            bayern_vs_Milano_event.Results.Add(bayern_vs_Milano);
-            bayern_vs_Milano_event.Results.Add(milano_vs_Bayern);
-            mu_vs_MC_event.Results.Add(mu_vs_MC);
-            mu_vs_MC_event.Results.Add(mc_vs_MU);
-            chelsea_vs_Milano_event.Results.Add(chelsea_vs_Milano);
-            chelsea_vs_Milano_event.Results.Add(milano_vs_Chelsea);
-            chelsea_vs_MC_event.Results.Add(chelsea_vs_MC);
-            chelsea_vs_MC_event.Results.Add(mc_vs_Chelsea);
-
-            this.databaseSportEvents.Add(chicagoBulls_vs_LA_event);
-            this.databaseSportEvents.Add(chicagoBulls_vs_Suns_event);
-            this.databaseSportEvents.Add(la_vs_Suns_event);
-            this.databaseSportEvents.Add(bayern_vs_Milano_event);
-            this.databaseSportEvents.Add(mu_vs_MC_event);
-            this.databaseSportEvents.Add(chelsea_vs_Milano_event);
-            this.databaseSportEvents.Add(chelsea_vs_MC_event);
+            this.databaseSportsContext.Database.ExecuteSqlCommand(
+                @"SET IDENTITY_INSERT [dbo].[Results] ON;
+                INSERT INTO [dbo].[Results] ([Id], [Score], [SportEvent_Id], [Team_Id])
+                VALUES
+                (1, 2, 1, 1),
+                (2, 1, 2, 2),
+                (3, 3, 4, 2),
+                (4, 1, 1, 3),
+                (5, 0, 3, 3),
+                (6, 0, 3, 4),
+                (7, 2, 4, 4),
+                (8, 4, 2, 5),
+                (9, 68, 5, 6),
+                (10, 52, 6, 6),
+                (11, 65, 5, 7),
+                (12, 65, 7, 7),
+                (13, 64, 7, 8),
+                (14, 52, 6, 8);               
+                SET IDENTITY_INSERT [dbo].[Results] OFF;");
+            
+            this.databaseSportsContext.SaveChanges();
         }
 
         [OneTimeTearDown]
         public void Clean()
         {
-
+            // Pend changes
+            this.databaseTransaction.Rollback();
+            this.databaseTransaction.Dispose();
         }
 
         [Test]
         [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(3)]
-        [TestCase(4)]
-        public void SportEventsCount(int sportId)
+        [TestCase(2)]                
+        public void CountCheckEventsExist(int sportId)
         {
-            int expectedCount = this.databaseSportEvents
-                .Where(e => e.SportType.Id == sportId)
-                .Count();
+            Assert.AreNotEqual(this.databaseSportsContext.SportEvents.Count(), 0);
+
+            int expectedCount = this.databaseSportsContext
+                .SportEvents.Where(e => e.SportType.Id == sportId).Count();
+            Assert.Greater(expectedCount, 0);
+                           
             int actualCount = this.eventService.Count(sportId);
+
+            Assert.AreEqual(expectedCount, actualCount);
+        }
+
+        [TestCase(-1)]
+        [TestCase(4)]
+        [TestCase(9999)]
+        public void CountCheckEventsNotExist(int sportId)
+        {
+            int expectedCount = this.databaseSportsContext
+                .SportEvents.Where(e => e.SportType.Id == sportId).Count();
+            Assert.AreEqual(expectedCount, 0);
+
+            int actualCount = this.eventService.Count(sportId);
+            Assert.AreEqual(actualCount, 0);
         }
 
         [Test]
         [TestCase(1, 0, 10)]
         [TestCase(1, 1, 3)]
-        [TestCase(1, 2, 1)]
-        [TestCase(1, 10, 10)]
+        [TestCase(1, 2, 1)]        
         [TestCase(2, 0, 10)]
-        [TestCase(2, 1, 1)]
-        [TestCase(2, 10, 10)]
-        [TestCase(3, 0, 10)]
-        [TestCase(3, 1, 1)]
-        [TestCase(3, 10, 10)]
-        [TestCase(4, 0, 10)]
-        [TestCase(4, 1, 1)]
-        [TestCase(4, 10, 10)]
-        public void GetSportEvents(int sportId, int skip, int take)
+        [TestCase(2, 1, 1)]        
+        public void GetSportEventsCheckEventsExist(int sportId, int skip, int take)
         {
-            List<SportEvent> expectedSportEvents = this.databaseSportEvents
+            // Get SportEvents from datavase directly and check, that they are exist
+            List<SportEvent> expectedSportEvents = this.databaseSportsContext.SportEvents
                 .Where(e => e.SportType.Id == sportId)
-                .OrderByDescending(e => e.Date)
+                .OrderByDescending(e => e.Date).ThenByDescending(e => e.Id)
                 .Skip(skip)
                 .Take(take)
                 .ToList();
+            Assert.Greater(expectedSportEvents.Count, 0);
+
+            // Map SportEvent to ResultDto
             List<ResultDto> expectedResultDtos = new List<ResultDto>();
             foreach (SportEvent item in expectedSportEvents)
             {
@@ -356,6 +177,7 @@ namespace JinnSports.UnitTests.Services
                     .Add(Mapper.Map<SportEvent, ResultDto>(item));
             }
 
+            // Get SportEvents through EventsService
             List<ResultDto> actualResultDtos = this.eventService
                 .GetSportEvents(sportId, skip, take).ToList();
 
@@ -364,49 +186,85 @@ namespace JinnSports.UnitTests.Services
             {
                 Assert.AreEqual(expectedResultDtos[i].Id, actualResultDtos[i].Id);
                 Assert.AreEqual(expectedResultDtos[i].Date, actualResultDtos[i].Date);
-                Assert.AreEqual(expectedResultDtos[i].TeamIds.Count(), 
+                Assert.AreEqual(
+                    expectedResultDtos[i].TeamIds.Count(), 
                     actualResultDtos[i].TeamIds.Count());
                 Assert.AreEqual(expectedResultDtos[i].TeamNames.Count(), 
-                    actualResultDtos[i].TeamIds.Count());                
+                    actualResultDtos[i].TeamIds.Count());  
 
                 for (int j = 0; j < expectedResultDtos[i].TeamIds.Count(); j++)
                 {
-                    bool existTeamId = 
-                        expectedResultDtos[i].TeamIds.Contains(actualResultDtos[i].TeamIds.ElementAt(j));
-                    Assert.AreEqual(true, existTeamId);
+                    Assert.AreEqual(
+                        expectedResultDtos[i].TeamIds.ElementAt(j),
+                        actualResultDtos[i].TeamIds.ElementAt(j));
 
-                    bool existTeamName =
-                        expectedResultDtos[i].TeamNames.Contains(actualResultDtos[i].TeamNames.ElementAt(j));
-                    Assert.AreEqual(true, existTeamName);
-           
+                    Assert.AreEqual(
+                        expectedResultDtos[i].TeamNames.ElementAt(j),
+                        actualResultDtos[i].TeamNames.ElementAt(j));           
                 }
             }
+        }
+
+        [Test]
+        [TestCase(1, 10, 10)]
+        [TestCase(2, 10, 10)]
+        [TestCase(3, 0, 10)]
+        [TestCase(3, 1, 1)]
+        [TestCase(3, 10, 10)]
+        [TestCase(4, 0, 10)]
+        [TestCase(4, 1, 1)]
+        [TestCase(4, 10, 10)]
+        public void GetSportEventsSportTypeExistEventsNotExist(int sportId, int skip, int take)
+        {
+            // Get SportEvents from database directly and check, that they are not exist
+            List<SportEvent> expectedSportEvents = this.databaseSportsContext.SportEvents
+                .Where(e => e.SportType.Id == sportId)
+                .OrderByDescending(e => e.Date)
+                .ThenByDescending(e => e.Id)
+                .Skip(skip)
+                .Take(take)
+                .ToList();
+            Assert.AreEqual(0, expectedSportEvents.Count);
+
+            // Get SportEvents from EventsService
+            List<ResultDto> actualResultDtos = this.eventService
+                .GetSportEvents(sportId, skip, take).ToList();
+            Assert.AreEqual(expectedSportEvents.Count, actualResultDtos.Count);
         }
 
         [Test]
         public void MapSportEvent()
         {
             List<ResultDto> expectedResultDtos = new List<ResultDto>();
-            List<ResultDto> actualResultDtos = new List<ResultDto>();            
-            foreach(SportEvent sportEvent in this.databaseSportEvents)
+            List<ResultDto> actualResultDtos = new List<ResultDto>();
+
+            // SportEvents in database
+            List<SportEvent> sportEvents = this.databaseSportsContext.SportEvents
+                .Where(e => e.SportType.Id == 1)
+                .OrderByDescending(e => e.Date)
+                .ThenByDescending(e => e.Id)
+                .Skip(0)
+                .Take(10)
+                .ToList();
+            
+            foreach (SportEvent sportEvent in sportEvents)
             {
+                // Manual map SportEvent to ResultDto
                 ResultDto current = new ResultDto();
                 current.Id = sportEvent.Id;
                 current.Date = new EventDate(sportEvent.Date).ToString();
-
                 current.Score = string.Format(
                             "{0} : {1}",
                             sportEvent.Results.ElementAt(0).Score,
                             sportEvent.Results.ElementAt(1).Score);
-
                 current.TeamIds = sportEvent.Results.Select(x => x.Team.Id);
                 current.TeamNames = sportEvent.Results.Select(x => x.Team.Name);
-
                 expectedResultDtos.Add(current);
+                // Automapper 
                 actualResultDtos.Add(Mapper.Map<SportEvent, ResultDto>(sportEvent));
             }
 
-            CollectionAssert.AreEqual(expectedResultDtos, actualResultDtos, new ResultDtoComparer());
+            CollectionAssert.AreEqual(expectedResultDtos, actualResultDtos, this.comparer);
         }
     }
 }

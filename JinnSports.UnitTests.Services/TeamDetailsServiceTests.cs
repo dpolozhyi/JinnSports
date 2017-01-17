@@ -19,61 +19,118 @@ namespace JinnSports.UnitTests.Services
     [TestFixture]
     public class TeamDetailsServiceTests
     {
+        private TeamDetailsService teamDetailsService;
 
-        List<SportType> sportTypes;
-        List<Team> teams;
-        List<Result> results;
-        List<SportEvent> sportEvents;
-        IEnumerable<List<ResultDto>> resultsDtoCollection;
-        List<ResultDto> resultsDto;
-        List<Result> testResults;
-        public class ResultDtoComparer : IComparer, IComparer<ResultDto>
+        private SportsContext databaseSportsContext;
+
+        private DbContextTransaction databaseTransaction;
+
+
+
+        private List<SportType> sportTypes;
+        private List<Team> teams;
+        private List<Result> results;
+        private List<SportEvent> sportEvents;
+        private IEnumerable<List<ResultDto>> resultsDtoCollection;
+        private List<ResultDto> resultsDto;
+        private List<Result> testResults;
+
+        [OneTimeSetUp]
+        public void Init()
         {
-            public int Compare(object x, object y)
-            {
-                var ldto = x as ResultDto;
-                var rdto = y as ResultDto;
-                if (ldto == null || rdto == null) throw new InvalidOperationException();
-                return Compare(ldto, rdto);
-            }
+            this.databaseSportsContext = new SportsContext("SportsContext");
 
-            public int Compare(ResultDto ldto, ResultDto rdto)
-            {
-                if (ldto.Date == null || string.IsNullOrEmpty(ldto.Score) || ldto.Id < 1 || ldto.TeamIds.ElementAt(0) < 1 || ldto.TeamIds.ElementAt(1) < 1 ||
-                string.IsNullOrEmpty(ldto.TeamNames.ElementAt(0)) || string.IsNullOrEmpty(ldto.TeamNames.ElementAt(1)))
-                {
-                    return -1;
-                }
+            // Other transactions can't update and insert data
+            this.databaseTransaction = this.databaseSportsContext
+                .Database.BeginTransaction(System.Data.IsolationLevel.Serializable);
 
-                return ((ldto.Date.CompareTo(rdto.Date)) & (ldto.Score.CompareTo(rdto.Score)) &
-                    (ldto.Id.CompareTo(rdto.Id)) & (ldto.TeamIds.ElementAt(0).CompareTo(rdto.TeamIds.ElementAt(0))) &
-                    (ldto.TeamIds.ElementAt(1).CompareTo(rdto.TeamIds.ElementAt(1))) & (ldto.TeamNames.ElementAt(0).CompareTo(rdto.TeamNames.ElementAt(0))) &
-                    (ldto.TeamNames.ElementAt(1).CompareTo(rdto.TeamNames.ElementAt(1))));
-            }
+            // Clear tables
+            this.databaseSportsContext.Results.RemoveRange(
+                this.databaseSportsContext.Results);
+            this.databaseSportsContext.SportEvents.RemoveRange(
+                this.databaseSportsContext.SportEvents);
+            this.databaseSportsContext.Teams.RemoveRange(
+                this.databaseSportsContext.Teams);
+            this.databaseSportsContext.SportTypes.RemoveRange(
+                this.databaseSportsContext.SportTypes);
+
+            this.databaseSportsContext.SaveChanges();
+
+            AutoMapperConfiguration.Configure();
+
+            this.databaseSportsContext.Database.ExecuteSqlCommand(
+                @"SET IDENTITY_INSERT [dbo].[SportTypes] ON;
+                INSERT INTO [dbo].[SportTypes] ([Id], [Name])
+                VALUES
+                (1, 'Football'),
+                (2, 'Basketball'),
+                (3, 'Tennis'),
+                (4, 'Snooker');               
+                SET IDENTITY_INSERT [dbo].[SportTypes] OFF;");
+
+            this.databaseSportsContext.Database.ExecuteSqlCommand(
+                @"SET IDENTITY_INSERT [dbo].[Teams] ON;
+                INSERT INTO [dbo].[Teams] ([Id], [Name], [SportType_Id])
+                VALUES
+                (1, 'Manchester United', 1),
+                (2, 'Milano', 1),
+                (3, 'Manchester City', 1),
+                (4, 'Chelsea', 1),
+                (5, 'Bayern', 1),
+                (6, 'Chicago Bulls', 2),
+                (7, 'Los Angeles Lakers', 2),
+                (8, 'Phoenix Suns', 2);               
+                SET IDENTITY_INSERT [dbo].[Teams] OFF;");
+
+            this.databaseSportsContext.Database.ExecuteSqlCommand(
+                @"SET IDENTITY_INSERT [dbo].[SportEvents] ON;
+                INSERT INTO [dbo].[SportEvents] ([Id], [Date], [SportType_Id])
+                VALUES
+                (1, '20161119 17:00', 1),
+                (2, '20161028 17:00', 1),
+                (3, '20161017 18:00', 1),
+                (4, '20161103 16:00', 1),
+                (5, '20161105 16:00', 2),
+                (6, '20161129 16:00', 2),
+                (7, '20161115 16:00', 2);               
+                SET IDENTITY_INSERT [dbo].[SportEvents] OFF;");
+
+            this.databaseSportsContext.Database.ExecuteSqlCommand(
+                @"SET IDENTITY_INSERT [dbo].[Results] ON;
+                INSERT INTO [dbo].[Results] ([Id], [Score], [SportEvent_Id], [Team_Id])
+                VALUES
+                (1, 2, 1, 1),
+                (2, 1, 2, 2),
+                (3, 3, 4, 2),
+                (4, 1, 1, 3),
+                (5, 0, 3, 3),
+                (6, 0, 3, 4),
+                (7, 2, 4, 4),
+                (8, 4, 2, 5),
+                (9, 68, 5, 6),
+                (10, 52, 6, 6),
+                (11, 65, 5, 7),
+                (12, 65, 7, 7),
+                (13, 64, 7, 8),
+                (14, 52, 6, 8);               
+                SET IDENTITY_INSERT [dbo].[Results] OFF;");
+
+            this.databaseSportsContext.SaveChanges();
+
+            this.teamDetailsService = new TeamDetailsService(
+                new EFUnitOfWork(this.databaseSportsContext));
         }
-        public class TeamDtoComparer : IComparer, IComparer<TeamDto>
+
+        [OneTimeTearDown]
+        public void Clean()
         {
-                public int Compare(object x, object y)
-                {
-                    var ldto = x as TeamDto;
-                    var rdto = y as TeamDto;
-                    if (ldto == null || rdto == null) throw new InvalidOperationException();
-                    return Compare(ldto, rdto);
-                }
+            this.databaseTransaction.Rollback();
+            this.databaseTransaction.Dispose();
+        }
 
-                public int Compare(TeamDto ldto, TeamDto rdto)
-                {
-                    if (string.IsNullOrEmpty(ldto.Name) || ldto.Id < 1)
-                    {
-                        return -1;
-                    }
 
-                    return ((ldto.Name.CompareTo(rdto.Name)) &
-                        (ldto.Id.CompareTo(rdto.Id)));
-                }
-         }
-       [SetUp]
-       public void Init()
+        [SetUp]
+        public void InitTestEntities()
         {
             this.sportTypes = new List<SportType>();
             this.teams = new List<Team>();
@@ -329,43 +386,43 @@ namespace JinnSports.UnitTests.Services
                 SportEvent = MU_vs_MC_event
             };
 
-            sportTypes.Add(football);
-            sportTypes.Add(basketball);
-            sportTypes.Add(tennis);
-            sportTypes.Add(snooker);
+            this.sportTypes.Add(football);
+            this.sportTypes.Add(basketball);
+            this.sportTypes.Add(tennis);
+            this.sportTypes.Add(snooker);
 
 
-            teams.Add(MU);
-            teams.Add(Milano);
-            teams.Add(MC);
-            teams.Add(Chelsea);
-            teams.Add(Bayern);
-            teams.Add(ChicagoBulls);
-            teams.Add(LALakers);
-            teams.Add(PhoenixSuns);
+            this.teams.Add(MU);
+            this.teams.Add(Milano);
+            this.teams.Add(MC);
+            this.teams.Add(Chelsea);
+            this.teams.Add(Bayern);
+            this.teams.Add(ChicagoBulls);
+            this.teams.Add(LALakers);
+            this.teams.Add(PhoenixSuns);
 
-            sportEvents.Add(ChicagoBulls_vs_LA_event);
-            sportEvents.Add(ChicagoBulls_vs_Suns_event);
-            sportEvents.Add(LA_vs_Suns_event);
-            sportEvents.Add(Bayern_vs_Milano_event);
-            sportEvents.Add(MU_vs_MC_event);
-            sportEvents.Add(Chelsea_vs_Milano_event);
-            sportEvents.Add(Chelsea_vs_MC_event);
+            this.sportEvents.Add(ChicagoBulls_vs_LA_event);
+            this.sportEvents.Add(ChicagoBulls_vs_Suns_event);
+            this.sportEvents.Add(LA_vs_Suns_event);
+            this.sportEvents.Add(Bayern_vs_Milano_event);
+            this.sportEvents.Add(MU_vs_MC_event);
+            this.sportEvents.Add(Chelsea_vs_Milano_event);
+            this.sportEvents.Add(Chelsea_vs_MC_event);
 
-            results.Add(MU_vs_MC);
-            results.Add(Milano_vs_Bayern);
-            results.Add(Milano_vs_Chelsea);
-            results.Add(MC_vs_MU);
-            results.Add(MC_vs_Chelsea);
-            results.Add(Chelsea_vs_MC);
-            results.Add(Chelsea_vs_Milano);
-            results.Add(Bayern_vs_Milano);
-            results.Add(Ch_vs_LA);
-            results.Add(Ch_vs_Ph);
-            results.Add(LA_vs_Ch);
-            results.Add(LA_vs_Ph);
-            results.Add(Ph_vs_LA);
-            results.Add(Ph_vs_Ch);
+            this.results.Add(MU_vs_MC);
+            this.results.Add(Milano_vs_Bayern);
+            this.results.Add(Milano_vs_Chelsea);
+            this.results.Add(MC_vs_MU);
+            this.results.Add(MC_vs_Chelsea);
+            this.results.Add(Chelsea_vs_MC);
+            this.results.Add(Chelsea_vs_Milano);
+            this.results.Add(Bayern_vs_Milano);
+            this.results.Add(Ch_vs_LA);
+            this.results.Add(Ch_vs_Ph);
+            this.results.Add(LA_vs_Ch);
+            this.results.Add(LA_vs_Ph);
+            this.results.Add(Ph_vs_LA);
+            this.results.Add(Ph_vs_Ch);
 
             MU.Results.Add(MU_vs_MC);
             Milano.Results.Add(Milano_vs_Bayern);
@@ -535,6 +592,7 @@ namespace JinnSports.UnitTests.Services
                 LA_vs_Ph
             };
         }
+
         [Test]
         [TestCase(1, 1)]
         [TestCase(2, 2)]
@@ -546,11 +604,7 @@ namespace JinnSports.UnitTests.Services
         [TestCase(8, 2)]
         public void TeamResultsCount(int teamId, int result)
         {
-
-            TeamDetailsService teamDelailsService = new TeamDetailsService(new EFUnitOfWork(new SportsContext("SportsContext")));
-            int count;
-
-            count = teamDelailsService.Count(teamId);
+            int count = this.teamDetailsService.Count(teamId);
 
             Assert.AreEqual(result, count); 
         }
@@ -561,12 +615,11 @@ namespace JinnSports.UnitTests.Services
         [TestCase(8, 2)]
         public void GetTeamResults(int teamId, int element)
         {
-            TeamDetailsService teamDetailsService = new TeamDetailsService(new EFUnitOfWork(new SportsContext("SportsContext")));
             List<ResultDto> resultDtoCollection = new List<ResultDto>();
             List<ResultDto> dtoTest = this.resultsDtoCollection.ElementAt(element);
             ResultDtoComparer dtoComparer = new ResultDtoComparer();
             int skip = 0; int take = 10;
-            resultDtoCollection = teamDetailsService.GetResults(teamId, skip, take).ToList();
+            resultDtoCollection = this.teamDetailsService.GetResults(teamId, skip, take).ToList();
 
             CollectionAssert.AreEqual(resultDtoCollection, dtoTest, dtoComparer);
         }
@@ -607,6 +660,52 @@ namespace JinnSports.UnitTests.Services
             }
 
             CollectionAssert.AreEqual(teamsTestDto, mappedDto, dtoComparer);
+        }
+
+        public class ResultDtoComparer : IComparer, IComparer<ResultDto>
+        {
+            public int Compare(object x, object y)
+            {
+                var ldto = x as ResultDto;
+                var rdto = y as ResultDto;
+                if (ldto == null || rdto == null)
+                    throw new InvalidOperationException();
+                return this.Compare(ldto, rdto);
+            }
+
+            public int Compare(ResultDto ldto, ResultDto rdto)
+            {
+                if (ldto.Date == null || string.IsNullOrEmpty(ldto.Score) || ldto.Id < 1 || ldto.TeamIds.ElementAt(0) < 1 || ldto.TeamIds.ElementAt(1) < 1 ||
+                string.IsNullOrEmpty(ldto.TeamNames.ElementAt(0)) || string.IsNullOrEmpty(ldto.TeamNames.ElementAt(1)))
+                {
+                    return -1;
+                }
+                return ((ldto.Date.CompareTo(rdto.Date)) & (ldto.Score.CompareTo(rdto.Score)) &
+                    (ldto.Id.CompareTo(rdto.Id)) & (ldto.TeamIds.ElementAt(0).CompareTo(rdto.TeamIds.ElementAt(0))) &
+                    (ldto.TeamIds.ElementAt(1).CompareTo(rdto.TeamIds.ElementAt(1))) & (ldto.TeamNames.ElementAt(0).CompareTo(rdto.TeamNames.ElementAt(0))) &
+                    (ldto.TeamNames.ElementAt(1).CompareTo(rdto.TeamNames.ElementAt(1))));
+            }
+        }
+        public class TeamDtoComparer : IComparer, IComparer<TeamDto>
+        {
+            public int Compare(object x, object y)
+            {
+                var ldto = x as TeamDto;
+                var rdto = y as TeamDto;
+                if (ldto == null || rdto == null)
+                    throw new InvalidOperationException();
+                return this.Compare(ldto, rdto);
+            }
+
+            public int Compare(TeamDto ldto, TeamDto rdto)
+            {
+                if (string.IsNullOrEmpty(ldto.Name) || ldto.Id < 1)
+                {
+                    return -1;
+                }
+                return ((ldto.Name.CompareTo(rdto.Name)) &
+                    (ldto.Id.CompareTo(rdto.Id)));
+            }
         }
     }
 }
