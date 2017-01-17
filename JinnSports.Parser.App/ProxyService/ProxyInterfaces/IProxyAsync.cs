@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace JinnSports.Parser.App.ProxyService.ProxyInterfaces
 {
-    public interface ICommand
+    public interface IProxyAsync
     {
-        void Execute();
+        HttpWebResponse GetProxyAsync();
     }
 }

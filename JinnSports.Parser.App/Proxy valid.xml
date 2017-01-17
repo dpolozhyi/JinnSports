@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfProxyServer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ProxyServer Status="PS_Stable" Priority="0">
+    <Ip>124.47.7.45</Ip>
+    <LastUsed>2016-12-12T21:38:21.9043775+02:00</LastUsed>
+    <IsBusy>true</IsBusy>
+  </ProxyServer>
+  <ProxyServer Status="PS_New" Priority="0">
+    <Ip>60.250.81.118</Ip>
+    <LastUsed>2017-01-16T19:30:36.6905818+02:00</LastUsed>
+    <IsBusy>false</IsBusy>
+  </ProxyServer>
+  <ProxyServer Status="PS_Stable" Priority="0">
+    <Ip>94.181.34.64</Ip>
+    <LastUsed>2017-01-16T19:34:14.2649658+02:00</LastUsed>
+    <IsBusy>true</IsBusy>
+  </ProxyServer>
+  <ProxyServer Status="PS_Stable" Priority="0">
+    <Ip>177.184.8.123</Ip>
+    <LastUsed>2017-01-16T19:52:20.9140523+02:00</LastUsed>
+    <IsBusy>false</IsBusy>
+  </ProxyServer>
+  <ProxyServer Status="PS_Bad" Priority="2">
+    <Ip>41.220.28.138</Ip>
+    <LastUsed>2017-01-16T19:34:04.625099+02:00</LastUsed>
+    <IsBusy>false</IsBusy>
+  </ProxyServer>
+  <ProxyServer Status="PS_Bad" Priority="2">
+    <Ip>46.16.226.10</Ip>
+    <LastUsed>2017-01-16T19:33:58.5333583+02:00</LastUsed>
+    <IsBusy>false</IsBusy>
+  </ProxyServer>
+  <ProxyServer Status="PS_New" Priority="0">
+    <Ip>178.215.111.70</Ip>
+    <LastUsed>2017-01-16T19:30:50.273163+02:00</LastUsed>
+    <IsBusy>true</IsBusy>
+  </ProxyServer>
+  <ProxyServer Status="PS_Bad" Priority="2">
+    <Ip>202.59.163.129</Ip>
+    <LastUsed>2017-01-16T19:33:55.4800217+02:00</LastUsed>
+    <IsBusy>false</IsBusy>
+  </ProxyServer>
+</ArrayOfProxyServer>

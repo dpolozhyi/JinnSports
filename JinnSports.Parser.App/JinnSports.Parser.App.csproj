@@ -79,7 +79,7 @@
     <Compile Include="ProxyService\ProxyEntities\BaseProxyServer.cs" />
     <Compile Include="ProxyService\ProxyEntities\HtmlProxyServerCollection.cs" />
     <Compile Include="ProxyService\ProxyEnums\ProxyStatus.cs" />
-    <Compile Include="ProxyService\ProxyInterfaces\ICommand.cs" />
+    <Compile Include="ProxyService\ProxyInterfaces\IProxyAsync.cs" />
     <Compile Include="ProxyService\ProxyInterfaces\IHtmlProxyServer.cs" />
     <Compile Include="ProxyService\ProxyInterfaces\IProxyConnection.cs" />
     <Compile Include="ProxyService\ProxyInterfaces\IProxyRepository.cs" />
@@ -97,8 +97,7 @@
     <Compile Include="ProxyService\ProxyInterfaces\IProxyTerminal.cs" />
     <Compile Include="ProxyService\ProxyParser\ProxyParser.cs" />
     <Compile Include="ProxyService\ProxyRepository\ProxyRepository.cs" />
-    <Compile Include="ProxyService\ProxyTerminal\Delegates\GetProxyAsyncDelegate.cs" />
-    <Compile Include="ProxyService\ProxyTerminal\ProxyAsyncCommand.cs" />
+    <Compile Include="ProxyService\ProxyTerminal\ProxyAsync.cs" />
     <Compile Include="ProxyService\ProxyTerminal\ProxyTerminal.cs" />
     <Compile Include="WebConnection\WebConnection.cs" />
     <Compile Include="WebConnection\WebProxyConnection.cs" />

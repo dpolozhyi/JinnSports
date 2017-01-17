@@ -4,6 +4,8 @@ using JinnSports.Parser.App.JsonParsers;
 using JinnSports.Parser.App.ProxyService.ProxyTerminal;
 using System.Net;
 using JinnSports.Parser.App.ProxyService.ProxyParser;
+using System;
+using System.Diagnostics;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
@@ -17,7 +19,9 @@ namespace JinnSports.Parser.App
             ProxyParser pp = new ProxyParser();
             pp.UpdateData(true, "http://foxtools.ru/Proxy");*/
             ProxyTerminal pt = new ProxyTerminal();
-            pt.GetProxyResponse(new System.Uri("https://2ip.ua/ru"));
+            var a = pt.GetProxyResponse(new Uri("https://2ip.ua/ru"));
+            Trace.WriteLine(a);
+            Console.ReadKey();
         }
     }
 }

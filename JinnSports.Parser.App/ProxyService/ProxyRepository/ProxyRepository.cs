@@ -136,6 +136,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
         {
             TimeSpan timeDifference = DateTime.Now.TimeOfDay - proxy.LastUsed.TimeOfDay;
             var proxyTimeout = timeDifference.Seconds + (timeDifference.Minutes * 60) + (timeDifference.Hours * 3600) + (timeDifference.Days * 3600 * 24);
+            //var proxyTimeout = timeDifference.TotalSeconds().;
             if ((Math.Abs(proxyTimeout) >= this.Interval * 60) && (proxy.IsBusy != true))
             {
                 return true;

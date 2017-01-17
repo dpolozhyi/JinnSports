@@ -10,6 +10,7 @@ using JinnSports.Parser.App.ProxyService.ProxyInterfaces;
 using JinnSports.Parser.App.Exceptions;
 using System.Threading;
 using JinnSports.Parser.App.ProxyService.ProxyEnums;
+using System.Threading.Tasks;
 
 namespace JinnSports.Parser.App.ProxyService.ProxyConnections
 {
@@ -126,119 +127,131 @@ namespace JinnSports.Parser.App.ProxyService.ProxyConnections
             }
         }
 
-        public HttpWebResponse GetProxyResponse(string url, int tries)
+        public HttpWebResponse GetProxyResponse(Uri uri, CancellationToken token)
         {
-            int iter = 0;
-            HttpWebResponse response;
-            HttpWebRequest request;
-            try
-            {
-                while (iter < tries)
-                {
-                    string proxy = this.GetProxy();
-                    if (proxy != string.Empty)
-                    {
-                        if (this.CanPing(proxy) == true)
-                        {
-                            try
-                            {
-                                request = (HttpWebRequest)WebRequest.Create(url);
-                                request.Headers.Set(HttpRequestHeader.ContentEncoding, "1251");
-                                WebProxy webProxy = new WebProxy(proxy, true);
-                                request.Proxy = webProxy;
-                                response = (HttpWebResponse)request.GetResponse();
-                                Debug.WriteLine("Good IP : " + proxy);
-                                this.SetStatus(proxy, true);
-                                return response;
-                            }
-                            catch (Exception e)
-                            {
-                                this.SetStatus(proxy, false);
-                                iter++;
-                            }
-                        }
-                        else
-                        {
-                            this.SetStatus(proxy, false);
-                            iter++;
-                        }
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw new WebResponseException(ex.Message, ex.InnerException);
-            }
-        }
-
-        public HttpWebResponse GetProxyResponse(Uri uri)
-        {
-            Trace.WriteLine("In function GetProxyResponce (Working)______________");
-
-
-
-            int intAvailableThreads, intAvailableIoAsynThreds;
-
-            ThreadPool.GetAvailableThreads(out intAvailableThreads,
-            out intAvailableIoAsynThreds);
-
-            // построить сообщение для записи
-            string strMessage =
-                String.Format(@"Is Thread Pool: {0},
-            Thread Id: {1} Free Threads {2}",
-                    Thread.CurrentThread.IsThreadPoolThread.ToString(),
-                    Thread.CurrentThread.GetHashCode(),
-                    intAvailableThreads);
-
-            // проверить, находится ли поток в пуле потоков.
-            Trace.WriteLine(strMessage);
-
-            Trace.WriteLine("____________________________________________");
-
-
-
-
             HttpWebResponse response;
             HttpWebRequest request;
             // Create the request object.
-                string proxy = this.GetProxy();
-                Trace.WriteLine("************************************");
-                Trace.WriteLine("Current IP : " + proxy);
-                Trace.WriteLine("************************************");
-                if (proxy != string.Empty)
+            string proxy = this.GetProxy();
+            Trace.WriteLine("************************************");
+            Trace.WriteLine("Current IP : " + proxy);
+            Trace.WriteLine("************************************");
+            if (proxy != string.Empty)
+            {
+                if (this.CanPing(proxy))
                 {
-                    if (this.CanPing(proxy))
+                    try
                     {
-                        try
-                        {
-                            request = (HttpWebRequest)WebRequest.Create(uri);
-                            request.Headers.Set(HttpRequestHeader.ContentEncoding, "1251");
-                            WebProxy webProxy = new WebProxy(proxy, true);
-                            request.Proxy = webProxy;
-                            response = (HttpWebResponse)request.GetResponse();
-                            Debug.WriteLine("Good IP : " + proxy);
-                            this.SetStatus(proxy, true);
+                        request = (HttpWebRequest)WebRequest.Create(uri);
 
+                        Trace.WriteLine("New task <Web Response>");
+
+                        request.Headers.Set(HttpRequestHeader.ContentEncoding, "1251");
+                        WebProxy webProxy = new WebProxy(proxy, true);
+                        request.Proxy = webProxy;
+                        //1st check cancellation token
+
+                        if (token.IsCancellationRequested)
+                        {
+                            Trace.WriteLine("Задача tsk отменена до получения webresponse");
+                            return null;
+                        }
+
+                        Task<WebResponse> task = Task.Factory.FromAsync(
+                        request.BeginGetResponse,
+                        request.EndGetResponse,
+                        request);
+
+                        task.ContinueWith(t =>
+                        {
+                            if (t.IsFaulted)
+                            {
+                                Trace.WriteLine("Bad IP FOUND in RESPONSE after TaskEnd FUNCTION _____ EXCEPTION");
+                                Trace.WriteLine("_____________________________________________________________");
+                                proxy = ((t.AsyncState as HttpWebRequest).Proxy as WebProxy).Address.Host;
+                                this.SetStatus(proxy, false);
+                            }
+                            else
+                            {
+                                //good ip found
+                            }
+                        });
+
+                        response = task.Result as HttpWebResponse;
+                        if (token.IsCancellationRequested)
+                        {
+                            Trace.WriteLine("Задача tsk отменена после получения webresponse");
+                            return null;
+                        }
+                        if (response != null)
+                        {
+                            //set cancellation token
+                            Trace.WriteLine("Good IP FOUND in RESPONSE after TaskEnd FUNCTION");
+                            Trace.WriteLine("_____________________________________________________________");
+
+                            Debug.WriteLine("Good IP : " + ((task.AsyncState as HttpWebRequest).Proxy as WebProxy).Address.Host);
+                            proxy = ((task.AsyncState as HttpWebRequest).Proxy as WebProxy).Address.Host;
+                            this.SetStatus(proxy, true);
                             return response;
                         }
-                        catch (Exception ex)
+                        else
                         {
+                            Trace.WriteLine("Bad IP FOUND in RESPONSE after TaskEnd FUNCTION");
+                            Trace.WriteLine("_____________________________________________________________");
+                            proxy = ((task.AsyncState as HttpWebRequest).Proxy as WebProxy).Address.Host;
                             this.SetStatus(proxy, false);
-                            //throw new WebResponseException(ex.Message, ex.InnerException);
                         }
                     }
-                    else
+                    catch (Exception ex)
                     {
+                        Trace.WriteLine(ex.Message, "Bad IP FOUND");
+                        Trace.WriteLine("_____________________________________________________________");
                         this.SetStatus(proxy, false);
+                        //throw new WebResponseException(ex.Message, ex.InnerException);
                     }
                 }
-                return null;
+                else
+                {
+                    Trace.WriteLine("Bad IP FOUND in RESPONSE after TaskEnd FUNCTION");
+                    Trace.WriteLine("_____________________________________________________________");
+                    this.SetStatus(proxy, false);
+                }
+            }
+            return null;
         }
+
+        /*public static Task<HttpWebResponse> GetProxyResponseAsync(this HttpWebRequest request, TimeSpan timeout,
+            CancellationToken token)
+        {
+            Trace.WriteLine("In function GetProxyResponseAsync (Working)");
+
+            return Task.Run(() =>
+            {
+                if (token.IsCancellationRequested)
+                    return null;
+                Task<WebResponse> task;
+                try
+                {
+                    token.Register(request.Abort);
+                    task = Task.Factory.FromAsync(request.BeginGetResponse, request.EndGetResponse, null);
+
+                    if (!task.Wait(timeout))
+                        throw new WebException("No response was received during the time-out period specified.",
+                            WebExceptionStatus.Timeout);
+                }
+                catch (Exception ex)
+                {
+                    var exception = ex as WebException;
+                    if (exception != null)
+                        throw exception;
+
+                    throw new WebException(ex.Message, WebExceptionStatus.ConnectionClosed);
+                }
+
+                return task.Result as HttpWebResponse;
+            }, token);
+        }*/
+
     }
 }
 

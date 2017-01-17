@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace JinnSports.Parser.App.ProxyService.ProxyInterfaces
@@ -15,8 +16,6 @@ namespace JinnSports.Parser.App.ProxyService.ProxyInterfaces
 
         bool CanPing(string address);
 
-        HttpWebResponse GetProxyResponse(string url, int tries);
-
-        HttpWebResponse GetProxyResponse(Uri uri);
+        HttpWebResponse GetProxyResponse(Uri uri, CancellationToken token);
     }
 }
