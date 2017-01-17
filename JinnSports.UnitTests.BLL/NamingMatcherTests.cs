@@ -6,20 +6,44 @@ using JinnSports.Entities.Entities;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JinnSports.UnitTests.Services
 {
     [TestFixture]
     public class NamingMatcherTests
     {
+        private SportsContext databaseSportsContext;
+
+        private DbContextTransaction databaseTransaction;
+
         [OneTimeSetUp]
         public void Init()
         {
-            IUnitOfWork unit = new EFUnitOfWork(new SportsContext("SportsContext"));
-            
+            this.databaseSportsContext = new SportsContext("SportsContext");
+
+            IUnitOfWork unit = new EFUnitOfWork(this.databaseSportsContext);            
+
+            // Other transactions can't update and insert data
+            this.databaseTransaction = this.databaseSportsContext
+                .Database.BeginTransaction(IsolationLevel.Serializable);
+
+            // Clear tables
+            this.databaseSportsContext.TeamNames.RemoveRange(
+                this.databaseSportsContext.TeamNames);
+            this.databaseSportsContext.Results.RemoveRange(
+                this.databaseSportsContext.Results);
+            this.databaseSportsContext.SportEvents.RemoveRange(
+                this.databaseSportsContext.SportEvents);
+            this.databaseSportsContext.Teams.RemoveRange(
+                this.databaseSportsContext.Teams);
+            this.databaseSportsContext.SportTypes.RemoveRange(
+                this.databaseSportsContext.SportTypes);
+
+            this.databaseSportsContext.SaveChanges();
+
             TeamName tn1 = new TeamName { Name = "Шахтер Д" };
             TeamName tn2 = new TeamName { Name = "Динамо Бухарест" };
             TeamName tn3 = new TeamName { Name = "Динамо Киев" };
@@ -30,8 +54,7 @@ namespace JinnSports.UnitTests.Services
             TeamName tn8 = new TeamName { Name = "Шальке-04" };
             TeamName tn9 = new TeamName { Name = "Краснодар" };
 
-            SportType football = new SportType { Name = "Football" };
-            SportType sport = unit.GetRepository<SportType>().Get(x => x.Name.ToUpper() == football.Name.ToUpper()).FirstOrDefault();
+            SportType sport = new SportType { Name = "Football" };            
 
             Team t1 = new Team { Name = tn1.Name, Names = new List<TeamName> { tn1 }, SportType = sport };
             Team t2 = new Team { Name = tn2.Name, Names = new List<TeamName> { tn2 }, SportType = sport };
@@ -71,14 +94,13 @@ namespace JinnSports.UnitTests.Services
             unit.GetRepository<Result>().Insert(result9);
             unit.GetRepository<Result>().Insert(result10);
 
-            unit.SaveChanges();
-            unit.Dispose();
+            unit.SaveChanges();            
         }
 
         [Test]
         public void ResolveNamingPositiveTest()
         {
-            IUnitOfWork unit = new EFUnitOfWork(new SportsContext("SportsContext"));
+            IUnitOfWork unit = new EFUnitOfWork(this.databaseSportsContext);
 
             SportType football = new SportType { Name = "Football" };
             SportType sport = unit.GetRepository<SportType>().Get(x => x.Name.ToUpper() == football.Name.ToUpper()).FirstOrDefault();           
@@ -99,7 +121,7 @@ namespace JinnSports.UnitTests.Services
         [Test]
         public void ResolveNamingNegativeTest()
         {
-            IUnitOfWork unit = new EFUnitOfWork(new SportsContext("SportsContext"));
+            IUnitOfWork unit = new EFUnitOfWork(this.databaseSportsContext);
 
             SportType football = new SportType { Name = "Football" };
             SportType sport = unit.GetRepository<SportType>().Get(x => x.Name.ToUpper() == football.Name.ToUpper()).FirstOrDefault();
@@ -119,7 +141,7 @@ namespace JinnSports.UnitTests.Services
         [Test]
         public void ResolveNamingNeutralTest()
         {
-            IUnitOfWork unit = new EFUnitOfWork(new SportsContext("SportsContext"));
+            IUnitOfWork unit = new EFUnitOfWork(this.databaseSportsContext);
 
             SportType football = new SportType { Name = "Football" };
             SportType sport = unit.GetRepository<SportType>().Get(x => x.Name.ToUpper() == football.Name.ToUpper()).FirstOrDefault();
@@ -141,7 +163,9 @@ namespace JinnSports.UnitTests.Services
         [OneTimeTearDown]
         public void Clean()
         {
-
+            // Pend changes
+            this.databaseTransaction.Rollback();
+            this.databaseTransaction.Dispose();
         }
 
 
