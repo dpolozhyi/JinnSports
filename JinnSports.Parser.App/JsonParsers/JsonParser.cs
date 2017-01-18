@@ -38,58 +38,12 @@ namespace JinnSports.Parser.App.JsonParsers
             Log.Info("Json parser was started");
             try
             {
-                string result;
-                JsonResult jsonResults;
-                List<SportEventDTO> sportEventsList;
+                string result = this.GetJsonFromUrl(this.SiteUri);
+                JsonResult jsonResults = this.DeserializeJson(result);
+                List<SportEventDTO> sportEventsList = this.GetSportEventsList(jsonResults);
+                this.SendEvents(sportEventsList);
 
-                try
-                {
-                    result = this.GetJsonFromUrl(this.SiteUri);
-                }
-                catch (Exception ex)
-                {
-                    throw new WebResponseException(ex.Message, ex.InnerException);
-                }
-
-                try
-                {
-                    jsonResults = this.DeserializeJson(result);
-                }
-                catch (Exception ex)
-                {
-                    throw new JsonDeserializeException(ex.Message, ex.InnerException);
-                }
-
-                try
-                {
-                    sportEventsList = this.GetSportEventsList(jsonResults);
-                }
-                catch (Exception ex)
-                {
-                    throw new ParseException(ex.Message, ex.InnerException);
-                }
-
-                try
-                {
-                    this.SendEvents(sportEventsList);
-                    Log.Info("New data from JSON parser was sent");
-                }
-                catch (Exception ex)
-                {
-                    throw new SaveDataException(ex.Message, ex.InnerException);
-                }
-            }
-            catch (WebResponseException ex)
-            {
-                Log.Error(ex);
-            }
-            catch (JsonDeserializeException ex)
-            {
-                Log.Error(ex);
-            }
-            catch (ParseException ex)
-            {
-                Log.Error(ex);
+                Log.Info("New data from JSON parser was sent");
             }
             catch (Exception ex)
             {
@@ -106,35 +60,65 @@ namespace JinnSports.Parser.App.JsonParsers
         {
             string result = string.Empty;
             ProxyConnection pc = new ProxyConnection();
+            HttpWebResponse resp;
+            Stream stream = null;
+
             string url = string.Format("{0}?locale={1}", uri.ToString(), locale == Locale.EN ? "en" : "ru");
-            HttpWebResponse resp = pc.MakeProxyRequest(uri.ToString(), 0);
-            if (resp == null)
-            {
-                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
-                resp = (HttpWebResponse)req.GetResponse();
-            }
-            Stream stream = resp.GetResponseStream();
-            StreamReader sr = new StreamReader(stream);
 
-            while (!sr.EndOfStream)
+            try
             {
-                result += sr.ReadLine();
+                resp = pc.MakeProxyRequest(uri.ToString(), 0);
+                if (resp == null)
+                {
+                    HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+                    resp = (HttpWebResponse)req.GetResponse();
+                }
+                stream = resp.GetResponseStream();
+            }
+            catch (Exception ex)
+            {
+                throw new WebResponseException(ex.Message, ex.InnerException);
             }
 
+            using (StreamReader sr = new StreamReader(stream))
+            {
+                while (!sr.EndOfStream)
+                {
+                    result += sr.ReadLine();
+                }
+            }
             resp.Close();
+
             return result;
         }
 
         public JsonResult DeserializeJson(string jsonStr)
         {
-            JsonResult res = JsonConvert.DeserializeObject<JsonResult>(jsonStr);
+            JsonResult res;
+
+            try
+            {
+                res = JsonConvert.DeserializeObject<JsonResult>(jsonStr);
+            }
+            catch (Exception ex)
+            {
+                throw new JsonDeserializeException(ex.Message, ex.InnerException);
+            }
+
             return res;
         }
 
         public void SendEvents(List<SportEventDTO> eventsList)
         {
             ApiConnection apiConnection = new ApiConnection();
-            apiConnection.SendEvents(eventsList);
+            try
+            {
+                apiConnection.SendEvents(eventsList);
+            }
+            catch (Exception ex)
+            {
+                throw new SaveDataException(ex.Message, ex.InnerException);
+            }
         }
 
         public List<SportEventDTO> GetSportEventsList(JsonResult result)
@@ -143,26 +127,33 @@ namespace JinnSports.Parser.App.JsonParsers
             List<ResultDTO> resultList;
             string sportType;
 
-            foreach (var ev in result.Events)
+            try
             {
-                resultList = new List<ResultDTO>();
-
-                sportType = result.Sports
-                    .Where(n => result.Sections.Where(s => s.Events.Contains(ev.Id))
-                    .FirstOrDefault().Sport == n.Id).FirstOrDefault().Name;
-
-                if (this.GetTeamsNamesFromEvent(ev, sportType, resultList)
-                    && this.AcceptSportType(this.ChangeSportTypeName(Locale.RU, sportType)))
+                foreach (var ev in result.Events)
                 {
-                    this.GetScoresFromEvent(ev, resultList);
+                    resultList = new List<ResultDTO>();
 
-                    SportEventDTO sportEvent = new SportEventDTO();
-                    sportEvent.Date = this.GetDateTimeFromSec(ev.StartTime).Ticks;
-                    sportEvent.Results = resultList;
-                    sportEvent.SportType = this.ChangeSportTypeName(Locale.RU, sportType);
+                    sportType = result.Sports
+                        .Where(n => result.Sections.Where(s => s.Events.Contains(ev.Id))
+                        .FirstOrDefault().Sport == n.Id).FirstOrDefault().Name;
 
-                    eventList.Add(sportEvent);
+                    if (this.GetTeamsNamesFromEvent(ev, sportType, resultList)
+                        && this.AcceptSportType(this.ChangeSportTypeName(Locale.RU, sportType)))
+                    {
+                        this.GetScoresFromEvent(ev, resultList);
+
+                        SportEventDTO sportEvent = new SportEventDTO();
+                        sportEvent.Date = this.GetDateTimeFromSec(ev.StartTime).Ticks;
+                        sportEvent.Results = resultList;
+                        sportEvent.SportType = this.ChangeSportTypeName(Locale.RU, sportType);
+
+                        eventList.Add(sportEvent);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new ParseException(ex.Message, ex.InnerException);
             }
 
             return eventList;

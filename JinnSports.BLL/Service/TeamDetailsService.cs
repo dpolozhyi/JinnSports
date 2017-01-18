@@ -20,18 +20,22 @@ namespace JinnSports.BLL.Service
 
         public int Count(int teamId)
         {
-            var count = this.dataUnit.GetRepository<Team>().GetById(teamId).Results.ToList().Count;
+            int count = this.dataUnit.GetRepository<Result>().Count(r => r.Team.Id == teamId);
 
             return count;
         }
 
         public IEnumerable<ResultDto> GetResults(int teamId, int skip, int take)
         {
-            List<ResultDto> orderedTeamResults = new List<ResultDto>();
+            List<ResultDto> orderedTeamResults = new List<ResultDto>();            
 
-            Team team = this.dataUnit.GetRepository<Team>().GetById(teamId);
-
-            IEnumerable teamResults = team.Results.OrderByDescending(x => x.SportEvent.Date).ThenByDescending(x => x.SportEvent.Id).Skip(skip).Take(take).ToList();
+            IEnumerable<Result> teamResults = this.dataUnit.GetRepository<Result>().Get(
+                filter: res => res.Team.Id == teamId,
+                includeProperties: "Team,SportEvent,SportEvent.Results,SportEvent.Results.Team",
+                orderBy: s => s.OrderByDescending(x => x.SportEvent.Date)
+                    .ThenByDescending(t => t.SportEvent.Id),
+                skip: skip,
+                take: take);
 
             foreach (Result teamResult in teamResults)
             {

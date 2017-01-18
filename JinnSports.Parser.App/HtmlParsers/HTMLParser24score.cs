@@ -5,10 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.Parser.App.Exceptions;
 using JinnSports.Parser.App.ProxyService.ProxyConnection;
-using JinnSports.Entities.Entities;
 using log4net;
 using DTO.JSON;
 
@@ -19,7 +17,7 @@ namespace JinnSports.Parser.App.HtmlParsers
         private static readonly ILog Log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public HTMLParser24score(IUnitOfWork unit)
+        public HTMLParser24score()
         {            
         }
         
@@ -61,16 +59,7 @@ namespace JinnSports.Parser.App.HtmlParsers
                         long date = dateTime.Ticks;
                         string url = baseUrl.ToString() + dateTime.Date.ToString("yyyy-MM-dd");
                         string html = this.GetHtml(url);
-                        List<SportEventDTO> events;
-
-                        try
-                        {
-                            events = this.ParseHtml(html, currentSport, date);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new ParseException(ex.Message, ex.InnerException);
-                        }
+                        List<SportEventDTO> events = this.ParseHtml(html, currentSport, date);
 
                         try
                         {
@@ -82,23 +71,7 @@ namespace JinnSports.Parser.App.HtmlParsers
                         }
                     }
                 }
-                Log.Info("New data from HTML parser was saved to DataBase");
-            }
-            catch (GetDataException ex)
-            {
-                Log.Error(ex);
-            }
-            catch (WebResponseException ex)
-            {
-                Log.Error(ex);
-            }
-            catch (JsonDeserializeException ex)
-            {
-                Log.Error(ex);
-            }
-            catch (ParseException ex)
-            {
-                Log.Error(ex);
+                Log.Info("New data from HTML parser was sent");
             }
             catch (Exception ex)
             {
@@ -138,46 +111,53 @@ namespace JinnSports.Parser.App.HtmlParsers
             var document = parser.Parse(html);
             List<SportEventDTO> events = new List<SportEventDTO>();
 
-            foreach (IElement htmlTr in document.QuerySelectorAll(".daymatches tr[class]:not(.hidden)"))
+            try
             {
-                SportEventDTO currentEvent = new SportEventDTO() { Date = date, SportType = currentSport };
-
-                string teamName1 = htmlTr.Children[1].FirstElementChild.TextContent;
-                string teamName2 = htmlTr.Children[2].FirstElementChild.TextContent;                                
-
-                var score = htmlTr.QuerySelectorAll("span[id*='score']")[0].TextContent;
-                score = score.Replace("\n", string.Empty).Replace("\t", string.Empty);
-                score = score.Split('(')[0];
-
-                int score1;
-                int score2;
-
-                ResultDTO result1 = new ResultDTO { TeamName = teamName1 };
-                ResultDTO result2 = new ResultDTO { TeamName = teamName2 };
-
-                if (score.Contains(":"))
+                foreach (IElement htmlTr in document.QuerySelectorAll(".daymatches tr[class]:not(.hidden)"))
                 {
-                    var scores = score.Split(':');
-                    int.TryParse(scores[0], out score1);
-                    int.TryParse(scores[1], out score2);
+                    SportEventDTO currentEvent = new SportEventDTO() { Date = date, SportType = currentSport };
 
-                    result1.Score = score1;
-                    result2.Score = score2;
-                }
-                else if (score.Contains("— —"))
-                {
-                    result1.Score = null;
-                    result2.Score = null;
-                }
-                else
-                {
-                    continue;
-                }
+                    string teamName1 = htmlTr.Children[1].FirstElementChild.TextContent;
+                    string teamName2 = htmlTr.Children[2].FirstElementChild.TextContent;
 
-                currentEvent.Results.Add(result1);
-                currentEvent.Results.Add(result2);
+                    var score = htmlTr.QuerySelectorAll("span[id*='score']")[0].TextContent;
+                    score = score.Replace("\n", string.Empty).Replace("\t", string.Empty);
+                    score = score.Split('(')[0];
 
-                events.Add(currentEvent);
+                    int score1;
+                    int score2;
+
+                    ResultDTO result1 = new ResultDTO { TeamName = teamName1 };
+                    ResultDTO result2 = new ResultDTO { TeamName = teamName2 };
+
+                    if (score.Contains(":"))
+                    {
+                        var scores = score.Split(':');
+                        int.TryParse(scores[0], out score1);
+                        int.TryParse(scores[1], out score2);
+
+                        result1.Score = score1;
+                        result2.Score = score2;
+                    }
+                    else if (score.Contains("— —"))
+                    {
+                        result1.Score = null;
+                        result2.Score = null;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                    currentEvent.Results.Add(result1);
+                    currentEvent.Results.Add(result2);
+
+                    events.Add(currentEvent);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ParseException(ex.Message, ex.InnerException);
             }
 
             return events;

@@ -19,7 +19,7 @@ namespace JinnSports.DataAccessInterfaces.Interfaces
 
         Task<T> GetByIdAsync(object id);
 
-        int Count(Func<T, bool> filter = null);
+        int Count(Expression<Func<T, bool>> filter = null);
 
         Task<int> CountAsync();
 
