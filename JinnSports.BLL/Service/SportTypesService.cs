@@ -109,7 +109,7 @@ namespace JinnSports.BLL.Service
             {
                 SelectedId = sportTypeId,
                 SelectedName = selectedName, 
-                SportTypes = GetAllSportTypes(),
+                SportTypes = this.GetAllSportTypes(),
                 SportTypeResults = sportTypeListDtos
             };
             return sportTypeModel;
