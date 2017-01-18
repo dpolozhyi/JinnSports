@@ -15,9 +15,9 @@
                         Application Type <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li role="presentation">@Html.ActionLink("MVC Application", "Index", "Mvc/Home")</li>
+                        <li role="presentation">@Html.ActionLink("MVC Application", "Index", "Home")</li>
                         <li role="presentation" class="divider"></li>
-                        <li role="presentation">@Html.ActionLink("WebAPI Application", "Index", "Home")</li>
+                        <li role="presentation">@Html.ActionLink("WebAPI Application", "Index", "Home", new { area = "" }, null)</li>
                     </ul>
                 </li>
                 <li>
@@ -25,11 +25,6 @@
                 </li>
                 <li>
                     @Html.ActionLink("Результаты матчей", "Index", "Event")
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    @Html.Partial("_LoginPartial")
                 </li>
             </ul>
         </div><!-- /.navbar-collapse -->
