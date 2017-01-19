@@ -19,8 +19,8 @@ namespace JinnSports.Parser.App
             ProxyParser pp = new ProxyParser();
             pp.UpdateData(true, "http://foxtools.ru/Proxy");*/
             ProxyTerminal pt = new ProxyTerminal();
-            var a = pt.GetProxyResponse(new Uri("https://2ip.ua/ru"));
-            Trace.WriteLine(a);
+            HttpWebResponse a = pt.GetProxyResponse(new Uri("https://2ip.ua/ru"));
+            Trace.WriteLine("___________________________" + a);
             Console.ReadKey();
         }
     }

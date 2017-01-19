@@ -17,9 +17,16 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
 
         public ProxyRepository()
         {
-            this.path = @"..\..\" + ConfigSettings.Xml();
+            this.path = @"..\..\" + ConfigSettings.GetPath("ProxyXml", "original");
             this.xmlSerializer = new XmlSerializer(typeof(List<ProxyServer>));
-            this.Interval = 1;
+            this.Interval = ConfigSettings.GetCooldown("ProxyXml", "original");
+        }
+
+        public ProxyRepository(string profile)
+        {
+            this.path = @"..\..\" + ConfigSettings.GetPath("ProxyXml", profile);
+            this.xmlSerializer = new XmlSerializer(typeof(List<ProxyServer>));
+            this.Interval = ConfigSettings.GetCooldown("ProxyXml", profile);
         }
 
         public int Interval { get; private set; }
@@ -33,16 +40,16 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
                 {
                     proxyCollection = (List<T>)this.xmlSerializer.Deserialize(xmlReader);
                 }
-            }
-            proxyCollection.Remove(proxyCollection.FirstOrDefault(x => x.Ip == ip));
-            lock (repLocker)
-            {
+
+                proxyCollection.Remove(proxyCollection.FirstOrDefault(x => x.Ip == ip));
+
                 using (TextWriter xmlWriter = new StreamWriter(this.path))
                 {
                     this.xmlSerializer.Serialize(xmlWriter, proxyCollection);
                 }
             }
         }
+
         public void Modify(T proxy)
         {
             List<T> proxyCollection = new List<T>();
@@ -61,6 +68,29 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
                 }
             }
         }
+
+        public void Modify(List<T> proxyList)
+        {
+            List<T> proxyCollection = new List<T>();
+            lock (repLocker)
+            {
+                using (TextReader xmlReader = new StreamReader(this.path))
+                {
+                    proxyCollection = (List<T>)this.xmlSerializer.Deserialize(xmlReader);
+                }
+                foreach (T proxy in proxyList)
+                {
+                    int index = proxyCollection.FindIndex(x => x.Ip == proxy.Ip);
+                    proxyCollection.RemoveAt(index);
+                    proxyCollection.Insert(index, proxy);
+                }
+                using (TextWriter xmlWriter = new StreamWriter(this.path))
+                {
+                    this.xmlSerializer.Serialize(xmlWriter, proxyCollection);
+                }
+            }
+        }
+
         public void Clear()
         {
             List<T> proxyCollection = new List<T>();
@@ -72,6 +102,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
                 }
             }
         }
+
         public int Count()
         {
             List<T> proxyCollection = new List<T>();
@@ -85,6 +116,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
             int a = proxyCollection.Count();
             return proxyCollection.Count();
         }
+
         public void Add(T proxy)
         {
             List<T> proxyCollection = new List<T>();
@@ -101,6 +133,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
                 }
             }
         }
+
         public void Add(List<T> proxyList)
         {
             List<T> proxyCollection = new List<T>();
@@ -120,6 +153,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
                 }
             }
         }
+
         public List<T> GetAll()
         {
             List<T> proxyCollection = new List<T>();
@@ -132,12 +166,12 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
             }
             return proxyCollection;
         }
+
         public bool IsAvaliable(T proxy)
         {
             TimeSpan timeDifference = DateTime.Now.TimeOfDay - proxy.LastUsed.TimeOfDay;
-            var proxyTimeout = timeDifference.Seconds + (timeDifference.Minutes * 60) + (timeDifference.Hours * 3600) + (timeDifference.Days * 3600 * 24);
-            //var proxyTimeout = timeDifference.TotalSeconds().;
-            if ((Math.Abs(proxyTimeout) >= this.Interval * 60) && (proxy.IsBusy != true))
+            double proxyTimeout = timeDifference.TotalSeconds;
+            if ((Math.Abs(proxyTimeout) >= this.Interval) && (proxy.IsBusy != true))
             {
                 return true;
             }
@@ -146,6 +180,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
                 return false;
             }
         }
+
         public bool Contains(string ip)
         {
             List<T> proxyCollection = new List<T>();

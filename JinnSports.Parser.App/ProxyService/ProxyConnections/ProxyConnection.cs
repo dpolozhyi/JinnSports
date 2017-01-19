@@ -17,62 +17,123 @@ namespace JinnSports.Parser.App.ProxyService.ProxyConnections
     public class ProxyConnection : IProxyConnection
     {
         private static object connectionLocker = new Object();
-
-        public void SetStatus(string ip, bool connected)
+        private ProxyRepository<ProxyServer> xmlWriter;
+        public void UpdateElimination()
         {
             lock (connectionLocker)
             {
-                ProxyRepository<ProxyServer> xmlWriter = new ProxyRepository<ProxyServer>();
+                try
+                {
+                    ProxyRepository<ProxyServer> xmlWriter = new ProxyRepository<ProxyServer>();
+                    List<ProxyServer> eliminatedCollection = xmlWriter.GetAll().Where(x => x.Status == ProxyStatus.PS_Eliminated).ToList();
+                    foreach (ProxyServer proxy in eliminatedCollection)
+                    {
+                        proxy.Status = ProxyStatus.PS_Bad;
+                        proxy.Priority--;
+                    }
+                    xmlWriter.Modify(eliminatedCollection);
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+            }
+        }
+
+        public ProxyConnection()
+        {
+            this.xmlWriter = new ProxyRepository<ProxyServer>();
+        }
+
+        public ProxyConnection(string sectionName)
+        {
+            this.xmlWriter = new ProxyRepository<ProxyServer>(sectionName);
+        }
+
+        public void SetStatus(string ip, ConnectionStatus status)
+        {
+            lock (connectionLocker)
+            {
                 List<ProxyServer> proxyCollection = xmlWriter.GetAll();
                 ProxyServer proxy = proxyCollection.Where(x => x.Ip == ip).FirstOrDefault();
                 try
                 {
-                    if (connected)
+                    switch (status)
                     {
-                        if (proxy.Priority != 0)
-                        {
-                            proxy.Priority = 0;
-                            proxy.Status = ProxyStatus.PS_Stable;
-                        }
-                        else
-                        {
-                            if (proxy.Status == ProxyStatus.PS_New)
+                        case ConnectionStatus.CS_Connected:
                             {
-                                proxy.Status = ProxyStatus.PS_Stable;
+                                if (proxy.Priority != 0)
+                                {
+                                    proxy.Priority = 0;
+                                    proxy.Status = ProxyStatus.PS_Stable;
+                                }
+                                else
+                                {
+                                    if (proxy.Status == ProxyStatus.PS_New)
+                                    {
+                                        proxy.Status = ProxyStatus.PS_Stable;
+                                    }
+                                }
+                                proxy.LastUsed = DateTime.Now;
+                                proxy.IsBusy = false;
+                                break;
                             }
-                        }
-                    }
-                    else
-                    {
-                        switch (proxy.Priority)
-                        {
-                            case 0:
+                        case ConnectionStatus.CS_Disconnected:
+                            {
+                                switch (proxy.Priority)
                                 {
-                                    proxy.Priority++;
-                                    proxy.Status = ProxyStatus.PS_Unstable;
-                                    break;
+                                    case 0:
+                                        {
+                                            proxy.Status = ProxyStatus.PS_Unstable;
+                                            proxy.Priority++;
+                                            break;
+                                        }
+                                    case 1:
+                                        {
+                                            proxy.Status = ProxyStatus.PS_Bad;
+                                            proxy.Priority++;
+                                            break;
+                                        }
+                                    case 2:
+                                        {
+                                            proxy.Status = ProxyStatus.PS_Eliminated;
+                                            proxy.Priority++;
+                                            break;
+                                        }
                                 }
-                            case 1:
+                                proxy.LastUsed = DateTime.Now;
+                                proxy.IsBusy = false;
+                                break;
+                           }
+                        case ConnectionStatus.CS_PreResponseTerminated:
+                            {
+                                proxy.IsBusy = false;
+                                break;
+                            }
+                        case ConnectionStatus.CS_PostResponseTerminated:
+                            {
+                                if (proxy.Priority != 0)
                                 {
-                                    proxy.Priority++;
-                                    proxy.Status = ProxyStatus.PS_Bad;
-                                    break;
+                                    proxy.Priority = 0;
+                                    proxy.Status = ProxyStatus.PS_Stable;
                                 }
-                            case 2:
+                                else
                                 {
-                                    proxy.Priority++;
-                                    proxy.Status = ProxyStatus.PS_Eliminated;
-                                    break;
+                                    if (proxy.Status == ProxyStatus.PS_New)
+                                    {
+                                        proxy.Status = ProxyStatus.PS_Stable;
+                                    }
                                 }
-                        }
+                                proxy.LastUsed = DateTime.Now;
+                                proxy.IsBusy = false;
+                                break;
+                            }
                     }
                 }
                 catch (Exception e)
                 {
                     throw e;
                 }
-                proxy.LastUsed = DateTime.Now;
-                proxy.IsBusy = false;
                 xmlWriter.Modify(proxy);
             }
         }
@@ -81,7 +142,6 @@ namespace JinnSports.Parser.App.ProxyService.ProxyConnections
         {
             lock (connectionLocker)
             {
-                ProxyRepository<ProxyServer> xmlWriter = new ProxyRepository<ProxyServer>();
                 List<ProxyServer> proxyCollection = xmlWriter.GetAll();
                 List<ProxyServer> usableProxies = proxyCollection.Where(x => x.Priority == 0 && xmlWriter.IsAvaliable(x)).ToList();
                 if (usableProxies.Count == 0)
@@ -127,131 +187,129 @@ namespace JinnSports.Parser.App.ProxyService.ProxyConnections
             }
         }
 
-        public HttpWebResponse GetProxyResponse(Uri uri, CancellationToken token)
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public HttpWebResponse GetProxyResponse(Uri uri, int timeout, CancellationToken token, bool async)
         {
             HttpWebResponse response;
             HttpWebRequest request;
-            // Create the request object.
+            // Get proxy from xml file, string "proxy" contains the result
             string proxy = this.GetProxy();
+
+            if (proxy == string.Empty)
+            {
+                this.UpdateElimination();
+                proxy = this.GetProxy();
+            }
+
             Trace.WriteLine("************************************");
             Trace.WriteLine("Current IP : " + proxy);
             Trace.WriteLine("************************************");
             if (proxy != string.Empty)
             {
+                //pinging block, if server doesn't ping SetStatus (Disconnected)
                 if (this.CanPing(proxy))
                 {
                     try
                     {
+                        //Request formation block
                         request = (HttpWebRequest)WebRequest.Create(uri);
-
-                        Trace.WriteLine("New task <Web Response>");
-
                         request.Headers.Set(HttpRequestHeader.ContentEncoding, "1251");
                         WebProxy webProxy = new WebProxy(proxy, true);
                         request.Proxy = webProxy;
-                        //1st check cancellation token
 
+                        //PreRequest CancellationToken checking, if Cancel - SetStatus (PreResponseTerminated)
                         if (token.IsCancellationRequested)
                         {
-                            Trace.WriteLine("Задача tsk отменена до получения webresponse");
+                            this.SetStatus(proxy, ConnectionStatus.CS_PostResponseTerminated);
                             return null;
                         }
 
-                        Task<WebResponse> task = Task.Factory.FromAsync(
-                        request.BeginGetResponse,
-                        request.EndGetResponse,
-                        request);
-
-                        task.ContinueWith(t =>
+                        if (async)
                         {
-                            if (t.IsFaulted)
-                            {
-                                Trace.WriteLine("Bad IP FOUND in RESPONSE after TaskEnd FUNCTION _____ EXCEPTION");
-                                Trace.WriteLine("_____________________________________________________________");
-                                proxy = ((t.AsyncState as HttpWebRequest).Proxy as WebProxy).Address.Host;
-                                this.SetStatus(proxy, false);
-                            }
-                            else
-                            {
-                                //good ip found
-                            }
-                        });
+                            response = RunAsyncProxyConnection(request, timeout, proxy);
+                        }
+                        else
+                        {
+                            response = RunProxyConnection(request, timeout, proxy);
+                        }
 
-                        response = task.Result as HttpWebResponse;
+                        //PostRequest CancellationToken checking, if Cancel - SetStatus (PostResponseTerminated)
                         if (token.IsCancellationRequested)
                         {
-                            Trace.WriteLine("Задача tsk отменена после получения webresponse");
+                            this.SetStatus(proxy, ConnectionStatus.CS_PostResponseTerminated);
                             return null;
                         }
                         if (response != null)
                         {
-                            //set cancellation token
-                            Trace.WriteLine("Good IP FOUND in RESPONSE after TaskEnd FUNCTION");
-                            Trace.WriteLine("_____________________________________________________________");
-
-                            Debug.WriteLine("Good IP : " + ((task.AsyncState as HttpWebRequest).Proxy as WebProxy).Address.Host);
-                            proxy = ((task.AsyncState as HttpWebRequest).Proxy as WebProxy).Address.Host;
-                            this.SetStatus(proxy, true);
+                            //Valid Ip founded, SetStatus (Connected)
+                            Debug.WriteLine("Good IP : " + /*((task.AsyncState as HttpWebRequest).Proxy as WebProxy).Address.Host*/ proxy);
+                            this.SetStatus(proxy, ConnectionStatus.CS_Connected);
                             return response;
                         }
                         else
                         {
-                            Trace.WriteLine("Bad IP FOUND in RESPONSE after TaskEnd FUNCTION");
-                            Trace.WriteLine("_____________________________________________________________");
-                            proxy = ((task.AsyncState as HttpWebRequest).Proxy as WebProxy).Address.Host;
-                            this.SetStatus(proxy, false);
+                            //Invalid Ip founded, SetStatus (Disconnected). Unreachable code
+                            this.SetStatus(proxy, ConnectionStatus.CS_Disconnected);
                         }
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        Trace.WriteLine(ex.Message, "Bad IP FOUND");
-                        Trace.WriteLine("_____________________________________________________________");
-                        this.SetStatus(proxy, false);
-                        //throw new WebResponseException(ex.Message, ex.InnerException);
+                        //Connection Exception, SetStatus (Disconnected)
+                        this.SetStatus(proxy, ConnectionStatus.CS_Disconnected);
                     }
                 }
                 else
                 {
-                    Trace.WriteLine("Bad IP FOUND in RESPONSE after TaskEnd FUNCTION");
-                    Trace.WriteLine("_____________________________________________________________");
-                    this.SetStatus(proxy, false);
+                    //Connection Exception, SetStatus (Disconnected)
+                    this.SetStatus(proxy, ConnectionStatus.CS_Disconnected);
                 }
             }
             return null;
         }
-
-        /*public static Task<HttpWebResponse> GetProxyResponseAsync(this HttpWebRequest request, TimeSpan timeout,
-            CancellationToken token)
+  
+        private HttpWebResponse RunAsyncProxyConnection(HttpWebRequest request, int timeout, string proxy)
         {
-            Trace.WriteLine("In function GetProxyResponseAsync (Working)");
+            Task<WebResponse> task = Task.Factory.FromAsync(
+                       request.BeginGetResponse,
+                       request.EndGetResponse,
+                       request);
 
-            return Task.Run(() =>
+            if (!task.Wait(timeout * 1000))
             {
-                if (token.IsCancellationRequested)
-                    return null;
-                Task<WebResponse> task;
-                try
+                throw new WebException("No response was received during the time-out period specified.",
+                    WebExceptionStatus.Timeout);
+            }
+
+            task.ContinueWith(t =>
+            {
+                if (t.IsFaulted)
                 {
-                    token.Register(request.Abort);
-                    task = Task.Factory.FromAsync(request.BeginGetResponse, request.EndGetResponse, null);
-
-                    if (!task.Wait(timeout))
-                        throw new WebException("No response was received during the time-out period specified.",
-                            WebExceptionStatus.Timeout);
+                    proxy = ((t.AsyncState as HttpWebRequest).Proxy as WebProxy).Address.Host;
+                    this.SetStatus(proxy, ConnectionStatus.CS_Disconnected);
                 }
-                catch (Exception ex)
-                {
-                    var exception = ex as WebException;
-                    if (exception != null)
-                        throw exception;
+            });
 
-                    throw new WebException(ex.Message, WebExceptionStatus.ConnectionClosed);
-                }
+            return task.Result as HttpWebResponse;
+        }
 
-                return task.Result as HttpWebResponse;
-            }, token);
-        }*/
-
+        private HttpWebResponse RunProxyConnection(HttpWebRequest request, int timeout, string proxy)
+        {
+            request.Timeout = timeout * 1000;
+            try
+            {
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                return response;
+            }
+            catch(WebException e)
+            {
+                throw new WebException(e.Message);
+            }
+        }
     }
 }
 

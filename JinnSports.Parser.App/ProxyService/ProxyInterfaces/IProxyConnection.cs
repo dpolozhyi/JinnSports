@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JinnSports.Parser.App.ProxyService.ProxyEnums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -10,12 +11,12 @@ namespace JinnSports.Parser.App.ProxyService.ProxyInterfaces
 {
     public interface IProxyConnection
     {
-        void SetStatus(string ip, bool connected);
+        void SetStatus(string ip, ConnectionStatus status);
 
         string GetProxy();
 
         bool CanPing(string address);
 
-        HttpWebResponse GetProxyResponse(Uri uri, CancellationToken token);
+        HttpWebResponse GetProxyResponse(Uri uri, int timeout, CancellationToken token, bool asyncResponse);
     }
 }

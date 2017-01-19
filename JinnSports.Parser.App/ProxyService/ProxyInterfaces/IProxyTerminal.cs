@@ -9,8 +9,6 @@ namespace JinnSports.Parser.App.ProxyService.ProxyInterfaces
 {
     public interface IProxyTerminal
     {
-        //HttpWebResponse GetProxyResponse(string url, int tries);
-
-        //HttpWebResponse GetProxyResponse(Uri uri);
+        HttpWebResponse GetProxyResponse(Uri uri);
     }
 }

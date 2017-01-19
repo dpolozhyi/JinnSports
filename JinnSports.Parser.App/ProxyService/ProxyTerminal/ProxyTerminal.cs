@@ -14,19 +14,23 @@ namespace JinnSports.Parser.App.ProxyService.ProxyTerminal
 {
     public class ProxyTerminal : IProxyTerminal
     {
-        IProxyAsync proxyAsyncCommand;
+        private IProxyAsync proxyAsync;
         private ProxyConnection pc;
-
+  
         public ProxyTerminal()
         {
             this.pc = new ProxyConnection();
         }
 
-        public HttpWebResponse GetProxyResponse(Uri uri)
+        public ProxyTerminal(string profile)
         {
-            proxyAsyncCommand = new ProxyAsync(this.pc, uri);
-            return proxyAsyncCommand.GetProxyAsync();
+            this.pc = new ProxyConnection(profile);
         }
 
+        public HttpWebResponse GetProxyResponse(Uri uri)
+        {
+            this.proxyAsync = new ProxyAsync(this.pc, uri);
+            return proxyAsync.GetProxyAsync();
+        }
     }
 }

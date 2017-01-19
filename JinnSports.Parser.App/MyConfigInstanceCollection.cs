@@ -9,6 +9,11 @@ namespace JinnSports.Parser.App
             get { return this.BaseGet(index) as MyConfigInstanceElement; }
         }
 
+        public new MyConfigInstanceElement this[string name]
+        {
+            get { return this.BaseGet(name) as MyConfigInstanceElement; }
+        }
+
         protected override ConfigurationElement CreateNewElement()
         {
             return new MyConfigInstanceElement();
@@ -16,8 +21,7 @@ namespace JinnSports.Parser.App
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            //set to whatever Element Property you want to use for a key
-            return ((MyConfigInstanceElement)element).Path;
+            return ((MyConfigInstanceElement)element).Profile;
         }
     }
 }

@@ -14,4 +14,11 @@ namespace JinnSports.Parser.App.ProxyService.ProxyEnums
         PS_Bad,
         PS_Eliminated
     }
+    public enum ConnectionStatus
+    {
+        CS_Connected,
+        CS_Disconnected,
+        CS_PreResponseTerminated,
+        CS_PostResponseTerminated
+    }
 }

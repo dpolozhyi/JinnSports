@@ -14,55 +14,77 @@ namespace JinnSports.Parser.App.ProxyService.ProxyTerminal
     public class ProxyAsync : IProxyAsync
     {
         private Uri uri;
-        private ProxyConnection pc;
+        private IProxyConnection pc;
         private CancellationTokenSource cancelTokenSrc;
+        private int asyncinterval;
+        private int timeout;
 
         public ProxyAsync(IProxyConnection proxyConnection, Uri uri)
         {
+            this.asyncinterval = ConfigSettings.GetAsyncInterval("ProxyXml", "original");
+            this.timeout = ConfigSettings.GetTimeout("ProxyXml", "original");
             this.uri = uri;
-            this.pc = new ProxyConnection();
+            this.pc = proxyConnection;
+            this.cancelTokenSrc = new CancellationTokenSource();
+        }
+
+        public ProxyAsync(IProxyConnection proxyConnection, Uri uri, string profile)
+        {
+            this.asyncinterval = ConfigSettings.GetAsyncInterval("ProxyXml", profile);
+            this.timeout = ConfigSettings.GetTimeout("ProxyXml", profile);
+            this.uri = uri;
+            this.pc = proxyConnection;
             this.cancelTokenSrc = new CancellationTokenSource();
         }
 
         public HttpWebResponse GetProxyAsync()
         {
-            Task<HttpWebResponse>[] tasks = new Task<HttpWebResponse>[2];
-            for (int i = 0; i < 2; i++)
-            {
-                Trace.WriteLine(String.Format("{0} - Cycle step", i));
+            return this.GetProxyAsync(false);
+        }
 
-                //Thread.Sleep(4000);
-                tasks[i] = Task<HttpWebResponse>.Factory.StartNew(() =>
+        public HttpWebResponse GetProxyAsync(bool asyncResponse)
+        {
+            IList<Task<HttpWebResponse>> tasks = new List<Task<HttpWebResponse>>();
+
+            //Creating tasks while CancelationToken is not cancelled
+            while (!this.cancelTokenSrc.Token.IsCancellationRequested)
+            {
+                Trace.WriteLine(String.Format("New task created"));
+
+                /*Task t = Task.Run(async() =>
                 {
-                    var result = this.pc.GetProxyResponse(uri, cancelTokenSrc.Token);
+                    await Task.Delay(this.asyncinterval * 1000);
+                });
+                t.Wait();*/
+                Thread.Sleep(this.asyncinterval * 1000);
+
+                tasks.Add(Task<HttpWebResponse>.Factory.StartNew(() =>
+                {
+                    var result = this.pc.GetProxyResponse(uri, this.timeout, cancelTokenSrc.Token, asyncResponse);
                     if (result != null)
                     {
                         cancelTokenSrc.Cancel();
                     }
                     return result;
                 }
-                , this.cancelTokenSrc.Token);
-
-                if (this.cancelTokenSrc.Token.IsCancellationRequested)
-                {
-                    Trace.WriteLine(String.Format("Task Group canceled"));
-                    break;
-                }
+                , this.cancelTokenSrc.Token));
             }
+
+            //Waiting for finishing all running tasks except Canceled
+            tasks = tasks.Where(t => t.Status != TaskStatus.Canceled).ToList();
+
             Task.WaitAll(tasks.ToArray());
+
+            //Checking for Status = RanToCompletion
             foreach (Task<HttpWebResponse> task in tasks)
             {
-                if (task.Status == TaskStatus.RanToCompletion)
+                if (task.Result != null)
                 {
-                    if (task.Result != null)
-                    {
-                        Trace.WriteLine("*&*^&^*^&^**^^*&^        Valid IP Found     *&*^&^*^&^**^^*&^");
-                        return task.Result as HttpWebResponse;
-                    }
+                    //returning valid IP, if found, can be only one for this function
+                    return task.Result as HttpWebResponse;
                 }
             }
-            Trace.WriteLine("tasks completed");
-            return null;      
+            return null;
         }
     }
 }
