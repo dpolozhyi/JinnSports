@@ -19,7 +19,7 @@ namespace JinnSports.UnitTests.Services
 
         private DbContextTransaction databaseTransaction;
 
-        [OneTimeSetUp]
+        [SetUp]
         public void Init()
         {
             this.databaseSportsContext = new SportsContext("SportsContext");
@@ -160,7 +160,7 @@ namespace JinnSports.UnitTests.Services
             Assert.AreEqual(expConf.ExistedName, newConf.ExistedName);
         }
 
-        [OneTimeTearDown]
+        [TearDown]
         public void Clean()
         {
             // Pend changes
