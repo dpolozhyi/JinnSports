@@ -30,7 +30,7 @@ namespace JinnSports.UnitTests.Services
 
         private DbContextTransaction databaseTransaction;
 
-        [OneTimeSetUp]
+        [SetUp]
         public void Init()
         {
             this.databaseSportsContext = new SportsContext("SportsContext");
@@ -117,7 +117,7 @@ namespace JinnSports.UnitTests.Services
             this.databaseSportsContext.SaveChanges();
         }
 
-        [OneTimeTearDown]
+        [TearDown]
         public void Clean()
         {
             // Pend changes
