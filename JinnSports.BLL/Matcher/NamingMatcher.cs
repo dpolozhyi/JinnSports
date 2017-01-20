@@ -20,7 +20,7 @@ namespace JinnSports.BLL.Matcher
         /// </summary>
         /// <param name="inputTeam"></param>
         /// <returns></returns>
-        public List<Conformity> ResolveNaming(Team inputTeam) //TODO add typisation and locals
+        public List<Conformity> ResolveNaming(Team inputTeam) //TODO add typisation and locals.
         {
             List<Conformity> conformities = new List<Conformity>();
             IEnumerable<Team> teams = this.unit.GetRepository<Team>()
