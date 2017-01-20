@@ -5,14 +5,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.Parser.App.Exceptions;
 using JinnSports.Parser.App.ProxyService.ProxyConnections;
-using JinnSports.Entities.Entities;
 using log4net;
 using DTO.JSON;
 using JinnSports.Parser.App.ProxyService.ProxyTerminal;
 using JinnSports.Parser.App.ProxyService.ProxyInterfaces;
+using JinnSports.DataAccessInterfaces.Interfaces;
 
 namespace JinnSports.Parser.App.HtmlParsers
 {
@@ -27,7 +26,6 @@ namespace JinnSports.Parser.App.HtmlParsers
         {
             proxyTerminal = new ProxyTerminal();
         }
-        
         public uint DaysCount { get; set; }
 
         public void Parse(uint daysCount = 1)
@@ -35,7 +33,7 @@ namespace JinnSports.Parser.App.HtmlParsers
             Log.Info("Html parser was started");
             try
             {
-                ApiConnection api = new ApiConnection(ApiConnectionStrings.URL, ApiConnectionStrings.Controller);
+                ApiConnection api = new ApiConnection(/*ApiConnectionStrings.URL, ApiConnectionStrings.Controller*/);
 
                 Uri footballUrl = new Uri("https://24score.com/?date=");
                 Uri basketballUrl = new Uri("https://24score.com/basketball/?date=");

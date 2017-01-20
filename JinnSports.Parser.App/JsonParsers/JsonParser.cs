@@ -111,7 +111,7 @@ namespace JinnSports.Parser.App.JsonParsers
 
         public void SendEvents(List<SportEventDTO> eventsList)
         {
-            ApiConnection apiConnection = new ApiConnection(ApiConnectionStrings.URL, ApiConnectionStrings.Controller);
+            ApiConnection apiConnection = new ApiConnection(/*ApiConnectionStrings.URL, ApiConnectionStrings.Controller*/);
             try
             {
                 apiConnection.SendEvents(eventsList);
@@ -134,21 +134,26 @@ namespace JinnSports.Parser.App.JsonParsers
                 {
                     resultList = new List<ResultDTO>();
 
-                    sportType = result.Sports
-                        .Where(n => result.Sections.Where(s => s.Events.Contains(ev.Id))
-                        .FirstOrDefault().Sport == n.Id).FirstOrDefault().Name;
+                    Sport sport = result.Sports
+                                    .Where(n => result.Sections.Where(s => s.Events.Contains(ev.Id))
+                                    .FirstOrDefault().Sport == n.Id).FirstOrDefault();
 
-                    if (this.GetTeamsNamesFromEvent(ev, sportType, resultList)
-                        && this.AcceptSportType(this.ChangeSportTypeName(Locale.RU, sportType)))
+                    if (sport != null)
                     {
-                        this.GetScoresFromEvent(ev, resultList);
+                        sportType = sport.Name;
 
-                        SportEventDTO sportEvent = new SportEventDTO();
-                        sportEvent.Date = this.GetDateTimeFromSec(ev.StartTime).Ticks;
-                        sportEvent.Results = resultList;
-                        sportEvent.SportType = this.ChangeSportTypeName(Locale.RU, sportType);
+                        if (this.GetTeamsNamesFromEvent(ev, sportType, resultList)
+                            && this.AcceptSportType(this.ChangeSportTypeName(Locale.RU, sportType)))
+                        {
+                            this.GetScoresFromEvent(ev, resultList);
 
-                        eventList.Add(sportEvent);
+                            SportEventDTO sportEvent = new SportEventDTO();
+                            sportEvent.Date = this.GetDateTimeFromSec(ev.StartTime).Ticks;
+                            sportEvent.Results = resultList;
+                            sportEvent.SportType = this.ChangeSportTypeName(Locale.RU, sportType);
+
+                            eventList.Add(sportEvent);
+                        }
                     }
                 }
             }

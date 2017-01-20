@@ -1,13 +1,9 @@
 ﻿using JinnSports.DAL.EFContext;
 using JinnSports.DAL.Repositories;
 using JinnSports.Parser.App.Configuration.Parser;
-using JinnSports.Parser.App.Configuration.Proxy;
 using JinnSports.Parser.App.HtmlParsers;
 using JinnSports.Parser.App.JsonParsers;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
