@@ -12,7 +12,8 @@ namespace JinnSports.WEB
             bundles.Add(new StyleBundle("~/Content/MainStyles")
                 .Include("~/Content/bootstrap.css")
                 .Include("~/Content/AdminLTE/AdminLTE.css")
-                .Include("~/Content/AdminLTE/skins/skin-blue.css"));
+                .Include("~/Content/AdminLTE/skins/skin-blue.css")
+                .Include("~/Content/Style.css"));
 
             bundles.Add(new StyleBundle("~/Content/DataTableStyles")
                 .Include("~/Content/DataTables/css/dataTables.bootstrap.css"));
