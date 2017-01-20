@@ -11,6 +11,8 @@ using JinnSports.Parser.App.ProxyService.ProxyConnections;
 using JinnSports.Entities.Entities;
 using log4net;
 using DTO.JSON;
+using JinnSports.Parser.App.ProxyService.ProxyTerminal;
+using JinnSports.Parser.App.ProxyService.ProxyInterfaces;
 
 namespace JinnSports.Parser.App.HtmlParsers
 {
@@ -19,8 +21,11 @@ namespace JinnSports.Parser.App.HtmlParsers
         private static readonly ILog Log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        private IProxyTerminal proxyTerminal;
+
         public HTMLParser24score(IUnitOfWork unit)
-        {            
+        {
+            proxyTerminal = new ProxyTerminal();
         }
         
         public uint DaysCount { get; set; }
@@ -30,7 +35,7 @@ namespace JinnSports.Parser.App.HtmlParsers
             Log.Info("Html parser was started");
             try
             {
-                ApiConnection api = new ApiConnection();
+                ApiConnection api = new ApiConnection(ApiConnectionStrings.URL, ApiConnectionStrings.Controller);
 
                 Uri footballUrl = new Uri("https://24score.com/?date=");
                 Uri basketballUrl = new Uri("https://24score.com/basketball/?date=");
@@ -84,28 +89,24 @@ namespace JinnSports.Parser.App.HtmlParsers
         private string GetHtml(string url)
         {
             ProxyConnection pc = new ProxyConnection();
-            HttpWebResponse resp;
+            HttpWebResponse response;
 
             WebRequest reqGet = WebRequest.Create(url);
             reqGet.Headers.Set(HttpRequestHeader.ContentEncoding, "1251");
 
             try
             {
-                /*resp = pc.GetProxyResponse(url, 0);
-                if (resp == null)
-                {
-                    resp = (HttpWebResponse)reqGet.GetResponse();
-                }*/
+                response = this.proxyTerminal.GetProxyResponse(new Uri(url));
             }
             catch (Exception ex)
             {
                 throw new WebResponseException(ex.Message, ex.InnerException);
             }
 
-            // string html = new StreamReader(resp.GetResponseStream()).ReadToEnd();
+            string html = new StreamReader(response.GetResponseStream()).ReadToEnd();
 
-            //return html;
-            return "";
+            return html;
+            //return "";
         }
 
         private List<SportEventDTO> ParseHtml(string html, string currentSport, long date)

@@ -3,7 +3,7 @@
   <ProxyServer Status="PS_Stable" Priority="0">
     <Ip>124.47.7.45</Ip>
     <LastUsed>2016-12-12T21:38:21.9043775+02:00</LastUsed>
-    <IsBusy>true</IsBusy>
+    <IsBusy>false</IsBusy>
   </ProxyServer>
   <ProxyServer Status="PS_New" Priority="0">
     <Ip>60.250.81.118</Ip>
@@ -13,7 +13,7 @@
   <ProxyServer Status="PS_Stable" Priority="0">
     <Ip>94.181.34.64</Ip>
     <LastUsed>2017-01-16T19:34:14.2649658+02:00</LastUsed>
-    <IsBusy>true</IsBusy>
+    <IsBusy>false</IsBusy>
   </ProxyServer>
   <ProxyServer Status="PS_Stable" Priority="0">
     <Ip>177.184.8.123</Ip>
@@ -33,7 +33,7 @@
   <ProxyServer Status="PS_New" Priority="0">
     <Ip>178.215.111.70</Ip>
     <LastUsed>2017-01-16T19:30:50.273163+02:00</LastUsed>
-    <IsBusy>true</IsBusy>
+    <IsBusy>false</IsBusy>
   </ProxyServer>
   <ProxyServer Status="PS_Bad" Priority="2">
     <Ip>202.59.163.129</Ip>

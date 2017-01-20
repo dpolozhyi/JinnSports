@@ -8,6 +8,7 @@ using System.Net;
 using System.Diagnostics;
 using JinnSports.Parser.App.ProxyService.ProxyConnections;
 using System.Threading;
+using JinnSports.Parser.App.Configuration.Proxy;
 
 namespace JinnSports.Parser.App.ProxyService.ProxyTerminal
 {
@@ -21,8 +22,8 @@ namespace JinnSports.Parser.App.ProxyService.ProxyTerminal
 
         public ProxyAsync(IProxyConnection proxyConnection, Uri uri)
         {
-            this.asyncinterval = ConfigSettings.GetAsyncInterval("ProxyXml", "original");
-            this.timeout = ConfigSettings.GetTimeout("ProxyXml", "original");
+            this.asyncinterval = ProxySettings.GetAsyncInterval("original");
+            this.timeout = ProxySettings.GetTimeout("original");
             this.uri = uri;
             this.pc = proxyConnection;
             this.cancelTokenSrc = new CancellationTokenSource();
@@ -30,8 +31,8 @@ namespace JinnSports.Parser.App.ProxyService.ProxyTerminal
 
         public ProxyAsync(IProxyConnection proxyConnection, Uri uri, string profile)
         {
-            this.asyncinterval = ConfigSettings.GetAsyncInterval("ProxyXml", profile);
-            this.timeout = ConfigSettings.GetTimeout("ProxyXml", profile);
+            this.asyncinterval = ProxySettings.GetAsyncInterval(profile);
+            this.timeout = ProxySettings.GetTimeout(profile);
             this.uri = uri;
             this.pc = proxyConnection;
             this.cancelTokenSrc = new CancellationTokenSource();
@@ -51,11 +52,6 @@ namespace JinnSports.Parser.App.ProxyService.ProxyTerminal
             {
                 Trace.WriteLine(String.Format("New task created"));
 
-                /*Task t = Task.Run(async() =>
-                {
-                    await Task.Delay(this.asyncinterval * 1000);
-                });
-                t.Wait();*/
                 Thread.Sleep(this.asyncinterval * 1000);
 
                 tasks.Add(Task<HttpWebResponse>.Factory.StartNew(() =>

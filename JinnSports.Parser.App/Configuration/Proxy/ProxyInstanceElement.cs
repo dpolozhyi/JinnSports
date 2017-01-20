@@ -1,8 +1,8 @@
 ﻿using System.Configuration;
 
-namespace JinnSports.Parser.App
+namespace JinnSports.Parser.App.Configuration.Proxy
 {
-    public class MyConfigInstanceElement : ConfigurationElement
+    public class ProxyInstanceElement : ConfigurationElement
     {
         [ConfigurationProperty("profile", IsKey = true, IsRequired = true)]
         public string Profile

@@ -60,6 +60,7 @@
     <Compile Include="Matcher\NamingMatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\EventsService.cs" />
+    <Compile Include="Service\ParserService.cs" />
     <Compile Include="Service\TeamDetailsService.cs" />
     <Compile Include="Service\TeamService.cs" />
     <Compile Include="Utilities\AutofacConfig.cs" />
@@ -80,6 +81,10 @@
     <ProjectReference Include="..\JinnSports.Entities\JinnSports.Entities.csproj">
       <Project>{fe881c95-44b6-4c3b-8d18-906f050d3cbb}</Project>
       <Name>JinnSports.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JinnSports.Parser.App\JinnSports.Parser.App.csproj">
+      <Project>{c5f8de8e-bea1-4a55-a0b4-1190eee9d017}</Project>
+      <Name>JinnSports.Parser.App</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

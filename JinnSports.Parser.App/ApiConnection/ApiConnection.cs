@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace JinnSports.Parser
+namespace JinnSports.Parser.App
 {
     public class ApiConnection
     {

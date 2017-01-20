@@ -6,6 +6,7 @@ using System.IO;
 using JinnSports.Parser.App.ProxyService.ProxyEntities;
 using JinnSports.Parser.App.ProxyService.ProxyInterfaces;
 using JinnSports.Parser.App.ProxyService.ProxyEnums;
+using JinnSports.Parser.App.Configuration.Proxy;
 
 namespace JinnSports.Parser.App.ProxyService.ProxyRepository
 {
@@ -17,16 +18,16 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
 
         public ProxyRepository()
         {
-            this.path = @"..\..\" + ConfigSettings.GetPath("ProxyXml", "original");
+            this.path = @"C:\ProgramData\JinnSports\" + ProxySettings.GetPath("original");
             this.xmlSerializer = new XmlSerializer(typeof(List<ProxyServer>));
-            this.Interval = ConfigSettings.GetCooldown("ProxyXml", "original");
+            this.Interval = ProxySettings.GetCooldown("original");
         }
 
         public ProxyRepository(string profile)
         {
-            this.path = @"..\..\" + ConfigSettings.GetPath("ProxyXml", profile);
+            this.path = @"C:\ProgramData\JinnSports\" + ProxySettings.GetPath(profile);
             this.xmlSerializer = new XmlSerializer(typeof(List<ProxyServer>));
-            this.Interval = ConfigSettings.GetCooldown("ProxyXml", profile);
+            this.Interval = ProxySettings.GetCooldown(profile);
         }
 
         public int Interval { get; private set; }
