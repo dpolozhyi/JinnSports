@@ -1,4 +1,5 @@
 ﻿using log4net;
+using PredictorApplication.Models.Settings;
 using ScorePredictor;
 using ScorePredictor.EventData;
 using System;
@@ -48,7 +49,7 @@ namespace PredictorApplication.Models
 
                 Prediction prediction = CreatePrediction(incomingEvent);
 
-                int maxScore = GetMaxScore(incomingEvent.SportType);
+                int maxScore = new SettingsReader().ReadMaxScore(incomingEvent.SportType);
 
                 foreach (TeamInfo teamInfo in incomingEvent.TeamsInfo)
                 {
@@ -75,19 +76,6 @@ namespace PredictorApplication.Models
                 Log.Error("Exception while trying to PredictEvent", ex);
             }
             
-        }
-
-        private int GetMaxScore(string sportType)
-        {
-            int maxScore = 0;
-
-            // TODO: Check other types
-            if (sportType == "football")
-            {
-                maxScore = 5;
-            }
-
-            return maxScore;
         }
 
         private Prediction CreatePrediction(IncomingEvent incomingEvent)

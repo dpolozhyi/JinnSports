@@ -34,19 +34,25 @@ namespace ScorePredictor
 
         private void CalcProbabilities(int maxScore)
         {
-            for (int i = 0; i <= maxScore; i++)
+            int step = maxScore / 5; // redusing steps number for high maxScores
+            if (step == 0)
             {
-                for (int j = 0; j <= maxScore; j++)
+                step = 1;
+            }
+
+            for (int i = 0; i <= maxScore; i += step)
+            {
+                for (int j = 0; j <= maxScore; j += step)
                 {
                     if (i > j)
                     {
                         HomeWinProbability += CalcProbability(i, j);
                     }
-                    if (i < j)
+                    else if (i < j)
                     {
                         AwayWinProbability += CalcProbability(i, j);
                     }
-                    if (i == j)
+                    else if (i == j)
                     {
                         DrawProbability += CalcProbability(i, j);
                     }  
