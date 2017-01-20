@@ -15,9 +15,9 @@ namespace JinnSports.Parser.App
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ApiConnection));
 
-        private string baseUrl;
-        private string controllerUrn;
-        private int timeoutSec;
+        private string baseUrl = "https://localhost:44300";
+        private string controllerUrn = "api/SportEvents";
+        private int timeoutSec = 60;
 
         /// <summary>
         /// Accepts collection of SportEventDTO and try to serialize and send it to Api Controller
@@ -33,7 +33,7 @@ namespace JinnSports.Parser.App
                 {
                     Log.Info("Starting Data transfer");
 
-                    this.GetConnectionSettings();
+                    //this.GetConnectionSettings();
 
                     client.BaseAddress = new Uri(this.baseUrl);
                     client.Timeout = new TimeSpan(0, 0, this.timeoutSec);

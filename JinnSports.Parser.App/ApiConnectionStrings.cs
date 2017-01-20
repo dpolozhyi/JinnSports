@@ -8,7 +8,7 @@ namespace JinnSports.Parser.App
 {
     public static class ApiConnectionStrings
     {
-        public static readonly string URL = "http://localhost:29579/Admin";
+        public static readonly string URL = "https://localhost:44300/Admin";
         public static readonly string Controller = "api/SportEvents";
     }
 }
