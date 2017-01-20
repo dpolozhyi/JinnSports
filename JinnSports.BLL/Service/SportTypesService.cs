@@ -59,7 +59,7 @@ namespace JinnSports.BLL.Service
 
                 if (time != 0)
                 {
-                    sportEvents = sportEvents.Where(m => Math.Sign(DateTime.Compare(m.Date, DateTime.Now))==time).Select(m => m).ToList();
+                    sportEvents = sportEvents.Where(m => Math.Sign(DateTime.Compare(m.Date, DateTime.Now)) == time).Select(m => m).ToList();
                 }
 
                 if (sportEvents.Count() > 0)
@@ -118,7 +118,7 @@ namespace JinnSports.BLL.Service
             SportTypeSelectDto sportTypeModel = new SportTypeSelectDto()
             {
                 SelectedId = sportTypeId,
-                SelectedName = selectedName, 
+                SelectedName = selectedName,
                 SportTypes = this.GetAllSportTypes(),
                 SportTypeResults = sportTypeListDtos
             };
