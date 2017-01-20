@@ -29,11 +29,6 @@ namespace JinnSports.WEB
                 namespaces: new[] { "JinnSports.WEB.Controllers" });
 
             routes.MapRoute(
-                name: "Home",
-                url: "{controller}/{action}",
-                namespaces: new[] { "JinnSports.WEB.Controllers" });
-
-            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}");
         }

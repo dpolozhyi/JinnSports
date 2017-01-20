@@ -1,35 +1,5 @@
-﻿@model List<JinnSports.BLL.Dtos.SportType.SportTypeListDto>
-
-@{
+﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "JinnSports Main";
     ViewBag.Header = "Main page";
 }
-
-<h2>Upcoming events</h2>
-
-<table class="table-events">
-
-    @foreach (var sport in Model)
-    {
-        <tr>
-            <th colspan="3">@sport.SportType.Name</th>
-        </tr>
-        <tr>
-            <th>Team 1</th>
-            <th>Team 2</th>
-            <th>Date</th>
-        </tr>
-        {
-            int count = sport.Results.Count() < 4 ? sport.Results.Count() : 4;
-            for (int i = 0; i < count; i++)
-            {
-            <tr class="row-events">
-                <td>@sport.Results.ToList()[i].TeamNames.ToList()[0]</td>
-                <td>@sport.Results.ToList()[i].TeamNames.ToList()[1]</td>
-                <td>@sport.Results.ToList()[i].Date</td>
-            </tr>
-                }
-            }
-    }
-</table>
