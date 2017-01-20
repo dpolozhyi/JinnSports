@@ -1,5 +1,6 @@
 ﻿using JinnSports.BLL.Dtos;
 using JinnSports.BLL.Interfaces;
+using JinnSports.WEB.Areas.Mvc.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace JinnSports.WEB.Areas.Mvc.Controllers
 {
     public class TeamController : Controller
     {
+        private const int PAGESIZE = 2;
+
         private readonly ITeamService teamService;
 
         private readonly ITeamDetailsService teamDetailsService;
@@ -21,18 +24,33 @@ namespace JinnSports.WEB.Areas.Mvc.Controllers
         }
 
         // GET: Mvc/Team
-        public ActionResult Index()
+        public ActionResult Index(int id = 1)
         {
             int recordsTotal = this.teamService.Count();
-            IEnumerable<TeamDto> teams = this.teamService.GetAllTeams(0, recordsTotal);
-            if (teams != null)
+            int page;
+
+            if (id < 1)
             {
-                return View(teams);
+                page = 1;
             }
             else
             {
-                return View();
+                page = id;
             }
+
+            PageInfo pageInfo = new PageInfo(
+                "Team", "Index", recordsTotal, page, PAGESIZE);
+
+            IEnumerable<TeamDto> teams = this.teamService.GetAllTeams(
+                (page - 1) * PAGESIZE, PAGESIZE);
+
+            TeamViewModel teamViewModel = new TeamViewModel()
+            {
+                PageInfo = pageInfo,
+                TeamDtos = teams
+            };
+
+            return View(teamViewModel);
         }
         public ActionResult Details(int id)
         {
