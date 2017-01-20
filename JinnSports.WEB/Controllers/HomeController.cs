@@ -8,9 +8,12 @@ namespace JinnSports.WEB.Controllers
     {
         private readonly INewsService newsService;
 
-        public HomeController(INewsService newsService)
+        private IEventService eventService;
+
+        public HomeController(INewsService newsService, IEventService eventService)
         {
             this.newsService = newsService;
+            this.eventService = eventService;
         }
 
         [OutputCache(Duration = 600, Location = OutputCacheLocation.Server)]
@@ -19,6 +22,12 @@ namespace JinnSports.WEB.Controllers
             var news = this.newsService.GetLastNews();
 
             return this.View(news);
+        }
+
+        public ActionResult UpcomingEvents()
+        {
+
+
         }
     }
 }
