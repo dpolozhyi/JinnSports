@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using DTO.JSON;
 using JinnSports.BLL.Dtos;
 using JinnSports.BLL.Extentions;
