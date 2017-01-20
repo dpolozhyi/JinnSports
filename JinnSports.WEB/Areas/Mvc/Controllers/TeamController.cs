@@ -50,11 +50,11 @@ namespace JinnSports.WEB.Areas.Mvc.Controllers
                 TeamDtos = teams
             };
 
-            return View(teamViewModel);
+            return this.View(teamViewModel);
         }
         public ActionResult Details(int id)
         {
-            int teamResultsCount = teamDetailsService.Count(id);
+            int teamResultsCount = this.teamDetailsService.Count(id);
 
             TeamDto team = this.teamService.GetTeamById(id);
             IEnumerable<ResultDto> results = this.teamDetailsService.GetResults(id, 0, teamResultsCount);
@@ -63,11 +63,11 @@ namespace JinnSports.WEB.Areas.Mvc.Controllers
 
             if (teamResults != null)
             {
-                return View(teamResults);
+                return this.View(teamResults);
             }
             else
             {
-                return View();
+                return this.View();
             }
         }
     }
