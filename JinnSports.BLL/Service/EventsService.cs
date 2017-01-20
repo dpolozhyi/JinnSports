@@ -91,9 +91,7 @@ namespace JinnSports.BLL.Service
 
         public bool SaveSportEvents(ICollection<SportEventDTO> eventDTOs)
         {
-            Log.Info("Writing transferred data...");
-            using (this.dataUnit)
-            {
+            Log.Info("Writing transferred data...");            
                 try
                 {
                     NamingMatcher matcher = new NamingMatcher(this.dataUnit);
@@ -112,12 +110,16 @@ namespace JinnSports.BLL.Service
 
                         foreach (ResultDTO resultDTO in eventDTO.Results)
                         {
-                            Team team = new Team { Name = resultDTO.TeamName, SportType = sportType };
+                            Team team = new Team { Name = resultDTO.TeamName, SportType = sportType,
+                                Names = new List<TeamName> { new TeamName { Name = resultDTO.TeamName} } };
+
                             List<Conformity> conformities = matcher.ResolveNaming(team);                            
 
                             if (conformities == null)
                             {
-                                team = this.dataUnit.GetRepository<Team>().Get((x) => x.Names.Contains(new TeamName { Name = team.Name })).FirstOrDefault();
+                                team = this.dataUnit.GetRepository<TeamName>()
+                                .Get((x) => x.Name == team.Name).Select(x => x.Team).FirstOrDefault();
+
                                 Result result = new Result { Team = team, Score = resultDTO.Score ?? -1, IsHome = resultDTO.IsHome };
                                 results.Add(result);
                             }
@@ -125,7 +127,17 @@ namespace JinnSports.BLL.Service
                             {
                                 conflictExist = true;
 
-                                TempResult result = new TempResult { Team = team, Score = resultDTO.Score };
+                                TempResult result = new TempResult
+                                {                                
+                                    Score = resultDTO.Score ?? -1,
+                                    Conformities = new List<Conformity>(),
+                                    IsHome = resultDTO.IsHome
+                                };
+
+                                if (team.Names.FirstOrDefault().Id != 0)
+                                {
+                                    result.Team = team;
+                                }
 
                                 foreach (Conformity conformity in conformities)
                                 {
@@ -138,7 +150,12 @@ namespace JinnSports.BLL.Service
 
                         if (conflictExist)
                         {
-                            TempSportEvent tempSportEvent = new TempSportEvent { SportType = sportType, Date = this.ConvertAndTrimDate(eventDTO.Date) };
+                            TempSportEvent tempSportEvent = new TempSportEvent
+                            {
+                                SportType = sportType,
+                                Date = this.ConvertAndTrimDate(eventDTO.Date),
+                                TempResults = new List<TempResult>()
+                            };
                             foreach (TempResult tempResult in tempResults)
                             {
                                 tempSportEvent.TempResults.Add(tempResult);
@@ -152,7 +169,9 @@ namespace JinnSports.BLL.Service
                         }
                         else
                         {
-                            SportEvent sportEvent = new SportEvent { SportType = sportType, Date = this.ConvertAndTrimDate(eventDTO.Date) };
+                            SportEvent sportEvent = new SportEvent
+                            { SportType = sportType, Date = this.ConvertAndTrimDate(eventDTO.Date), Results = new List<Result>() };
+
                             foreach (Result result in results)
                             {
                                 sportEvent.Results.Add(result);
@@ -169,8 +188,7 @@ namespace JinnSports.BLL.Service
                 {
                     Log.Error("Exception when trying to save transferred data to DB", ex);
                     return false;
-                }
-            }
+                }            
             Log.Info("Transferred data sucessfully saved");
             return true;
         }

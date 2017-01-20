@@ -40,14 +40,17 @@ namespace JinnSports.BLL.Matcher
             {
                 TeamName newName = new TeamName();
                 newName.Name = inputTeam.Name;
-                matches[0].Names.Add(newName);
+                foreach (TeamName name in inputTeam.Names)
+                {
+                    matches[0].Names.Add(name); 
+                }
                 this.unit.GetRepository<Team>().Update(matches[0]);
                 this.unit.SaveChanges();
                 return null;
             }
             else if (comparingResult < 50)
             {
-                inputTeam.Names.Add(new TeamName { Name = inputTeam.Name });
+                //inputTeam.Names.Add(new TeamName { Name = inputTeam.Name });
                 this.unit.GetRepository<Team>().Insert(inputTeam);
                 this.unit.SaveChanges();
                 return null;
