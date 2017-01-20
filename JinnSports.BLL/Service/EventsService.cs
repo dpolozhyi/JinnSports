@@ -93,6 +93,34 @@ namespace JinnSports.BLL.Service
             return sportTypeDto;
         }
 
+        public MainPageDto GetMainPageInfo()
+        {
+            INewsService newsService = new NewsService();
+            var news = newsService.GetLastNews();
+
+            IEnumerable<EventDto> upcomingEvents = this.GetUpcomingEvents(10);
+
+            return new MainPageDto() { News = news, UpcomingEvents = upcomingEvents };
+        }
+
+        public IEnumerable<EventDto> GetUpcomingEvents(int take)
+        {
+            List<EventDto> results = new List<EventDto>();
+
+            IEnumerable<SportEvent> sportEvents;
+            sportEvents =
+                this.dataUnit.GetRepository<SportEvent>().Get(
+                    filter: m => DateTime.Compare(m.Date, DateTime.Now) > 0,
+                    includeProperties: "Results,SportType,Results.Team",
+                    orderBy: s => s.OrderBy(x => x.Date).ThenBy(x => x.Id),
+                    take: take);
+            foreach (SportEvent sportEvent in sportEvents)
+            {
+                results.Add(Mapper.Map<SportEvent, EventDto>(sportEvent));
+            }
+            return results;
+        }
+
         public bool SaveSportEvents(ICollection<SportEventDTO> eventDTOs)
         {
             Log.Info("Writing transferred data...");

@@ -1,6 +1,9 @@
 ﻿using System.Web.Mvc;
 using System.Web.UI;
 using JinnSports.BLL.Interfaces;
+using System.Collections.Generic;
+using JinnSports.BLL.Dtos;
+using System.Linq;
 
 namespace JinnSports.WEB.Controllers
 {
@@ -19,15 +22,13 @@ namespace JinnSports.WEB.Controllers
         [OutputCache(Duration = 600, Location = OutputCacheLocation.Server)]
         public ActionResult Index()
         {
-            var news = this.newsService.GetLastNews();
-
-            return this.View(news);
+            return this.View(this.eventService.GetMainPageInfo());
         }
 
-        public ActionResult UpcomingEvents()
+        public ActionResult _UpcomingEvents()
         {
-
-
+            IEnumerable<EventDto> upcomingEvents = this.eventService.GetUpcomingEvents(10);
+            return this.View(upcomingEvents.ToList());
         }
     }
 }
