@@ -585,7 +585,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DTO\DTO.csproj">
-      <Project>{40F1BD33-B3C8-4268-8243-59230825EF9B}</Project>
+      <Project>{40f1bd33-b3c8-4268-8243-59230825ef9b}</Project>
       <Name>DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\JinnSports.BLL\JinnSports.BLL.csproj">
