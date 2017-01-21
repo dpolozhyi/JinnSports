@@ -8,6 +8,7 @@ using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace JinnSports.Parser.App
@@ -26,7 +27,7 @@ namespace JinnSports.Parser.App
         /// </summary>
         /// <param name="events"></param>
         /// <exception cref="SaveDataException"></exception>
-        public async void SendEvents(ICollection<SportEventDTO> events)
+        public void SendEvents(ICollection<SportEventDTO> events)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -44,7 +45,18 @@ namespace JinnSports.Parser.App
                     string json = JsonConvert.SerializeObject(events, Newtonsoft.Json.Formatting.Indented);
                     StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    HttpResponseMessage response = await client.PostAsync(this.controllerUrn, content);
+                    Task<HttpResponseMessage> postResponseTask = client.PostAsync(this.controllerUrn, content);
+
+                    postResponseTask.ContinueWith(t =>
+                    {
+                        if (t.IsFaulted)
+                        {
+                            Log.Info("Error occured during Data transfer");
+                        }
+                    });
+
+                    HttpResponseMessage response = postResponseTask.Result as HttpResponseMessage;
+
                     if (response.IsSuccessStatusCode)
                     {
                         Log.Info("Data sucsessfully transfered");

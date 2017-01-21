@@ -18,18 +18,11 @@ namespace JinnSports.BLL.Service
         {
             int timeInterval = ParserSettings.GetInterval("original");
 
-            /*Task t = Task.Factory.StartNew(() =>
-            {*/
-
             while (!cancellationToken.IsCancellationRequested)
             {
                 await Run();
                 await Task.Delay(timeInterval * 1000, cancellationToken);
             }
-            /*
-                }
-            });
-        }*/
         }
 
         public static async Task Run()
