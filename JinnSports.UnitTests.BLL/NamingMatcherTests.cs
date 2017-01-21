@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Transactions;
 using JinnSports.BLL.Matcher;
 using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.DAL.EFContext;
@@ -17,18 +17,14 @@ namespace JinnSports.UnitTests.BLL
     {
         private SportsContext databaseSportsContext;
 
-        private DbContextTransaction databaseTransaction;
+        private TransactionScope databaseTransaction;
 
         [OneTimeSetUp]
-        public void Init()
+        public void OneTimeInit()
         {
             this.databaseSportsContext = new SportsContext("SportsContext");
 
-            IUnitOfWork unit = new EFUnitOfWork(this.databaseSportsContext);            
-
-            // Other transactions can't update and insert data
-            this.databaseTransaction = this.databaseSportsContext
-                .Database.BeginTransaction(IsolationLevel.ReadUncommitted);
+            IUnitOfWork unit = new EFUnitOfWork(this.databaseSportsContext);
 
             // Clear tables
             this.databaseSportsContext.TeamNames.RemoveRange(
@@ -97,6 +93,27 @@ namespace JinnSports.UnitTests.BLL
             unit.SaveChanges();            
         }
 
+        [SetUp]
+        public void Init()
+        {
+            this.databaseTransaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
+            {
+                IsolationLevel = IsolationLevel.Serializable
+            });
+        }
+
+        [TearDown]
+        public void Clean()
+        {
+            this.databaseTransaction.Dispose();
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeClean()
+        {
+            this.databaseSportsContext.Dispose();
+        }
+
         [Test]
         public void ResolveNamingPositiveTest()
         {
@@ -157,14 +174,6 @@ namespace JinnSports.UnitTests.BLL
 
             Assert.AreEqual(expConf.InputName, newConf.InputName);
             Assert.AreEqual(expConf.ExistedName, newConf.ExistedName);
-        }
-
-        [OneTimeTearDown]
-        public void Clean()
-        {
-            // Pend changes
-            this.databaseTransaction.Rollback();
-            this.databaseTransaction.Dispose();
         }
     }
 }
