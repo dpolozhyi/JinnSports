@@ -14,21 +14,25 @@ namespace JinnSports.BLL.Service
     {
         private static CancellationToken cancellationToken = new CancellationToken();
 
-        public static void Initialize()
+        public static async Task Initialize()
         {
             int timeInterval = ParserSettings.GetInterval("original");
 
-            Task t = Task.Factory.StartNew(() =>
+            /*Task t = Task.Factory.StartNew(() =>
+            {*/
+
+            while (!cancellationToken.IsCancellationRequested)
             {
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    Run();
-                    Task.Delay(timeInterval * 1000, cancellationToken);
+                await Run();
+                await Task.Delay(timeInterval * 1000, cancellationToken);
+            }
+            /*
                 }
             });
+        }*/
         }
 
-        public static void Run()
+        public static async Task Run()
         {
 
             JsonParser jsonParser = new JsonParser();
@@ -45,7 +49,7 @@ namespace JinnSports.BLL.Service
                 htmlParser.Parse();
             }));
 
-            Task.WaitAll(tasks.ToArray());
+            await Task.WhenAll(tasks.ToArray());
         }
     }
 }
