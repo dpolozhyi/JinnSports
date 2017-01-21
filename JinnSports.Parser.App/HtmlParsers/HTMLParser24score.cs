@@ -12,6 +12,7 @@ using DTO.JSON;
 using JinnSports.Parser.App.ProxyService.ProxyTerminal;
 using JinnSports.Parser.App.ProxyService.ProxyInterfaces;
 using JinnSports.DataAccessInterfaces.Interfaces;
+using System.Threading.Tasks;
 
 namespace JinnSports.Parser.App.HtmlParsers
 {
