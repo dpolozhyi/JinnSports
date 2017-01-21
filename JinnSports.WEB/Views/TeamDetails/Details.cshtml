@@ -11,40 +11,41 @@
         <h3 class="box-title">@Model.Name</h3>
     </div>
     <div class="box-body">
+        @Html.Action("WinRateChartForTeam", "Chart", new { Model.Id })
         <table id="teamResultTable" class="table table-bordered table-striped">
             <thead>
-                <tr>
-                    <th>First Team</th>
-                    <th>Score</th>
-                    <th>Second Team</th>
-                    <th>Date</th>
-                </tr>
+            <tr>
+                <th>First Team</th>
+                <th>Score</th>
+                <th>Second Team</th>
+                <th>Date</th>
+            </tr>
             </thead>
         </table>
     </div>
 </div>
-    @section scripts {
-        @Scripts.Render("~/Scripts/DataTable")
-        <script>
-            $(document).ready(function () {
-                $("#teamResultTable").DataTable({
-                    "processing": false,
-                    "serverSide": true,
-                    "filter": false,
-                    "orderMulti": false,
-                    "ajax": {
-                        url: "/api/TeamDetails/LoadResults/@Model.Id",
-                        type: 'GET',
-                        datatype: 'json',
-                        dataSrc: 'data'
-                    },
-                    "columns": [
-                              { 'data': 'TeamNames.0', 'autoWidth': true },
-                              { 'data': 'Score', 'autoWidth': true },
-                              { 'data': 'TeamNames.1', 'autoWidth': true },
-                              { 'data': 'Date', 'autoWidth': true }
-                    ]
-                });
+@section scripts {
+    @Scripts.Render("~/Scripts/DataTable")
+    <script>
+        $(document).ready(function () {
+            $("#teamResultTable").DataTable({
+                "processing": false,
+                "serverSide": true,
+                "filter": false,
+                "orderMulti": false,
+                "ajax": {
+                    url: "/api/TeamDetails/LoadResults/@Model.Id",
+                    type: 'GET',
+                    datatype: 'json',
+                    dataSrc: 'data'
+                },
+                "columns": [
+                    { 'data': 'TeamNames.0', 'autoWidth': true },
+                    { 'data': 'Score', 'autoWidth': true },
+                    { 'data': 'TeamNames.1', 'autoWidth': true },
+                    { 'data': 'Date', 'autoWidth': true }
+                ]
             });
-        </script>
-        }
+        });
+    </script>
+}

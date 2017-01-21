@@ -13,11 +13,12 @@ namespace JinnSports.BLL.Interfaces
         /// <param name="sportId">Sport type ID</param>
         /// <returns></returns>                        
         int Count(int sportId);
-        
+
         /// <summary>
         /// Get events for sport type
         /// </summary>
         /// <param name="sportId">Sport type ID</param>
+        /// <param name="time"></param>
         /// <param name="skip"></param>
         /// <param name="take"></param>
         /// <returns></returns>
@@ -26,6 +27,5 @@ namespace JinnSports.BLL.Interfaces
         bool SaveSportEvents(ICollection<SportEventDTO> eventDTOs);
 
         IEnumerable<SportTypeDto> GetSportTypes();
-
     }
 }
