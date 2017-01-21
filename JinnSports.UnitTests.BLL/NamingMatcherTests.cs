@@ -105,15 +105,15 @@ namespace JinnSports.UnitTests.BLL
             SportType football = new SportType { Name = "Football" };
             SportType sport = unit.GetRepository<SportType>().Get(x => x.Name.ToUpper() == football.Name.ToUpper()).FirstOrDefault();           
 
-            Team positiveTeam = new Team { Name = "Краснодар ФК", SportType = sport, Names = new List<TeamName>() };  
+            Team positiveTeam = new Team
+            { Name = "Краснодар ФК", SportType = sport, Names = new List<TeamName> { new TeamName { Name = "Краснодар ФК" } } };  
 
             NamingMatcher matcher = new NamingMatcher(unit);
 
             List<Conformity> positiveConformities = matcher.ResolveNaming(positiveTeam);
-
             Assert.IsNull(positiveConformities);
-            TeamName name = new TeamName { Name = positiveTeam.Name };
-            Team team = unit.GetRepository<Team>().Get((x) => x.Names.Select(n => n.Name).Contains(name.Name)).FirstOrDefault();                  
+           
+            Team team = unit.GetRepository<Team>().Get((x) => x.Names.Select(n => n.Name).Contains(positiveTeam.Name)).FirstOrDefault();                  
             Assert.IsTrue(team.Names.Select(t => t.Name).Contains("Краснодар"));
             Assert.IsTrue(team.Names.Select(t => t.Name).Contains("Краснодар ФК"));
         }
@@ -131,10 +131,9 @@ namespace JinnSports.UnitTests.BLL
             NamingMatcher matcher = new NamingMatcher(unit);
 
             List<Conformity> negativeConformities = matcher.ResolveNaming(negativeTeam);
-
-            Assert.IsNull(negativeConformities);
-            TeamName name = new TeamName { Name = negativeTeam.Name };
-            Team team = team = unit.GetRepository<Team>().Get((x) => x.Names.Select(n => n.Name).Contains(name.Name)).FirstOrDefault();
+            Assert.IsNull(negativeConformities);   
+                     
+            Team team = unit.GetRepository<Team>().Get((x) => x.Names.Select(n => n.Name).Contains(negativeTeam.Name)).FirstOrDefault();
             Assert.AreEqual(team, negativeTeam);
         }
 
