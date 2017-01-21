@@ -20,6 +20,7 @@ namespace JinnSports.BLL.Utilities
             builder.RegisterType<TeamDetailsService>().As<ITeamDetailsService>();
             builder.RegisterType<SportTypeService>().As<ISportTypeService>();
             builder.RegisterType<NewsService>().As<INewsService>();
+            builder.RegisterType<ChartService>().As<IChartService>();
         }
     }
 }

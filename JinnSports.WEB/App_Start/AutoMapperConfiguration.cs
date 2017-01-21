@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using JinnSports.BLL.Dtos;
 using JinnSports.Entities.Entities;
 using System.Linq;

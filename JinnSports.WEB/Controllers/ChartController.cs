@@ -17,7 +17,7 @@ namespace JinnSports.WEB.Controllers
         {
             var data = chartService.GetDataTableForTeam(id);
 
-            return View(new WinRateChartDto
+            return PartialView("WinRateChartForTeam", new WinRateChartDto
             {
                 Title = "",
                 Subtitle = "",
