@@ -1,5 +1,6 @@
 ﻿using JinnSports.DAL.EFContext;
 using JinnSports.DAL.Repositories;
+using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.Parser.App.Configuration.Parser;
 using JinnSports.Parser.App.HtmlParsers;
 using JinnSports.Parser.App.JsonParsers;
@@ -31,7 +32,7 @@ namespace JinnSports.BLL.Service
         {
 
             JsonParser jsonParser = new JsonParser();
-            HTMLParser24score htmlParser = new HTMLParser24score(new EFUnitOfWork(new SportsContext("SportsContext")));
+            HTMLParser24score htmlParser = new HTMLParser24score();
 
             List<Task> tasks = new List<Task>();
             /*tasks.Add(Task.Factory.StartNew(() =>

@@ -22,7 +22,7 @@ namespace JinnSports.Parser.App.HtmlParsers
 
         private IProxyTerminal proxyTerminal;
 
-        public HTMLParser24score(IUnitOfWork unit)
+        public HTMLParser24score()
         {
             proxyTerminal = new ProxyTerminal();
         }
