@@ -10,6 +10,6 @@ namespace JinnSports.BLL.Dtos
     {
         public IEnumerable<NewsDto> News { get; set; }
 
-        public IEnumerable<EventDto> UpcomingEvents { get; set; }
+        public IEnumerable<ResultDto> UpcomingEvents { get; set; }
     }
 }

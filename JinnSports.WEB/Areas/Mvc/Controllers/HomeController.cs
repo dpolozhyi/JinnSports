@@ -27,11 +27,5 @@ namespace JinnSports.WEB.Areas.Mvc.Controllers
         {
             return this.View(this.eventService.GetMainPageInfo());
         }
-
-        public ActionResult _UpcomingEvents()
-        {
-            IEnumerable<EventDto> upcomingEvents = this.eventService.GetUpcomingEvents(10);
-            return this.View(upcomingEvents.ToList());
-        }
     }
 }

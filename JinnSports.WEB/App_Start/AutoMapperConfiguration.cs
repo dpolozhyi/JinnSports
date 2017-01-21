@@ -54,34 +54,17 @@ namespace JinnSports.WEB
                      opt => opt.MapFrom(
                          res => res.Results.Select(x => x.Team.Id)))
                .ForMember(
+                     e => e.SportType,
+                     opt => opt.MapFrom(
+                         res => res.SportType))
+               .ForMember(
                     e => e.Score,
                     opt => opt.MapFrom(
-                        res => string.Format(
+                        res => ((res.Results.ElementAt(0).Score==-1 || res.Results.ElementAt(1).Score==-1) ? "—:—" : 
+                            string.Format(
                             "{0} : {1}",
                             res.Results.ElementAt(0).Score,
-                            res.Results.ElementAt(1).Score)))
-                .ForMember(
-                    e => e.Date,
-                    opt => opt.MapFrom(
-                        res => new EventDate(res.Date).ToString()));
-
-                config.CreateMap<SportEvent, EventDto>()
-                .ForMember(
-                    e => e.Id,
-                    opt => opt.MapFrom(
-                        s => s.Id))
-               .ForMember(
-                    e => e.TeamNames,
-                    opt => opt.MapFrom(
-                        s => s.Results.Select(x => x.Team.Name)))
-               .ForMember(
-                     e => e.TeamIds,
-                     opt => opt.MapFrom(
-                         res => res.Results.Select(x => x.Team.Id)))
-               .ForMember(
-                    e => e.SportType,
-                    opt => opt.MapFrom(
-                        res => res.SportType))
+                            res.Results.ElementAt(1).Score))))
                 .ForMember(
                     e => e.Date,
                     opt => opt.MapFrom(

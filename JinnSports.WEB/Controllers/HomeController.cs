@@ -19,16 +19,10 @@ namespace JinnSports.WEB.Controllers
             this.eventService = eventService;
         }
 
-        [OutputCache(Duration = 600, Location = OutputCacheLocation.Server)]
+        //[OutputCache(Duration = 600, Location = OutputCacheLocation.Server)]
         public ActionResult Index()
         {
             return this.View(this.eventService.GetMainPageInfo());
-        }
-
-        public ActionResult _UpcomingEvents()
-        {
-            IEnumerable<EventDto> upcomingEvents = this.eventService.GetUpcomingEvents(10);
-            return this.View(upcomingEvents.ToList());
         }
     }
 }

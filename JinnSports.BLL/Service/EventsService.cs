@@ -28,18 +28,33 @@ namespace JinnSports.BLL.Service
             this.dataUnit = unitOfWork;
         }
 
-        public int Count(int sportTypeId)
+        public int Count(int sportTypeId, int time)
         {
             int count;
             if (sportTypeId != 0)
             {
-                count = this.dataUnit.GetRepository<SportEvent>()
-                .Count(m => m.SportType.Id == sportTypeId);
+                IEnumerable<SportEvent> sportEvents = this.dataUnit.GetRepository<SportEvent>().Get(filter: m => m.SportType.Id == sportTypeId);
+                if (time != 0)
+                {
+                    count = sportEvents.Count(m => Math.Sign(DateTime.Compare(m.Date, DateTime.Now)) == time);
+                }
+                else
+                {
+                    count = sportEvents.Count();
+                }
             }
             else
             {
-                count = this.dataUnit.GetRepository<SportEvent>()
-                .Count();
+                IEnumerable<SportEvent> sportEvents = this.dataUnit.GetRepository<SportEvent>().Get();
+                if (time != 0)
+                {
+                    
+                    count = sportEvents.Count(m => Math.Sign(DateTime.Compare(m.Date, DateTime.Now)) == time);
+                }
+                else
+                {
+                    count = sportEvents.Count();
+                }
             }
             return count;
         }
@@ -98,28 +113,11 @@ namespace JinnSports.BLL.Service
             INewsService newsService = new NewsService();
             var news = newsService.GetLastNews();
 
-            IEnumerable<EventDto> upcomingEvents = this.GetUpcomingEvents(10);
+            IEnumerable<ResultDto> upcomingEvents = this.GetSportEvents(0,1,0,0);
 
             return new MainPageDto() { News = news, UpcomingEvents = upcomingEvents };
         }
 
-        public IEnumerable<EventDto> GetUpcomingEvents(int take)
-        {
-            List<EventDto> results = new List<EventDto>();
-
-            IEnumerable<SportEvent> sportEvents;
-            sportEvents =
-                this.dataUnit.GetRepository<SportEvent>().Get(
-                    filter: m => DateTime.Compare(m.Date, DateTime.Now) > 0,
-                    includeProperties: "Results,SportType,Results.Team",
-                    orderBy: s => s.OrderBy(x => x.Date).ThenBy(x => x.Id),
-                    take: take);
-            foreach (SportEvent sportEvent in sportEvents)
-            {
-                results.Add(Mapper.Map<SportEvent, EventDto>(sportEvent));
-            }
-            return results;
-        }
 
         public bool SaveSportEvents(ICollection<SportEventDTO> eventDTOs)
         {
