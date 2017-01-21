@@ -16,9 +16,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Transactions;
 using static JinnSports.UnitTests.Services.TeamDetailsServiceTests;
+using IsolationLevel = System.Transactions.IsolationLevel;
 
 namespace JinnSports.UnitTests.Services
 {
@@ -31,16 +31,16 @@ namespace JinnSports.UnitTests.Services
 
         private SportsContext databaseSportsContext;
 
-        private DbContextTransaction databaseTransaction;
+        private TransactionScope databaseTransaction;
 
         [OneTimeSetUp]
-        public void Init()
+        public void OneTimeInit()
         {
             this.databaseSportsContext = new SportsContext("SportsContext");
 
-            // Other transactions can't update and insert data
-            this.databaseTransaction = this.databaseSportsContext
-                .Database.BeginTransaction(IsolationLevel.Serializable);
+            //// Other transactions can't update and insert data
+            //this.databaseTransaction = this.databaseSportsContext
+            //    .Database.BeginTransaction(IsolationLevel.Serializable);
 
             // Clear tables
             this.databaseSportsContext.TeamNames.RemoveRange(
@@ -57,7 +57,7 @@ namespace JinnSports.UnitTests.Services
             this.databaseSportsContext.SaveChanges();
 
             this.eventService = new EventsService(new EFUnitOfWork(this.databaseSportsContext));
-            this.comparer = new TeamDetailsServiceTests.ResultDtoComparer();            
+            this.comparer = new ResultDtoComparer();
 
             AutoMapperConfiguration.Configure();
 
@@ -130,7 +130,7 @@ namespace JinnSports.UnitTests.Services
                 (13, 64, 7, 8),
                 (14, 52, 6, 8);               
                 SET IDENTITY_INSERT [dbo].[Results] OFF;");
-            
+
             this.databaseSportsContext.SaveChanges();
 
             IUnitOfWork unit = new EFUnitOfWork(this.databaseSportsContext);
@@ -188,17 +188,30 @@ namespace JinnSports.UnitTests.Services
             unit.SaveChanges();
         }
 
-        [OneTimeTearDown]
+        [SetUp]
+        public void Init()
+        {
+            this.databaseTransaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
+            {
+                IsolationLevel = IsolationLevel.Serializable
+            });
+        }
+
+        [TearDown]
         public void Clean()
         {
-            // Pend changes
-            this.databaseTransaction.Rollback();
             this.databaseTransaction.Dispose();
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeClean()
+        {
+            this.databaseSportsContext.Dispose();
         }
 
         [Test]
         [TestCase(1)]
-        [TestCase(2)]                
+        [TestCase(2)]
         public void CountCheckEventsExist(int sportId)
         {
             Assert.AreNotEqual(this.databaseSportsContext.SportEvents.Count(), 0);
@@ -206,7 +219,7 @@ namespace JinnSports.UnitTests.Services
             int expectedCount = this.databaseSportsContext
                 .SportEvents.Where(e => e.SportType.Id == sportId).Count();
             Assert.Greater(expectedCount, 0);
-                           
+
             int actualCount = this.eventService.Count(sportId);
 
             Assert.AreEqual(expectedCount, actualCount);
@@ -228,9 +241,9 @@ namespace JinnSports.UnitTests.Services
         [Test]
         [TestCase(1, 0, 0, 10)]
         [TestCase(1, 0, 1, 3)]
-        [TestCase(1, 0, 2, 1)]        
+        [TestCase(1, 0, 2, 1)]
         [TestCase(2, 0, 0, 10)]
-        [TestCase(2, 0, 1, 1)]        
+        [TestCase(2, 0, 1, 1)]
         public void GetSportEventsCheckEventsExist(int sportId, int time, int skip, int take)
         {
             // Get SportEvents from datavase directly and check, that they are exist
@@ -260,11 +273,11 @@ namespace JinnSports.UnitTests.Services
                 Assert.AreEqual(expectedResultDtos[i].Id, actualResultDtos[i].Id);
                 Assert.AreEqual(expectedResultDtos[i].Date, actualResultDtos[i].Date);
                 Assert.AreEqual(
-                    expectedResultDtos[i].TeamIds.Count(), 
+                    expectedResultDtos[i].TeamIds.Count(),
                     actualResultDtos[i].TeamIds.Count());
                 Assert.AreEqual(
-                    expectedResultDtos[i].TeamNames.Count(), 
-                    actualResultDtos[i].TeamIds.Count());  
+                    expectedResultDtos[i].TeamNames.Count(),
+                    actualResultDtos[i].TeamIds.Count());
 
                 for (int j = 0; j < expectedResultDtos[i].TeamIds.Count(); j++)
                 {
@@ -274,7 +287,7 @@ namespace JinnSports.UnitTests.Services
 
                     Assert.AreEqual(
                         expectedResultDtos[i].TeamNames.ElementAt(j),
-                        actualResultDtos[i].TeamNames.ElementAt(j));           
+                        actualResultDtos[i].TeamNames.ElementAt(j));
                 }
             }
         }
@@ -320,7 +333,7 @@ namespace JinnSports.UnitTests.Services
                 .Skip(0)
                 .Take(10)
                 .ToList();
-            
+
             foreach (SportEvent sportEvent in sportEvents)
             {
                 // Manual map SportEvent to ResultDto
@@ -328,9 +341,9 @@ namespace JinnSports.UnitTests.Services
                 current.Id = sportEvent.Id;
                 current.Date = new EventDate(sportEvent.Date).ToString();
                 current.Score = string.Format(
-                            "{0} : {1}",
-                            sportEvent.Results.ElementAt(0).Score,
-                            sportEvent.Results.ElementAt(1).Score);
+                    "{0} : {1}",
+                    sportEvent.Results.ElementAt(0).Score,
+                    sportEvent.Results.ElementAt(1).Score);
                 current.TeamIds = sportEvent.Results.Select(x => x.Team.Id);
                 current.TeamNames = sportEvent.Results.Select(x => x.Team.Name);
                 expectedResultDtos.Add(current);
@@ -341,26 +354,36 @@ namespace JinnSports.UnitTests.Services
             CollectionAssert.AreEqual(expectedResultDtos, actualResultDtos, this.comparer);
         }
 
-        [Test]        
+        [Test]
         public void ExistedTeamsSportEventsSaving()
         {
-            ResultDTO r1 = new ResultDTO {TeamName = "Краснодар ФК", IsHome = true, Score = 1};
-            ResultDTO r2 = new ResultDTO {TeamName = "Шахтер Донецк", IsHome = false, Score = 1};
+            ResultDTO r1 = new ResultDTO { TeamName = "Краснодар ФК", IsHome = true, Score = 1 };
+            ResultDTO r2 = new ResultDTO { TeamName = "Шахтер Донецк", IsHome = false, Score = 1 };
             SportEventDTO ev = new SportEventDTO
-            { Date = DateTime.Now.Ticks, SportType = "Football", Results = new List<ResultDTO> {r1, r2}};
+                { Date = DateTime.Now.Ticks, SportType = "Football", Results = new List<ResultDTO> { r1, r2 } };
             List<SportEventDTO> events = new List<SportEventDTO>();
             events.Add(ev);
-            
-            IUnitOfWork unit = new EFUnitOfWork(this.databaseSportsContext);            
+
+            IUnitOfWork unit = new EFUnitOfWork(this.databaseSportsContext);
 
             this.eventService.SaveSportEvents(events);
-            
-            Team team1 = unit.GetRepository<TeamName>().Get(tn => tn.Name == "Краснодар").Select(tn => tn.Team).FirstOrDefault();
-            Team team2 = unit.GetRepository<TeamName>().Get(tn => tn.Name == "Краснодар ФК").Select(tn => tn.Team).FirstOrDefault();
+
+            Team team1 =
+                unit.GetRepository<TeamName>().Get(tn => tn.Name == "Краснодар").Select(tn => tn.Team).FirstOrDefault();
+            Team team2 =
+                unit.GetRepository<TeamName>()
+                    .Get(tn => tn.Name == "Краснодар ФК")
+                    .Select(tn => tn.Team)
+                    .FirstOrDefault();
             Assert.AreEqual(team1, team2);
-            
-            Team team3 = unit.GetRepository<TeamName>().Get(tn => tn.Name == "Шахтер Д").Select(tn => tn.Team).FirstOrDefault();
-            Team team4 = unit.GetRepository<TeamName>().Get(tn => tn.Name == "Шахтер Донецк").Select(tn => tn.Team).FirstOrDefault();
+
+            Team team3 =
+                unit.GetRepository<TeamName>().Get(tn => tn.Name == "Шахтер Д").Select(tn => tn.Team).FirstOrDefault();
+            Team team4 =
+                unit.GetRepository<TeamName>()
+                    .Get(tn => tn.Name == "Шахтер Донецк")
+                    .Select(tn => tn.Team)
+                    .FirstOrDefault();
             Assert.AreEqual(team3, team4);
 
             Result savedResult1 = unit.GetRepository<Result>().Get(r => r.Team.Id == team1.Id).FirstOrDefault();
@@ -401,7 +424,7 @@ namespace JinnSports.UnitTests.Services
             ResultDTO r1 = new ResultDTO { TeamName = "Ворскла", IsHome = false, Score = 0 };
             ResultDTO r2 = new ResultDTO { TeamName = "Металлист", IsHome = true, Score = 4 };
             SportEventDTO ev = new SportEventDTO
-            { Date = DateTime.Now.Ticks, SportType = "Football", Results = new List<ResultDTO> { r1, r2 } };
+                { Date = DateTime.Now.Ticks, SportType = "Football", Results = new List<ResultDTO> { r1, r2 } };
             List<SportEventDTO> events = new List<SportEventDTO>();
             events.Add(ev);
 
@@ -409,22 +432,24 @@ namespace JinnSports.UnitTests.Services
 
             this.eventService.SaveSportEvents(events);
 
-            Team team1 = unit.GetRepository<TeamName>().Get(tn => tn.Name == "Металлист").Select(tn => tn.Team).FirstOrDefault();            
+            Team team1 =
+                unit.GetRepository<TeamName>().Get(tn => tn.Name == "Металлист").Select(tn => tn.Team).FirstOrDefault();
             Assert.IsNotNull(team1);
 
-            Team team2 = unit.GetRepository<TeamName>().Get(tn => tn.Name == "Ворскла").Select(tn => tn.Team).FirstOrDefault();
+            Team team2 =
+                unit.GetRepository<TeamName>().Get(tn => tn.Name == "Ворскла").Select(tn => tn.Team).FirstOrDefault();
             Assert.IsNotNull(team2);
 
             Result savedResult1 = unit.GetRepository<Result>().Get(r => r.Team.Id == team1.Id).FirstOrDefault();
             Assert.IsNotNull(savedResult1);
 
             Result savedResult2 = unit.GetRepository<Result>().Get(r => r.Team.Id == team2.Id).FirstOrDefault();
-            Assert.IsNotNull(savedResult2);            
+            Assert.IsNotNull(savedResult2);
 
             SportEvent savedEvent1 = unit.GetRepository<Result>()
                 .Get(filter: (r => r.SportEvent.Id == savedResult1.SportEvent.Id))
                 .Select(r => r.SportEvent).FirstOrDefault();
-            Assert.IsTrue(savedEvent1.Results.Contains(savedResult2));            
+            Assert.IsTrue(savedEvent1.Results.Contains(savedResult2));
 
             IEnumerable<TempResult> tempResults = unit.GetRepository<TempResult>().Get();
             Assert.IsEmpty(tempResults);
@@ -442,7 +467,7 @@ namespace JinnSports.UnitTests.Services
             ResultDTO r1 = new ResultDTO { TeamName = "Маккаби Тель-Авив", IsHome = true, Score = 2 };
             ResultDTO r2 = new ResultDTO { TeamName = "Ст. Этьен", IsHome = false, Score = 1 };
             SportEventDTO ev = new SportEventDTO
-            { Date = DateTime.Now.Ticks, SportType = "Football", Results = new List<ResultDTO> { r1, r2 } };
+                { Date = DateTime.Now.Ticks, SportType = "Football", Results = new List<ResultDTO> { r1, r2 } };
             List<SportEventDTO> events = new List<SportEventDTO>();
             events.Add(ev);
 
@@ -450,26 +475,32 @@ namespace JinnSports.UnitTests.Services
 
             this.eventService.SaveSportEvents(events);
 
-            Team team1 = unit.GetRepository<TeamName>().Get(tn => tn.Name == "Маккаби Тель-Авив").Select(tn => tn.Team).FirstOrDefault();
+            Team team1 =
+                unit.GetRepository<TeamName>()
+                    .Get(tn => tn.Name == "Маккаби Тель-Авив")
+                    .Select(tn => tn.Team)
+                    .FirstOrDefault();
             Assert.IsNull(team1);
 
-            Team team2 = unit.GetRepository<TeamName>().Get(tn => tn.Name == "Ст. Этьен").Select(tn => tn.Team).FirstOrDefault();
-            Assert.IsNull(team2);            
+            Team team2 =
+                unit.GetRepository<TeamName>().Get(tn => tn.Name == "Ст. Этьен").Select(tn => tn.Team).FirstOrDefault();
+            Assert.IsNull(team2);
 
             IEnumerable<SportEvent> simpleEvents = unit.GetRepository<SportEvent>().Get(e => e.Results.Count() == 0);
             Assert.IsTrue(simpleEvents.Count() == 0);
 
-            Conformity conf1 = unit.GetRepository<Conformity>().Get(c => c.InputName == "Маккаби Тель-Авив").FirstOrDefault();
+            Conformity conf1 =
+                unit.GetRepository<Conformity>().Get(c => c.InputName == "Маккаби Тель-Авив").FirstOrDefault();
             Assert.IsNotNull(conf1);
 
             Conformity conf2 = unit.GetRepository<Conformity>().Get(c => c.InputName == "Ст. Этьен").FirstOrDefault();
-            Assert.IsNotNull(conf2);            
+            Assert.IsNotNull(conf2);
 
             IEnumerable<TempResult> tempResults = unit.GetRepository<TempResult>().Get();
             Assert.IsTrue(tempResults.Count() == 2);
 
             IEnumerable<TempSportEvent> tempEvents = unit.GetRepository<TempSportEvent>().Get();
-            Assert.IsTrue(tempEvents.Count() == 1);   
+            Assert.IsTrue(tempEvents.Count() == 1);
         }
 
         [Test]
@@ -478,7 +509,7 @@ namespace JinnSports.UnitTests.Services
             ResultDTO r1 = new ResultDTO { TeamName = "Динамо Киев", IsHome = true, Score = 3 };
             ResultDTO r2 = new ResultDTO { TeamName = "Ст. Этьен", IsHome = false, Score = 1 };
             SportEventDTO ev = new SportEventDTO
-            { Date = DateTime.Now.Ticks, SportType = "Football", Results = new List<ResultDTO> { r1, r2 } };
+                { Date = DateTime.Now.Ticks, SportType = "Football", Results = new List<ResultDTO> { r1, r2 } };
             List<SportEventDTO> events = new List<SportEventDTO>();
             events.Add(ev);
 
@@ -486,17 +517,22 @@ namespace JinnSports.UnitTests.Services
 
             this.eventService.SaveSportEvents(events);
 
-            Team team1 = unit.GetRepository<TeamName>().Get(tn => tn.Name == "Динамо Киев").Select(tn => tn.Team).FirstOrDefault();
+            Team team1 =
+                unit.GetRepository<TeamName>()
+                    .Get(tn => tn.Name == "Динамо Киев")
+                    .Select(tn => tn.Team)
+                    .FirstOrDefault();
             Assert.IsNotNull(team1);
 
-            Team team2 = unit.GetRepository<TeamName>().Get(tn => tn.Name == "Ст. Этьен").Select(tn => tn.Team).FirstOrDefault();
+            Team team2 =
+                unit.GetRepository<TeamName>().Get(tn => tn.Name == "Ст. Этьен").Select(tn => tn.Team).FirstOrDefault();
             Assert.IsNull(team2);
 
             IEnumerable<SportEvent> emptyEvents = unit.GetRepository<SportEvent>().Get(e => e.Results.Count() == 0);
             Assert.IsTrue(emptyEvents.Count() == 0);
 
             IEnumerable<SportEvent> oneResultEvents = unit.GetRepository<SportEvent>().Get(e => e.Results.Count() == 1);
-            Assert.IsTrue(oneResultEvents.Count() == 0);   
+            Assert.IsTrue(oneResultEvents.Count() == 0);
 
             Conformity conf2 = unit.GetRepository<Conformity>().Get(c => c.InputName == "Ст. Этьен").FirstOrDefault();
             Assert.IsTrue(conf2.TempResult != null);
@@ -512,30 +548,35 @@ namespace JinnSports.UnitTests.Services
         }
 
         [Test]
-        public void DoubleConformitySportEventsSaving()//multiple conformities with the same inputName
+        public void DoubleConformitySportEventsSaving() //multiple conformities with the same inputName
         {
             ResultDTO r1 = new ResultDTO { TeamName = "Динамо", IsHome = true, Score = 0 };
-            ResultDTO r2 = new ResultDTO { TeamName = "Манчестер Юнайтед", IsHome = false, Score = 1 };            
+            ResultDTO r2 = new ResultDTO { TeamName = "Манчестер Юнайтед", IsHome = false, Score = 1 };
             SportEventDTO ev1 = new SportEventDTO
-            { Date = DateTime.Now.Ticks, SportType = "Football", Results = new List<ResultDTO> { r1, r2 } };            
+                { Date = DateTime.Now.Ticks, SportType = "Football", Results = new List<ResultDTO> { r1, r2 } };
             List<SportEventDTO> events = new List<SportEventDTO>();
-            events.Add(ev1);            
+            events.Add(ev1);
 
             IUnitOfWork unit = new EFUnitOfWork(this.databaseSportsContext);
 
             this.eventService.SaveSportEvents(events);
 
-            Team team1 = unit.GetRepository<TeamName>().Get(tn => tn.Name == "Динамо").Select(tn => tn.Team).FirstOrDefault();
+            Team team1 =
+                unit.GetRepository<TeamName>().Get(tn => tn.Name == "Динамо").Select(tn => tn.Team).FirstOrDefault();
             Assert.IsNull(team1);
 
-            Team team2 = unit.GetRepository<TeamName>().Get(tn => tn.Name == "Манчестер Юнайтед").Select(tn => tn.Team).FirstOrDefault();
+            Team team2 =
+                unit.GetRepository<TeamName>()
+                    .Get(tn => tn.Name == "Манчестер Юнайтед")
+                    .Select(tn => tn.Team)
+                    .FirstOrDefault();
             Assert.IsNotNull(team2);
 
             IEnumerable<SportEvent> simpleEvents = unit.GetRepository<SportEvent>().Get(e => e.Results.Count() == 0);
             Assert.IsTrue(simpleEvents.Count() == 0);
 
             IEnumerable<Conformity> confs = unit.GetRepository<Conformity>().Get(c => c.InputName == "Динамо");
-            Assert.IsTrue(confs.Count() == 2);                       
+            Assert.IsTrue(confs.Count() == 2);
 
             IEnumerable<TempResult> tempResults = unit.GetRepository<TempResult>().Get();
             Assert.IsTrue(tempResults.Count() == 2);
