@@ -142,7 +142,9 @@
   <PropertyGroup>
     <PostBuildEvent>if not exist "C:\ProgramData\JinnSports\" mkdir "C:\ProgramData\JinnSports\"
 xcopy /Y "$(ProjectDir)Proxy.xml" "C:\ProgramData\JinnSports\"</PostBuildEvent>
-    <PostBuildEvent>copy $(ProjectDir)\ApiConnection\ApiConnection.xml $(ProjectDir)$(OutDir)</PostBuildEvent>
+    <PostBuildEvent>if not exist "C:\ProgramData\JinnSports\" mkdir "C:\ProgramData\JinnSports\"
+xcopy /Y "$(ProjectDir)Proxy.xml" "C:\ProgramData\JinnSports\"
+xcopy /Y "$(ProjectDir)\ApiConnection\ApiConnection.xml" "C:\ProgramData\JinnSports\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
