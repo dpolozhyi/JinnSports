@@ -36,9 +36,9 @@ namespace JinnSports.Parser.App.HtmlParsers
                 ApiConnection api = new ApiConnection(/*ApiConnectionStrings.URL, ApiConnectionStrings.Controller*/);
 
                 Uri footballUrl = new Uri("https://24score.com/?date=");
-                Uri basketballUrl = new Uri("https://24score.com/basketball/?date=");
-                Uri hokkeyUrl = new Uri("https://24score.com/ice_hockey/?date=");
-                List<Uri> selectedUris = new List<Uri> { footballUrl, basketballUrl, hokkeyUrl };
+                //Uri basketballUrl = new Uri("https://24score.com/basketball/?date=");
+                //Uri hokkeyUrl = new Uri("https://24score.com/ice_hockey/?date=");
+                List<Uri> selectedUris = new List<Uri> { footballUrl/*, basketballUrl, hokkeyUrl*/ };
                 
                 foreach (Uri baseUrl in selectedUris)                
                 {
