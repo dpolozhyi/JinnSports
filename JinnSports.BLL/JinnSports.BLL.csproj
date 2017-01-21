@@ -80,19 +80,21 @@
     <Compile Include="Identity\UserStore.cs" />
     <Compile Include="Interfaces\IEventService.cs" />
     <Compile Include="Interfaces\INewsService.cs" />
+    <Compile Include="Interfaces\IPredictionsService.cs" />
     <Compile Include="Interfaces\IResultService.cs" />
     <Compile Include="Interfaces\ISportTypeService.cs" />
     <Compile Include="Interfaces\ITeamDetailsService.cs" />
     <Compile Include="Interfaces\ITeamService.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Matcher\NamingMatcher.cs" />
+    <Compile Include="Service\PredictionsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RssParser\RssParser.cs" />
     <Compile Include="Service\ApiConnection.cs" />
     <Compile Include="Service\EventsService.cs" />
     <Compile Include="Service\NewsService.cs" />
     <Compile Include="Service\ParserService.cs" />
-    <Compile Include="Service\PredictoionService.cs" />
+    <Compile Include="Predictor\PredictoionSender.cs" />
     <Compile Include="Service\SportTypesService.cs" />
     <Compile Include="Service\TeamDetailsService.cs" />
     <Compile Include="Service\TeamService.cs" />
@@ -117,10 +119,10 @@
       <Project>{fe881c95-44b6-4c3b-8d18-906f050d3cbb}</Project>
       <Name>JinnSports.Entities</Name>
     </ProjectReference>
-	<ProjectReference Include="..\JinnSports.Parser.App\JinnSports.Parser.App.csproj">
-		<Project>{C5F8DE8E-BEA1-4A55-A0B4-1190EEE9D017}</Project>
-		<Name>JinnSports.Parser.App</Name>
-	</ProjectReference>
+    <ProjectReference Include="..\JinnSports.Parser.App\JinnSports.Parser.App.csproj">
+      <Project>{C5F8DE8E-BEA1-4A55-A0B4-1190EEE9D017}</Project>
+      <Name>JinnSports.Parser.App</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PredictorDTO\PredictorDTO.csproj">
       <Project>{96B1BC81-F95F-49C6-9B2F-44E2D00460CF}</Project>
       <Name>PredictorDTO</Name>

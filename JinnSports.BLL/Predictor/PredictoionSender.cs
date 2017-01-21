@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace JinnSports.BLL.Service
 {
-    public class PredictoionService
+    public class PredictoionSender
     {
         private readonly IUnitOfWork dataUnit;
 
@@ -17,7 +17,7 @@ namespace JinnSports.BLL.Service
 
         private Task sendRequest;
 
-        public PredictoionService(IUnitOfWork dataUnit)
+        public PredictoionSender(IUnitOfWork dataUnit)
         {
             this.dataUnit = dataUnit;
         }
@@ -48,16 +48,19 @@ namespace JinnSports.BLL.Service
 
         private void CheckForNewEvents()
         {
-            DateTime currentDate = DateTime.Today;
-            IEnumerable<SportEvent> events = dataUnit.GetRepository<SportEvent>().Get(e => e.Date >= currentDate);
-
-            foreach (SportEvent sportEvent in events)
+            using (dataUnit)
             {
-                if (sportEvent.Results.FirstOrDefault(r => r.Score == -1) != null)
+                DateTime currentDate = DateTime.Today;
+                IEnumerable<SportEvent> events = dataUnit.GetRepository<SportEvent>().Get(e => e.Date >= currentDate);
+
+                foreach (SportEvent sportEvent in events)
                 {
-                    AddIncomingEvent(sportEvent);
+                    if (sportEvent.Results.FirstOrDefault(r => r.Score == -1) != null)
+                    {
+                        AddIncomingEvent(sportEvent);
+                    }
                 }
-            }
+            }   
         }
 
         private void AddIncomingEvent(SportEvent sportEvent)

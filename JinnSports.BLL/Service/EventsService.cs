@@ -22,9 +22,17 @@ namespace JinnSports.BLL.Service
 
         private readonly IUnitOfWork dataUnit;
 
+        private readonly PredictoionSender predictionSender;
+
         public EventsService(IUnitOfWork unitOfWork)
         {
             this.dataUnit = unitOfWork;
+        }
+
+        public EventsService(IUnitOfWork unitOfWork, PredictoionSender predictionSender)
+        {
+            this.dataUnit = unitOfWork;
+            this.predictionSender = predictionSender;
         }
 
         public int Count(int sportTypeId)
@@ -152,6 +160,9 @@ namespace JinnSports.BLL.Service
                     this.Save(tempEvent, sportEvent);
                     }
                     this.dataUnit.SaveChanges();
+                    
+                    // TODO: resolve injection
+                    predictionSender.SendPredictionRequest(); // Check new events and send request to Predictor
                 }
                 catch (Exception ex)
                 {
