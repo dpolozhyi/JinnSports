@@ -19,8 +19,8 @@ namespace JinnSports.WEB.Controllers
 
             return PartialView("WinRateChartForTeam", new WinRateChartDto
             {
-                Title = "",
-                Subtitle = "",
+                Title = "Title",
+                Subtitle = "Subtitle",
                 DataTable = data
             });
         }

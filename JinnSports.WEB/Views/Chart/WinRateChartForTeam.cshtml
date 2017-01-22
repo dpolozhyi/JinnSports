@@ -1,31 +1,31 @@
-﻿@model JinnSports.BLL.Dtos.Charts.WinRateChartDto
+﻿@using Newtonsoft.Json
+@model JinnSports.BLL.Dtos.Charts.WinRateChartDto
 
 <div id="chart"></div>
 
-@section scripts{
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
 
-        function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Year', 'Sales', 'Expenses'],
-            ['2004',  1000,      400],
-            ['2005',  1170,      460],
-            ['2006',  660,       1120],
-            ['2007',  1030,      540]
-        ]);
+    function drawChart() {
+        var data = new google.visualization.DataTable(
+            @Html.Raw(JsonConvert.SerializeObject(Model.DataTable))
+        );
 
         var options = {
-            title: 'Company Performance',
-            curveType: 'function',
-            legend: { position: 'bottom' }
+            title: '@Model.Title',
+            subtitle: '@Model.Subtitle',
+            curveType: 'none',
+            legend: { position: 'bottom' },
+            vAxis: {
+                minValue: 0,
+                maxValue: 100
+            }
         };
 
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+        var chart = new google.visualization.LineChart(document.getElementById('chart'));
 
         chart.draw(data, options);
-        }
-    </script>
-}
+    }
+</script>
