@@ -19,35 +19,4 @@
             </thead>
         </table>
     </div>
-
-    <!--<div class="box-body">
-        @if (Model == null || Model.Count == 0)
-            {
-            <p>No upcomig events...</p>
-        }
-        else
-        {
-            <table id="eventTable" class="table no-margin">
-                <thead>
-                    <tr>
-                        <th>Sport Type</th>
-                        <th>Team 1</th>
-                        <th>Team 2</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var result in Model)
-                    {
-                        <tr>
-                            <td><a href="@Url.Action("Index","Event", new { sportTypeId = result.SportType.Id, time = 1 })">@result.SportType.Name</a></td>
-                            <td><a href="@Url.Action("Details","TeamDetails", new { Id = result.TeamIds.ToList()[0] })">@result.TeamNames.ToList()[0]</a></td>
-                            <td><a href="@Url.Action("Details","TeamDetails", new { Id = result.TeamIds.ToList()[1] })">@result.TeamNames.ToList()[1]</a></td>
-                            <td>@result.Date</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-    </div>-->
 </div>

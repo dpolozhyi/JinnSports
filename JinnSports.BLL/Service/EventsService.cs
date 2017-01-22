@@ -108,7 +108,7 @@ namespace JinnSports.BLL.Service
                         take: take);
                 }
             }
-            if(time == 1)
+            if (time == 1)
             {
                 sportEvents = sportEvents.OrderBy(x => x.Date).ThenBy(x => x.Id);
             }
@@ -241,7 +241,7 @@ namespace JinnSports.BLL.Service
         private DateTime ConvertAndTrimDate(long dateTicks)
         {
             DateTime temp = new DateTime(dateTicks);
-            return new DateTime(temp.Year, temp.Month, temp.Day);
+            return new DateTime(temp.Year, temp.Month, temp.Day, temp.Hour, temp.Minute, temp.Second);
         }
     }
 }

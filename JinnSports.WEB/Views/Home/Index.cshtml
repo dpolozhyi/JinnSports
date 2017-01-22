@@ -60,9 +60,24 @@
                     dataSrc: 'data'
                 },
                 "columns": [
-                        { 'data': 'SportType.Name', 'autoWidth': true },
-                        { 'data': 'TeamNames.0', 'autoWidth': true },
-                        { 'data': 'TeamNames.1', 'autoWidth': true },
+                        {
+                            'data': 'SportType.Name', 'autoWidth': true,
+                            'render': function (data, type, full, meta) {
+                                return '<a href="@Url.Action("Index", "Event")?sportTypeId=' + full.SportType.Id + '&time=1">' + data + '</a>';
+                            }
+                        },
+                        {
+                            'data': 'TeamNames.0', 'autoWidth': true,
+                            'render': function (data, type, full, meta) {
+                                return '<a href="@Url.Action("Details","TeamDetails")?id=' + full.TeamIds[0] + '">' + data + '</a>';
+                            }
+                        },
+                        {
+                            'data': 'TeamNames.1', 'autoWidth': true,
+                            'render': function (data, type, full, meta) {
+                                return '<a href="@Url.Action("Details","TeamDetails")?id=' + full.TeamIds[1] + '">' + data + '</a>';
+                            }
+                        },
                         { 'data': 'Date', 'autoWidth': true }
                 ]
             });

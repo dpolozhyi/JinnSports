@@ -23,10 +23,11 @@ namespace JinnSports.WEB
                .ForMember(
                     e => e.Score,
                     opt => opt.MapFrom(
-                        res => string.Format(
+                        res => ((res.SportEvent.Results.ElementAt(0).Score == -1 || res.SportEvent.Results.ElementAt(1).Score == -1) ? "—:—" :
+                            string.Format(
                             "{0} : {1}",
                             res.SportEvent.Results.ElementAt(0).Score,
-                            res.SportEvent.Results.ElementAt(1).Score)))
+                            res.SportEvent.Results.ElementAt(1).Score))))
                .ForMember(
                     e => e.TeamNames,
                     opt => opt.MapFrom(
