@@ -22,11 +22,6 @@ namespace JinnSports.Parser.App.ProxyService.ProxyTerminal
             this.pc = new ProxyConnection();
         }
 
-        public ProxyTerminal(string profile)
-        {
-            this.pc = new ProxyConnection(profile);
-        }
-
         public HttpWebResponse GetProxyResponse(Uri uri)
         {
             this.proxyAsync = new ProxyAsync(this.pc, uri);

@@ -2,5 +2,5 @@
 <ApiConnectionPath> 
   <url>https://localhost:44300</url>
   <name>api/SportEvents</name>
-  <timeout>120</timeout>
+  <timeout>60</timeout>
 </ApiConnectionPath> 

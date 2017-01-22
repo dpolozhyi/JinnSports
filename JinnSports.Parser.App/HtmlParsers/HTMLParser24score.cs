@@ -66,7 +66,6 @@ namespace JinnSports.Parser.App.HtmlParsers
                         string url = baseUrl.ToString() + dateTime.Date.ToString("yyyy-MM-dd");
                         string html = this.GetHtml(url);
                         List<SportEventDTO> events = this.ParseHtml(html, currentSport, date);
-
                         try
                         {
                             api.SendEvents(events);
@@ -96,6 +95,9 @@ namespace JinnSports.Parser.App.HtmlParsers
             try
             {
                 response = this.proxyTerminal.GetProxyResponse(new Uri(url));
+                /*HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(url));
+                request.Headers.Set(HttpRequestHeader.ContentEncoding, "1251");
+                response = request.GetResponse() as HttpWebResponse;*/
             }
             catch (Exception ex)
             {
@@ -105,7 +107,6 @@ namespace JinnSports.Parser.App.HtmlParsers
             string html = new StreamReader(response.GetResponseStream()).ReadToEnd();
 
             return html;
-            //return "";
         }
 
         private List<SportEventDTO> ParseHtml(string html, string currentSport, long date)

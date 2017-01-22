@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -44,6 +45,8 @@ namespace JinnSports.Parser.App
 
                     string json = JsonConvert.SerializeObject(events, Newtonsoft.Json.Formatting.Indented);
                     StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
 
                     Task<HttpResponseMessage> postResponseTask = client.PostAsync(this.controllerUrn, content);
 

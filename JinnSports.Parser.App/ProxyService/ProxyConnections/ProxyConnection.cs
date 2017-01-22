@@ -46,11 +46,6 @@ namespace JinnSports.Parser.App.ProxyService.ProxyConnections
             this.xmlWriter = new ProxyRepository<ProxyServer>();
         }
 
-        public ProxyConnection(string sectionName)
-        {
-            this.xmlWriter = new ProxyRepository<ProxyServer>(sectionName);
-        }
-
         public void SetStatus(string ip, ConnectionStatus status)
         {
             lock (connectionLocker)
@@ -220,7 +215,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyConnections
                         //Request formation block
                         request = (HttpWebRequest)WebRequest.Create(uri);
                         request.Headers.Set(HttpRequestHeader.ContentEncoding, "1251");
-                        WebProxy webProxy = new WebProxy(proxy, true);
+                        WebProxy webProxy = new WebProxy(proxy);
                         request.Proxy = webProxy;
 
                         //PreRequest CancellationToken checking, if Cancel - SetStatus (PreResponseTerminated)

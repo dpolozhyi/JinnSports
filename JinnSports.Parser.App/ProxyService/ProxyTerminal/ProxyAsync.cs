@@ -22,17 +22,8 @@ namespace JinnSports.Parser.App.ProxyService.ProxyTerminal
 
         public ProxyAsync(IProxyConnection proxyConnection, Uri uri)
         {
-            this.asyncinterval = ProxySettings.GetAsyncInterval("original");
-            this.timeout = ProxySettings.GetTimeout("original");
-            this.uri = uri;
-            this.pc = proxyConnection;
-            this.cancelTokenSrc = new CancellationTokenSource();
-        }
-
-        public ProxyAsync(IProxyConnection proxyConnection, Uri uri, string profile)
-        {
-            this.asyncinterval = ProxySettings.GetAsyncInterval(profile);
-            this.timeout = ProxySettings.GetTimeout(profile);
+            this.asyncinterval = ProxySettings.GetAsyncInterval();
+            this.timeout = ProxySettings.GetTimeout();
             this.uri = uri;
             this.pc = proxyConnection;
             this.cancelTokenSrc = new CancellationTokenSource();

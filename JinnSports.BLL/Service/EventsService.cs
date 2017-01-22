@@ -11,6 +11,11 @@ using System;
 using log4net;
 using JinnSports.Entities.Entities.Temp;
 using JinnSports.BLL.Dtos.SportType;
+using JinnSports.BLL.Utilities;
+using System.Web;
+using Autofac;
+using JinnSports.DAL.Repositories;
+using JinnSports.DAL.EFContext;
 
 namespace JinnSports.BLL.Service
 {
@@ -20,7 +25,7 @@ namespace JinnSports.BLL.Service
 
         private static readonly ILog Log = LogManager.GetLogger(typeof(EventsService));
 
-        private readonly IUnitOfWork dataUnit;
+        private IUnitOfWork dataUnit;
 
         public EventsService(IUnitOfWork unitOfWork)
         {
@@ -94,12 +99,12 @@ namespace JinnSports.BLL.Service
 
         public bool SaveSportEvents(ICollection<SportEventDTO> eventDTOs)
         {
-            Log.Info("Writing transferred data...");            
-                try
-                {
+            Log.Info("Writing transferred data...");
+            try
+            {
                     NamingMatcher matcher = new NamingMatcher(this.dataUnit);
 
-                    IEnumerable<SportType> sportTypes = this.dataUnit.GetRepository<SportType>().Get();                    
+                    IEnumerable<SportType> sportTypes = this.dataUnit.GetRepository<SportType>().Get();
 
                     foreach (SportEventDTO eventDTO in eventDTOs)
                     {
@@ -110,13 +115,17 @@ namespace JinnSports.BLL.Service
                         { SportType = sportType, Date = this.ConvertAndTrimDate(eventDTO.Date), Results = new List<Result>() };
                         TempSportEvent tempEvent = new TempSportEvent()
                         { SportType = sportType, Date = this.ConvertAndTrimDate(eventDTO.Date), TempResults = new List<TempResult>() };
-                     
+
                         foreach (ResultDTO resultDTO in eventDTO.Results)
                         {
-                            Team team = new Team { Name = resultDTO.TeamName, SportType = sportType,
-                                Names = new List<TeamName> { new TeamName { Name = resultDTO.TeamName} } };
+                            Team team = new Team
+                            {
+                                Name = resultDTO.TeamName,
+                                SportType = sportType,
+                                Names = new List<TeamName> { new TeamName { Name = resultDTO.TeamName } }
+                            };
 
-                            List<Conformity> conformities = matcher.ResolveNaming(team);   
+                            List<Conformity> conformities = matcher.ResolveNaming(team);
 
                             if (conformities == null)
                             {
@@ -127,9 +136,9 @@ namespace JinnSports.BLL.Service
                                 sportEvent.Results.Add(result);
                             }
                             else
-                            {     
+                            {
                                 TempResult result = new TempResult
-                                {                                
+                                {
                                     Score = resultDTO.Score ?? -1,
                                     Conformities = new List<Conformity>(),
                                     IsHome = resultDTO.IsHome
@@ -149,15 +158,15 @@ namespace JinnSports.BLL.Service
                             }
                         }
 
-                    this.Save(tempEvent, sportEvent);
+                        this.Save(tempEvent, sportEvent);
                     }
                     this.dataUnit.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("Exception when trying to save transferred data to DB", ex);
-                    return false;
-                }            
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Exception when trying to save transferred data to DB", ex);
+                return false;
+            }            
             Log.Info("Transferred data sucessfully saved");
             return true;
         }
