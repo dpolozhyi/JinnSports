@@ -55,11 +55,22 @@ namespace JinnSports.BLL.Service
 
                 selectedName = sportType.Name;
 
-                sportEvents = sportType.SportEvents;
+                sportEvents = sportType.SportEvents.OrderByDescending(x => x.Date)
+                                    .ThenByDescending(x => x.Id)
+                                    .ToList();
 
                 if (time != 0)
                 {
-                    sportEvents = sportEvents.Where(m => Math.Sign(DateTime.Compare(m.Date, DateTime.Now)) == time).Select(m => m).ToList();
+                    sportEvents = sportEvents.Where(m => Math.Sign(DateTime.Compare(m.Date, DateTime.UtcNow)) == time)
+                                    .Select(m => m).OrderByDescending(x => x.Date)
+                                    .ThenByDescending(x => x.Id)
+                                    .ToList();
+                    if (time == 1)
+                    {
+                        sportEvents = sportEvents.OrderBy(x => x.Date)
+                                .ThenByDescending(x => x.Id)
+                                .ToList();
+                    }
                 }
 
                 if (sportEvents.Count() > 0)
@@ -87,11 +98,22 @@ namespace JinnSports.BLL.Service
 
                 foreach (SportType sportType in sportTypes)
                 {
-                    sportEvents = sportType.SportEvents;
+                    sportEvents = sportType.SportEvents.OrderByDescending(x => x.Date)
+                                    .ThenByDescending(x => x.Id)
+                                    .ToList(); ;
 
                     if (time != 0)
                     {
-                        sportEvents = sportEvents.Where(m => Math.Sign(DateTime.Compare(m.Date, DateTime.Now)) == time).Select(m => m).ToList();
+                        sportEvents = sportEvents.Where(m => Math.Sign(DateTime.Compare(m.Date, DateTime.UtcNow)) == time)
+                                    .Select(m => m).OrderByDescending(x => x.Date)
+                                    .ThenByDescending(x => x.Id)
+                                    .ToList();
+                        if(time == 1)
+                        {
+                            sportEvents = sportEvents.OrderBy(x => x.Date)
+                                    .ThenByDescending(x => x.Id)
+                                    .ToList();
+                        }
                     }
 
                     if (sportEvents.Count() > 0)

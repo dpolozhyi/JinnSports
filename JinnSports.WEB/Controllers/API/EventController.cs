@@ -29,7 +29,7 @@ namespace JinnSports.WEB.ApiControllers
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
 
-            int recordsTotal = this.eventService.Count(sportTypeId);
+            int recordsTotal = this.eventService.Count(sportTypeId, time);
 
             IEnumerable<ResultDto> results = this.eventService
                 .GetSportEvents(sportTypeId, time, skip, pageSize);

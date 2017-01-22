@@ -58,6 +58,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dtos\MainPageDto.cs" />
     <Compile Include="Dtos\NewsDto.cs" />
     <Compile Include="Dtos\ResultDto.cs" />
     <Compile Include="Dtos\SportType\SportTypeDto.cs" />

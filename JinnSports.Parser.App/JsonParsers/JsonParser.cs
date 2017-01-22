@@ -29,7 +29,7 @@ namespace JinnSports.Parser.App.JsonParsers
 
         public JsonParser() : this(new Uri("http://results.fbwebdn.com/results.json.php"))
         {
-            proxyTerminal = new ProxyTerminal();
+
         }
 
         public JsonParser(Uri uri)
@@ -73,7 +73,7 @@ namespace JinnSports.Parser.App.JsonParsers
 
             try
             {
-                response = this.proxyTerminal.GetProxyResponse(uri);
+                response = this.proxyTerminal.GetProxyResponse(new Uri(url));
                 stream = response.GetResponseStream();
             }
             catch (Exception ex)
@@ -88,7 +88,7 @@ namespace JinnSports.Parser.App.JsonParsers
                     result += sr.ReadLine();
                 }
             }
-            //resp.Close();
+            response.Close();
 
             return result;
         }
@@ -111,7 +111,7 @@ namespace JinnSports.Parser.App.JsonParsers
 
         public void SendEvents(List<SportEventDTO> eventsList)
         {
-            ApiConnection apiConnection = new ApiConnection(/*ApiConnectionStrings.URL, ApiConnectionStrings.Controller*/);
+            ApiConnection apiConnection = new ApiConnection();
             try
             {
                 apiConnection.SendEvents(eventsList);
@@ -145,7 +145,10 @@ namespace JinnSports.Parser.App.JsonParsers
                         if (this.GetTeamsNamesFromEvent(ev, sportType, resultList)
                             && this.AcceptSportType(this.ChangeSportTypeName(Locale.RU, sportType)))
                         {
-                            this.GetScoresFromEvent(ev, resultList);
+                            if (ev.Status == 3)
+                            {
+                                this.GetScoresFromEvent(ev, resultList);
+                            }
 
                             SportEventDTO sportEvent = new SportEventDTO();
                             sportEvent.Date = this.GetDateTimeFromSec(ev.StartTime).Ticks;
@@ -192,7 +195,7 @@ namespace JinnSports.Parser.App.JsonParsers
         {
             if (ev.Name.Contains("-") && !ev.Name.Contains(":") && !ev.Name.Contains("1st")
                 && !ev.Name.Contains("2nd") && !ev.Name.Contains("1-") && !ev.Name.Contains("2-")
-                && !ev.Name.Contains("3-") && ev.Status == 3 && ev.Score.Contains(":"))
+                && !ev.Name.Contains("3-") && ((ev.Status == 3 && ev.Score.Contains(":")) || ev.Status == 0))
             {
                 string[] teams = ev.Name.Split(new string[] { "-" }, StringSplitOptions.None);
                 for (int i = 0; i < teams.Length; i++)
