@@ -50,11 +50,21 @@ namespace JinnSports.Parser.App.JsonParsers
             Log.Info("Json parser was started");
             try
             {
-                string result = this.GetJsonFromUrl(this.SiteUri);
-                JsonResult jsonResults = this.DeserializeJson(result);
-                List<SportEventDTO> sportEventsList = this.GetSportEventsList(jsonResults);
-                this.SendEvents(sportEventsList);
-
+                while (true)
+                {
+                    try
+                    {
+                        string result = this.GetJsonFromUrl(this.SiteUri);
+                        JsonResult jsonResults = this.DeserializeJson(result);
+                        List<SportEventDTO> sportEventsList = this.GetSportEventsList(jsonResults);
+                        this.SendEvents(sportEventsList);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex);
+                    }
+                }
                 Log.Info("New data from JSON parser was sent");
             }
             catch (Exception ex)
@@ -72,30 +82,22 @@ namespace JinnSports.Parser.App.JsonParsers
         {
             string result = string.Empty;
             HttpWebResponse response;
-            Stream stream = null;
 
             string url = string.Format("{0}?locale={1}", uri.ToString(), locale == Locale.EN ? "en" : "ru");
 
             try
             {
+                //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(url));
+                //request.Headers.Set(HttpRequestHeader.ContentEncoding, "1251");
+                //response = request.GetResponse() as HttpWebResponse;
                 response = this.proxyTerminal.GetProxyResponse(new Uri(url));
-                stream = response.GetResponseStream();
+                result = new StreamReader(response.GetResponseStream()).ReadToEnd();
+                return result;
             }
             catch (Exception ex)
             {
                 throw new WebResponseException(ex.Message, ex.InnerException);
             }
-
-            using (StreamReader sr = new StreamReader(stream))
-            {
-                while (!sr.EndOfStream)
-                {
-                    result += sr.ReadLine();
-                }
-            }
-            response.Close();
-
-            return result;
         }
 
         public JsonResult DeserializeJson(string jsonStr)

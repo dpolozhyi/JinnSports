@@ -9,6 +9,7 @@ using JinnSports.Parser.App.ProxyService.ProxyConnections;
 using JinnSports.Parser.App.Exceptions;
 using System.Diagnostics;
 using System.Threading;
+using JinnSports.Parser.App.ProxyService.ProxyEnums;
 
 namespace JinnSports.Parser.App.ProxyService.ProxyTerminal
 {
@@ -22,14 +23,14 @@ namespace JinnSports.Parser.App.ProxyService.ProxyTerminal
             this.pc = new ProxyConnection();
         }
 
-        public ProxyTerminal(string profile)
+        public void MakeProxyUnavaliable(string proxy)
         {
-            this.pc = new ProxyConnection(profile);
+            pc.SetStatus(proxy, ConnectionStatus.CS_СonnectedWrongly);
         }
 
-        public HttpWebResponse GetProxyResponse(Uri uri)
+        public HttpWebResponse GetProxyResponse(Uri url)
         {
-            this.proxyAsync = new ProxyAsync(this.pc, uri);
+            this.proxyAsync = new ProxyAsync(this.pc, url);
             return proxyAsync.GetProxyAsync();
         }
     }
