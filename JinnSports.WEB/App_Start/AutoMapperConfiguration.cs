@@ -61,7 +61,7 @@ namespace JinnSports.WEB
                .ForMember(
                     e => e.Score,
                     opt => opt.MapFrom(
-                        res => ((res.Results.ElementAt(0).Score==-1 || res.Results.ElementAt(1).Score==-1) ? "—:—" : 
+                        res => ((res.Results.ElementAt(0).Score == -1 || res.Results.ElementAt(1).Score == -1) ? "—:—" :
                             string.Format(
                             "{0} : {1}",
                             res.Results.ElementAt(0).Score,
@@ -146,6 +146,18 @@ namespace JinnSports.WEB
                         e => e.Name,
                         opt => opt.MapFrom(
                             s => s.Name));
+
+                //=================================SportTypeService=====================================================
+                config.CreateMap<SportType, SportTypeDto>()
+                    .ForMember(
+                        e => e.Id,
+                        opt => opt.MapFrom(
+                            res => res.Id))
+                    .ForMember(
+                        e => e.Name,
+                        opt => opt.MapFrom(
+                            res => res.Name));
+
             });
         }
     }
