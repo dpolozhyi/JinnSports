@@ -12,7 +12,7 @@ namespace JinnSports.BLL.Utilities
         public static void Configure(ref ContainerBuilder builder)
         {
             // Data access config
-            builder.Register(db => new SportsContext("SportsContext")).InstancePerRequest();
+            builder.Register(db => new SportsContext("SportsContext")).InstancePerLifetimeScope();
             builder.RegisterType<EFUnitOfWork>().As<IUnitOfWork>();
             // Services config
             builder.RegisterType<EventsService>().As<IEventService>();

@@ -14,28 +14,19 @@ namespace JinnSports.Parser.App.ProxyService.ProxyTerminal
 {
     public class ProxyAsync : IProxyAsync
     {
-        private Uri uri;
+        private Uri url;
         private IProxyConnection pc;
         private CancellationTokenSource cancelTokenSrc;
         private int asyncinterval;
         private int timeout;
 
-        public ProxyAsync(IProxyConnection proxyConnection, Uri uri)
+        public ProxyAsync(IProxyConnection proxyConnection, Uri url)
         {
-            this.asyncinterval = ProxySettings.GetAsyncInterval("original");
-            this.timeout = ProxySettings.GetTimeout("original");
-            this.uri = uri;
+            this.asyncinterval = ProxySettings.GetAsyncInterval();
+            this.timeout = ProxySettings.GetTimeout();
             this.pc = proxyConnection;
             this.cancelTokenSrc = new CancellationTokenSource();
-        }
-
-        public ProxyAsync(IProxyConnection proxyConnection, Uri uri, string profile)
-        {
-            this.asyncinterval = ProxySettings.GetAsyncInterval(profile);
-            this.timeout = ProxySettings.GetTimeout(profile);
-            this.uri = uri;
-            this.pc = proxyConnection;
-            this.cancelTokenSrc = new CancellationTokenSource();
+            this.url = url;
         }
 
         public HttpWebResponse GetProxyAsync()
@@ -56,7 +47,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyTerminal
 
                 tasks.Add(Task<HttpWebResponse>.Factory.StartNew(() =>
                 {
-                    var result = this.pc.GetProxyResponse(uri, this.timeout, cancelTokenSrc.Token, asyncResponse);
+                    var result = this.pc.GetProxyResponse(url, this.timeout, cancelTokenSrc.Token, asyncResponse);
                     if (result != null)
                     {
                         cancelTokenSrc.Cancel();
