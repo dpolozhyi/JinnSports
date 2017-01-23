@@ -42,7 +42,9 @@ namespace JinnSports.WEB.Areas.Mvc.Controllers
                 return this.View(new SportEventViewModel()
                 {
                      PageInfo = pageInfo,
-                     SportTypeSelectDto = sportTypeModel
+                     SportTypeSelectDto = sportTypeModel,
+                     ActionName = "Index",
+                     ControllerName = "Event"
                 });
             }
             else
@@ -60,7 +62,29 @@ namespace JinnSports.WEB.Areas.Mvc.Controllers
             string requestedTime = Request["timeSelector"];
             int timeId = !string.IsNullOrEmpty(requestedTime) ? Convert.ToInt32(requestedTime) : 1;
 
-            return this.RedirectToAction("Index", new { page = 1, id = sportTypeId, time = timeId - 1 });
+            int recordsTotal = this.sportTypeService.Count(sportTypeId, timeId - 1);
+            
+
+            PageInfo pageInfo = new PageInfo(recordsTotal, 1, PAGESIZE);
+            SportTypeSelectDto sportTypeModel = this.sportTypeService.GetSportTypes(sportTypeId, timeId - 1,
+                0, PAGESIZE);
+
+
+            if (sportTypeModel != null)
+            {
+                return this.View("Index",
+                    new SportEventViewModel()
+                    {
+                        PageInfo = pageInfo,
+                        SportTypeSelectDto = sportTypeModel,
+                        ActionName = "Index",
+                        ControllerName = "Event"
+                    });
+            }
+            else
+            {
+                return this.View();
+            }
         }
     }
 }
