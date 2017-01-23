@@ -21,10 +21,13 @@ namespace JinnSports.BLL.Service
         private static readonly ILog Log = LogManager.GetLogger(typeof(EventsService));
 
         private readonly IUnitOfWork dataUnit;
+        
+        private readonly PredictoionSender predictionSender;
 
         public EventsService(IUnitOfWork unitOfWork)
         {
             this.dataUnit = unitOfWork;
+            this.predictionSender = new PredictoionSender(dataUnit);
         }
 
         public int Count(int sportTypeId, int time)
@@ -203,6 +206,9 @@ namespace JinnSports.BLL.Service
                     this.Save(tempEvent, sportEvent);
                 }
                 this.dataUnit.SaveChanges();
+                
+                // TODO: resolve injection
+                predictionSender.SendPredictionRequest(); // Check new events and send request to Predictor
             }
             catch (Exception ex)
             {
