@@ -52,11 +52,17 @@ namespace JinnSports.BLL.Service
             {
                 DateTime currentDate = DateTime.Today;
                 IEnumerable<SportEvent> events = dataUnit.GetRepository<SportEvent>().Get(e => e.Date >= currentDate);
+                IEnumerable<EventPrediction> eventPredictions = dataUnit.GetRepository<EventPrediction>().Get();
 
                 foreach (SportEvent sportEvent in events)
                 {
                     if (sportEvent.Results.FirstOrDefault(r => r.Score == -1) != null)
                     {
+                        // Check if prediction for given event already exists
+                        if (eventPredictions.FirstOrDefault(ep => ep.SportEvent.Id == sportEvent.Id) != null)
+                        {
+                            continue;
+                        }
                         AddIncomingEvent(sportEvent);
                     }
                 }
