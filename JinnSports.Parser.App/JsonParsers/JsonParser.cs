@@ -20,6 +20,11 @@ namespace JinnSports.Parser.App.JsonParsers
         EN, RU
     }
 
+    public enum EventStatus
+    {
+        NotStarted = 0, InPlay = 2, Finished = 3
+    }
+
     public class JsonParser
     {
         private static readonly ILog Log =
@@ -195,7 +200,8 @@ namespace JinnSports.Parser.App.JsonParsers
         {
             if (ev.Name.Contains("-") && !ev.Name.Contains(":") && !ev.Name.Contains("1st")
                 && !ev.Name.Contains("2nd") && !ev.Name.Contains("1-") && !ev.Name.Contains("2-")
-                && !ev.Name.Contains("3-") && ((ev.Status == 3 && ev.Score.Contains(":")) || ev.Status == 0))
+                && !ev.Name.Contains("3-") && ((ev.Status == (int)EventStatus.Finished && ev.Score.Contains(":"))
+                || ev.Status == (int)EventStatus.NotStarted))
             {
                 string[] teams = ev.Name.Split(new string[] { "-" }, StringSplitOptions.None);
                 for (int i = 0; i < teams.Length; i++)
