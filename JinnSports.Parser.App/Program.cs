@@ -1,5 +1,4 @@
-﻿using DTO.JSON;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using JinnSports.Parser.App.JsonParsers;
 using JinnSports.Parser.App.ProxyService.ProxyTerminal;
 using System.Net;

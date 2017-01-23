@@ -20,6 +20,11 @@ namespace JinnSports.Parser.App.JsonParsers
         EN, RU
     }
 
+    public enum EventStatus
+    {
+        NotStarted = 0, InPlay = 2, Finished = 3
+    }
+
     public class JsonParser
     {
         private static readonly ILog Log =
@@ -29,7 +34,7 @@ namespace JinnSports.Parser.App.JsonParsers
 
         public JsonParser() : this(new Uri("http://results.fbwebdn.com/results.json.php"))
         {
-            proxyTerminal = new ProxyTerminal();
+
         }
 
         public JsonParser(Uri uri)
@@ -113,7 +118,7 @@ namespace JinnSports.Parser.App.JsonParsers
 
         public void SendEvents(List<SportEventDTO> eventsList)
         {
-            ApiConnection apiConnection = new ApiConnection(/*ApiConnectionStrings.URL, ApiConnectionStrings.Controller*/);
+            ApiConnection apiConnection = new ApiConnection();
             try
             {
                 apiConnection.SendEvents(eventsList);
@@ -147,10 +152,13 @@ namespace JinnSports.Parser.App.JsonParsers
                         if (this.GetTeamsNamesFromEvent(ev, sportType, resultList)
                             && this.AcceptSportType(this.ChangeSportTypeName(Locale.RU, sportType)))
                         {
-                            this.GetScoresFromEvent(ev, resultList);
+                            if (ev.Status == (int)EventStatus.Finished)
+                            {
+                                this.GetScoresFromEvent(ev, resultList);
+                            }
 
                             SportEventDTO sportEvent = new SportEventDTO();
-                            sportEvent.Date = this.GetDateTimeFromSec(ev.StartTime).Ticks;
+                            sportEvent.Date = this.UnixToDateTime(ev.StartTime).Ticks;
                             sportEvent.Results = resultList;
                             sportEvent.SportType = this.ChangeSportTypeName(Locale.RU, sportType);
 
@@ -194,7 +202,8 @@ namespace JinnSports.Parser.App.JsonParsers
         {
             if (ev.Name.Contains("-") && !ev.Name.Contains(":") && !ev.Name.Contains("1st")
                 && !ev.Name.Contains("2nd") && !ev.Name.Contains("1-") && !ev.Name.Contains("2-")
-                && !ev.Name.Contains("3-") && ev.Status == 3 && ev.Score.Contains(":"))
+                && !ev.Name.Contains("3-") && ((ev.Status == (int)EventStatus.Finished && ev.Score.Contains(":"))
+                || ev.Status == (int)EventStatus.NotStarted))
             {
                 string[] teams = ev.Name.Split(new string[] { "-" }, StringSplitOptions.None);
                 for (int i = 0; i < teams.Length; i++)
@@ -253,13 +262,11 @@ namespace JinnSports.Parser.App.JsonParsers
             return name;
         }
 
-        private DateTime GetDateTimeFromSec(long timeSec)
+        public DateTime UnixToDateTime(long unixTime)
         {
-            int startTime = (int)timeSec;
-            int hour, min;
-            hour = (startTime / 60 / 60) % 24;
-            min = (startTime / 60) % 60;
-            return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, min, 0);
+            DateTime eventTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            eventTime = eventTime.AddSeconds(unixTime);
+            return eventTime;
         }
     }
 }

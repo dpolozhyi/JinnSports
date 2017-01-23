@@ -64,6 +64,7 @@ namespace PredictorApplication.Models
                 }
 
                 Predictor predictor = new Predictor(homeTeam, awayTeam, maxScore);
+                predictor.CalcProbabilities();
 
                 prediction.HomeWinProbability = predictor.HomeWinProbability;
                 prediction.DrawProbability = predictor.DrawProbability;
