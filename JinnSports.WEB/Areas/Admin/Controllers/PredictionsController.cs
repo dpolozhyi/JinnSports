@@ -6,14 +6,15 @@ using System.Net.Http;
 using System.Web.Http;
 using JinnSports.BLL.Interfaces;
 using PredictorDTO;
+using JinnSports.BLL.Service;
 
 namespace JinnSports.WEB.Areas.Admin.Controllers
 {
     public class PredictionsController : ApiController
     {
-        private readonly IPredictionsService predictionsService;
+        private readonly PredictionsService predictionsService;
 
-        public PredictionsController(IPredictionsService predictionsService)
+        public PredictionsController(PredictionsService predictionsService)
         {
             this.predictionsService = predictionsService;
         }

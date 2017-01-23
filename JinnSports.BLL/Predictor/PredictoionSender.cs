@@ -38,8 +38,8 @@ namespace JinnSports.BLL.Service
 
                 // TODO: get connection parameters from settings
                 package.CallBackURL = "";
-                package.CallBackController = "";
-                package.CallBackTimeout = 0;
+                package.CallBackController = "api/Predictions";
+                package.CallBackTimeout = 60;
 
                 ApiConnection connection = new ApiConnection();
                 connection.SendPackage(package);
