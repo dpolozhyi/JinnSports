@@ -508,6 +508,7 @@
     <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
+    <Content Include="Scripts\loader.js" />
     <Content Include="Views\web.config" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -530,7 +531,6 @@
     <Compile Include="Controllers\Api\TeamController.cs" />
     <Compile Include="Controllers\Api\TeamDetailsController.cs" />
     <Compile Include="Areas\Admin\Controllers\SportEventsController.cs" />
-    <Compile Include="Controllers\ChartController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\EventController.cs" />
@@ -571,7 +571,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Admin.cshtml" />
-    <Content Include="Views\Chart\WinRateChartForTeam.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

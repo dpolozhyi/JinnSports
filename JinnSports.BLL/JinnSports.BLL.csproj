@@ -69,6 +69,7 @@
     <Compile Include="Dtos\SportType\SportTypeDto.cs" />
     <Compile Include="Dtos\SportType\SportTypeListDto.cs" />
     <Compile Include="Dtos\SportType\SportTypeSelectDto.cs" />
+    <Compile Include="Dtos\TeamDetailsDto.cs" />
     <Compile Include="Dtos\TeamDto.cs" />
     <Compile Include="Dtos\TeamResultsDto.cs" />
     <Compile Include="Dtos\RoleDto.cs" />
