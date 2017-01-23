@@ -24,7 +24,7 @@ namespace JinnSports.BLL.Service
         {
             GoogleVisualizationDataTable dataTable = new GoogleVisualizationDataTable();
 
-            dataTable.AddColumn("Date", "string");
+            dataTable.AddColumn("Date", "date");
             dataTable.AddColumn("WinRate", "number");
 
             var results = unitOfWork.GetRepository<Team>().GetById(id).Results.OrderBy(result => result.SportEvent.Date).ToList();
@@ -35,7 +35,7 @@ namespace JinnSports.BLL.Service
             {
                 totalCounter++;
                 IList<object> row = new List<object>(2);
-                row.Add(result.SportEvent.Date.ToShortDateString());
+                row.Add(result.SportEvent.Date);
 
                 var winners = result.SportEvent.Results.Where(r => r.Score == result.SportEvent.Results.Max(mr => mr.Score)).ToList();
                 if (winners.Count == 1 && winners[0].Team.Id == id)
