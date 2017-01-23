@@ -149,6 +149,7 @@ namespace JinnSports.BLL.Service
                     SportType sportType = sportEvents.ElementAt(0).SportType;
 
                     foreach (SportEvent sportEvent in sportEvents)
+
                     {
                         if (sportEvent.SportType.Id != sportType.Id)
                         {
