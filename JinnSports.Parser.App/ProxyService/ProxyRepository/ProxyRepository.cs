@@ -8,6 +8,8 @@ using JinnSports.Parser.App.ProxyService.ProxyInterfaces;
 using JinnSports.Parser.App.ProxyService.ProxyEnums;
 using JinnSports.Parser.App.Configuration.Proxy;
 using System.Configuration;
+using System.Web;
+using System.Web.Hosting;
 
 namespace JinnSports.Parser.App.ProxyService.ProxyRepository
 {
@@ -19,10 +21,9 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
 
         public ProxyRepository()
         {
-            this.path = ConfigurationManager.AppSettings.Get("appData") + "/" + ProxySettings.GetPath();
+            this.path = HostingEnvironment.MapPath("~/App_Data/") + ProxySettings.GetPath();
             this.xmlSerializer = new XmlSerializer(typeof(List<ProxyServer>));
-            this.Interval = ProxySettings.GetCooldown();
-             
+            this.Interval = ProxySettings.GetCooldown();         
         }
 
         public int Interval { get; private set; }

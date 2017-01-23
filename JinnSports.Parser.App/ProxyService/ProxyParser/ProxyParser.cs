@@ -10,6 +10,8 @@ using JinnSports.Parser.App.ProxyService.ProxyEntities;
 using JinnSports.Parser.App.ProxyService.ProxyEnums;
 using JinnSports.Parser.App.Configuration.Proxy;
 using System.Configuration;
+using System.Web;
+using System.Web.Hosting;
 
 namespace JinnSports.Parser.App.ProxyService.ProxyParser
 {
@@ -19,7 +21,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyParser
 
         public ProxyParser()
         {
-            this.path = ConfigurationManager.AppSettings.Get("appData") + "/" + ProxySettings.GetPath();
+            this.path = HostingEnvironment.MapPath("~/App_Data/") + ProxySettings.GetPath();
         }
 
         public void UpdateData(bool clearData, string url)
