@@ -18,10 +18,11 @@ namespace JinnSports.WEB.Controllers
         public ActionResult Details(int id = 0)
         {
             TeamDto team = this.teamService.GetTeamById(id);
-            var data = chartService.GetDataTableForTeam(team.Id);
 
             if (team != null)
             {
+                var data = chartService.GetDataTableForTeam(team.Id);
+
                 return this.View(new TeamDetailsDto
                 {
                     TeamDto = team,

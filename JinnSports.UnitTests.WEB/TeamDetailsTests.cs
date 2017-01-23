@@ -23,7 +23,8 @@ namespace JinnSports.UnitTests.WEB
         public void Details([Values(0, 1)] int id)
         {
             // Arrange
-            TeamDetailsController controller = new TeamDetailsController(new TeamService(new EFUnitOfWork(new SportsContext("SportsContext"))));
+            TeamDetailsController controller = new TeamDetailsController(new TeamService(new EFUnitOfWork(new SportsContext("SportsContext"))),
+                new ChartService(new EFUnitOfWork(new SportsContext("SportsContext"))));
 
             // Act
             ActionResult result = controller.Details(id);
