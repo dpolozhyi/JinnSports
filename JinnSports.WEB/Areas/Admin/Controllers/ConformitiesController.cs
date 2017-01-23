@@ -4,7 +4,7 @@ using System.Web.Mvc;
 
 namespace JinnSports.WEB.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class ConformitiesController : Controller
     {
         private readonly IConformityService conformityService;
@@ -30,8 +30,8 @@ namespace JinnSports.WEB.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Save(ConformityViewModel model)
-        {
-            if (!ModelState.IsValid)
+        {            
+            if (!this.IsValid(model))
             {
                 var newModel = this.conformityService.GetConformityViewModel(model.InputName);
                 return this.View("Edit", newModel);
@@ -40,6 +40,21 @@ namespace JinnSports.WEB.Areas.Admin.Controllers
             this.conformityService.Save(model);
 
            return this.RedirectToAction("Index");
+        }
+
+        private bool IsValid(ConformityViewModel conformity)
+        {          
+            if (conformity.ConformityId == 0 && conformity.ExistedName == null)
+            {
+                return false;
+            }
+
+            if (conformity.ConformityId != 0 && conformity.ExistedName != null)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

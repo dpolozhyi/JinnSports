@@ -105,7 +105,7 @@ namespace JinnSports.BLL.Service
         {
             IEnumerable<TeamName> namesInDB = this.dataUnit.GetRepository<TeamName>().Get(x => x.Name == existedName);
 
-            if (namesInDB != null)
+            if (namesInDB.Count() != 0)
             {
                 return true;
             }

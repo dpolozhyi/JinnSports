@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace JinnSports.BLL.Dtos
-{
+{    
     public class ConformityViewModel
     {
         public ConformityViewModel(string inputName, List<ConformityDto> conformities)
@@ -15,13 +15,11 @@ namespace JinnSports.BLL.Dtos
         public ConformityViewModel()
         {
         }
-
-        [ConformityViewModelValidator]
+        
         public int ConformityId { get; set; }
 
         public string InputName { get; set; }
-
-        [ConformityViewModelValidator]
+        
         [Display(Name = "Matching variant")]
         public string ExistedName { get; set; }
 
