@@ -39,10 +39,10 @@ namespace JinnSports.BLL.Service
             HTMLParser24score htmlParser = new HTMLParser24score();
 
             List<Task> tasks = new List<Task>();
-            /*tasks.Add(Task.Factory.StartNew(() =>
+            tasks.Add(Task.Factory.StartNew(() =>
             {
                 jsonParser.StartParser();
-            }));*/
+            }));
 
             tasks.Add(Task.Factory.StartNew(() =>
             {
