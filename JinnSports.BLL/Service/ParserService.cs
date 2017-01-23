@@ -30,7 +30,6 @@ namespace JinnSports.BLL.Service
 
         public static async Task Run()
         {
-
             JsonParser jsonParser = new JsonParser();
             HTMLParser24score htmlParser = new HTMLParser24score();
 
