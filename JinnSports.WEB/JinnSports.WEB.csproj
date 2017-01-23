@@ -420,7 +420,9 @@
     <Content Include="Areas\Mvc\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Mvc\Views\Shared\_ResultPartial.cshtml" />
     <Content Include="Areas\Mvc\Views\Shared\_HeaderPartial.cshtml" />
-    <Content Include="Areas\Mvc\Views\Shared\_PaginationPartial.cshtml" />
+    <Content Include="Areas\Mvc\Views\Shared\_TeamPaginationPartial.cshtml" />
+    <Content Include="Areas\Mvc\Views\Shared\_EventPaginationPartial.cshtml" />
+    <Content Include="Areas\Mvc\Views\Shared\_TeamDetailPaginationPartial.cshtml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\AdminLTE\app.js" />
     <Content Include="Scripts\AdminLTE\app.min.js" />
@@ -526,6 +528,8 @@
     <Compile Include="Areas\Mvc\Controllers\HomeController.cs" />
     <Compile Include="Areas\Mvc\Controllers\TeamController.cs" />
     <Compile Include="Areas\Mvc\Models\PageInfo.cs" />
+    <Compile Include="Areas\Mvc\Models\SportEventViewModel.cs" />
+    <Compile Include="Areas\Mvc\Models\TeamDetailsViewModel.cs" />
     <Compile Include="Areas\Mvc\Models\TeamViewModel.cs" />
     <Compile Include="Areas\Mvc\MvcAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />

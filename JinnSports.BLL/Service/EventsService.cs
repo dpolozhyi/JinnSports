@@ -32,6 +32,7 @@ namespace JinnSports.BLL.Service
             int count;
             if (sportTypeId != 0)
             {
+                
                 count = this.dataUnit.GetRepository<SportEvent>()
                 .Count(m => m.SportType.Id == sportTypeId);
             }
@@ -50,27 +51,47 @@ namespace JinnSports.BLL.Service
             IEnumerable<SportEvent> sportEvents;
             if (sportTypeId != 0)
             {
-                sportEvents =
-                    this.dataUnit.GetRepository<SportEvent>().Get(
-                    filter: m => m.SportType.Id == sportTypeId,
-                    includeProperties: "Results,SportType,Results.Team",
-                    orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
-                    skip: skip,
-                    take: take);
+                if (time != 0)
+                {
+                    sportEvents =
+                        this.dataUnit.GetRepository<SportEvent>().Get(
+                        filter: m => m.SportType.Id == sportTypeId && 
+                        DateTime.Compare(m.Date, DateTime.UtcNow) == time,
+                        includeProperties: "Results,SportType,Results.Team",
+                        orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
+                        skip: skip, take: take);
+                }
+                else
+                {
+                    sportEvents =
+                        this.dataUnit.GetRepository<SportEvent>().Get(
+                        filter: m => m.SportType.Id == sportTypeId,
+                        includeProperties: "Results,SportType,Results.Team",
+                        orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
+                        skip: skip, take: take);
+                }
             }
             else
             {
-                sportEvents =
-                    this.dataUnit.GetRepository<SportEvent>().Get(
-                    includeProperties: "Results,SportType,Results.Team",
-                    orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
-                    skip: skip,
-                    take: take);
+                if (time != 0)
+                {
+                    sportEvents =
+                        this.dataUnit.GetRepository<SportEvent>().Get(
+                        filter: m => DateTime.Compare(m.Date, DateTime.UtcNow) == time,
+                        includeProperties: "Results,SportType,Results.Team",
+                        orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
+                        skip: skip, take: take);
+                }
+                else
+                {
+                    sportEvents =
+                        this.dataUnit.GetRepository<SportEvent>().Get(
+                        includeProperties: "Results,SportType,Results.Team",
+                        orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
+                        skip: skip, take: take);
+                }
             }
-            if (time != 0)
-            {
-                sportEvents = sportEvents.Where(m => Math.Sign(DateTime.Compare(m.Date, DateTime.Now)) == time).Select(m => m);
-            }
+            
             foreach (SportEvent sportEvent in sportEvents)
             {
                 results.Add(Mapper.Map<SportEvent, ResultDto>(sportEvent));

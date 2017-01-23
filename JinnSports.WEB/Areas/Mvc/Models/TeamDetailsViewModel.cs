@@ -6,14 +6,14 @@ using System.Web;
 
 namespace JinnSports.WEB.Areas.Mvc.Models
 {
-    public class TeamViewModel
+    public class TeamDetailsViewModel
     {
-        public IEnumerable<TeamDto> TeamDtos { get; set; }
+        public TeamResultsDto TeamResultDto { get; set; }
+
+        public PageInfo PageInfo { get; set; }
 
         public string ActionName { get; set; }
 
         public string ControllerName { get; set; }
-
-        public PageInfo PageInfo { get; set; }
     }
 }
