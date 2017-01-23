@@ -150,7 +150,7 @@ namespace JinnSports.Parser.App.JsonParsers
                         if (this.GetTeamsNamesFromEvent(ev, sportType, resultList)
                             && this.AcceptSportType(this.ChangeSportTypeName(Locale.RU, sportType)))
                         {
-                            if (ev.Status == 3)
+                            if (ev.Status == (int)EventStatus.Finished)
                             {
                                 this.GetScoresFromEvent(ev, resultList);
                             }
