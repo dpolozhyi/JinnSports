@@ -156,7 +156,7 @@ namespace JinnSports.Parser.App.JsonParsers
                             }
 
                             SportEventDTO sportEvent = new SportEventDTO();
-                            sportEvent.Date = this.GetDateTimeFromSec(ev.StartTime).Ticks;
+                            sportEvent.Date = this.UnixToDateTime(ev.StartTime).Ticks;
                             sportEvent.Results = resultList;
                             sportEvent.SportType = this.ChangeSportTypeName(Locale.RU, sportType);
 
@@ -260,13 +260,11 @@ namespace JinnSports.Parser.App.JsonParsers
             return name;
         }
 
-        private DateTime GetDateTimeFromSec(long timeSec)
+        public DateTime UnixToDateTime(long unixTime)
         {
-            int startTime = (int)timeSec;
-            int hour, min;
-            hour = (startTime / 60 / 60) % 24;
-            min = (startTime / 60) % 60;
-            return new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, min, 0);
+            DateTime eventTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            eventTime = eventTime.AddSeconds(unixTime);
+            return eventTime;
         }
     }
 }

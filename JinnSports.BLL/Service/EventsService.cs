@@ -108,10 +108,6 @@ namespace JinnSports.BLL.Service
                         take: take);
                 }
             }
-            if (time == 1)
-            {
-                sportEvents = sportEvents.OrderBy(x => x.Date).ThenBy(x => x.Id);
-            }
             foreach (SportEvent sportEvent in sportEvents)
             {
                 results.Add(Mapper.Map<SportEvent, ResultDto>(sportEvent));
