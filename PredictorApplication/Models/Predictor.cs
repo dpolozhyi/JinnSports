@@ -11,28 +11,20 @@ namespace ScorePredictor
     {
         private TeamData homeTeam;
         private TeamData awayTeam;
+        private int maxScore;
 
         public Predictor(TeamData homeTeam, TeamData awayTeam, int maxScore)
         {
             this.homeTeam = homeTeam;
             this.awayTeam = awayTeam;
-            CalcProbabilities(maxScore);
-            NormalizeProbabilities();
+            this.maxScore = maxScore;
         }
 
         public double HomeWinProbability { get; private set; }
         public double DrawProbability { get; private set; }
         public double AwayWinProbability { get; private set; }
 
-        private void NormalizeProbabilities()
-        {
-            double norm = 1 / (HomeWinProbability + DrawProbability + AwayWinProbability);
-            HomeWinProbability *= norm;
-            DrawProbability *= norm;
-            AwayWinProbability *= norm;
-        }
-
-        private void CalcProbabilities(int maxScore)
+        public void CalcProbabilities()
         {
             int step = maxScore / 5; // redusing steps number for high maxScores
             if (step == 0)
@@ -58,6 +50,16 @@ namespace ScorePredictor
                     }  
                 }
             }
+
+            NormalizeProbabilities();
+        }
+
+        private void NormalizeProbabilities()
+        {
+            double norm = 1 / (HomeWinProbability + DrawProbability + AwayWinProbability);
+            HomeWinProbability *= norm;
+            DrawProbability *= norm;
+            AwayWinProbability *= norm;
         }
 
         private double CalcProbability(int firstScore, int secondScore)

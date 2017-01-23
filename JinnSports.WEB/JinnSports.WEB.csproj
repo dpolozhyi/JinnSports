@@ -523,7 +523,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
-    <Compile Include="Areas\Admin\Models\ConformitiesViewModel.cs" />
+    <Compile Include="Areas\Admin\Controllers\PredictionsController.cs" />
     <Compile Include="Areas\Mvc\Controllers\EventController.cs" />
     <Compile Include="Areas\Mvc\Controllers\HomeController.cs" />
     <Compile Include="Areas\Mvc\Controllers\TeamController.cs" />
@@ -573,6 +573,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Admin.cshtml" />
+    <Content Include="Views\Shared\_UpcomingEvents.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -588,7 +589,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DTO\DTO.csproj">
-      <Project>{40F1BD33-B3C8-4268-8243-59230825EF9B}</Project>
+      <Project>{40f1bd33-b3c8-4268-8243-59230825ef9b}</Project>
       <Name>DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\JinnSports.BLL\JinnSports.BLL.csproj">
@@ -606,6 +607,10 @@
     <ProjectReference Include="..\JinnSports.Entities\JinnSports.Entities.csproj">
       <Project>{fe881c95-44b6-4c3b-8d18-906f050d3cbb}</Project>
       <Name>JinnSports.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PredictorDTO\PredictorDTO.csproj">
+      <Project>{96B1BC81-F95F-49C6-9B2F-44E2D00460CF}</Project>
+      <Name>PredictorDTO</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
