@@ -15,8 +15,6 @@ namespace PredictorBalancer.Models
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(Predictor));
 
-        public enum Status {Awailable , Buisy, NotAwailable};
-
         private string baseUrl;
         private string controllerUrn;
         private int timeoutSec;
@@ -28,14 +26,21 @@ namespace PredictorBalancer.Models
             this.timeoutSec = timeoutSec;
         }
 
+        public enum Status
+        {
+            Available,
+            Busy,
+            NotAvailable
+        }
+
         public int Id { get; set; }
         public Status CurrentStatus { get; private set; }
 
-        public void SendIncomingEvents(IEnumerable<IncomingEventDTO> incomingEvents)
+        public void SendIncomingEvents(PackageDTO package)
         {
-            ApiConnection<IEnumerable<IncomingEventDTO>> connection = 
-                new ApiConnection<IEnumerable<IncomingEventDTO>>(baseUrl, controllerUrn, timeoutSec);
-            connection.Send(incomingEvents);
+            ApiConnection<PackageDTO> connection = 
+                new ApiConnection<PackageDTO>(this.baseUrl, this.controllerUrn, this.timeoutSec);
+            connection.Send(package);
         }
 
         public async void UpdateStatus()
@@ -46,26 +51,26 @@ namespace PredictorBalancer.Models
                 {
                     Log.Info("Starting Data transfer");
 
-                    client.BaseAddress = new Uri(baseUrl);
-                    client.Timeout = new TimeSpan(0, 0, timeoutSec);
+                    client.BaseAddress = new Uri(this.baseUrl);
+                    client.Timeout = new TimeSpan(0, 0, this.timeoutSec);
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    HttpResponseMessage response = await client.GetAsync(controllerUrn);
+                    HttpResponseMessage response = await client.GetAsync(this.controllerUrn);
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        CurrentStatus = Status.Awailable;
-                        Log.Info($"Predictor #{Id} is currently awailable");
+                        this.CurrentStatus = Status.Available;
+                        Log.Info($"Predictor #{Id} is currently available");
                     }
                     else if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
                     {
-                        CurrentStatus = Status.Buisy;
-                        Log.Info($"Predictor #{Id} is currently buisy");
+                        this.CurrentStatus = Status.Busy;
+                        Log.Info($"Predictor #{Id} is currently busy");
                     }
                     else
                     {
-                        CurrentStatus = Status.NotAwailable;
-                        Log.Info($"Predictor #{Id} is currently unawailable");
+                        this.CurrentStatus = Status.NotAvailable;
+                        Log.Info($"Predictor #{Id} is currently unavailable");
                     }
                 }
                 catch (Exception ex)

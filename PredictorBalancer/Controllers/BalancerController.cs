@@ -11,12 +11,18 @@ namespace PredictorBalancer.Controllers
 {
     public class BalancerController : ApiController
     {
-        BalancerMonitor instance;
+        private BalancerMonitor instance;
 
-        public void Post([FromBody]PackageDTO package)
+        public void PostPackage([FromBody]PackageDTO package)
         {
-            instance = BalancerMonitor.GetInstance();
-            instance.SendIncomingEvents(package);
+            this.instance = BalancerMonitor.GetInstance();
+            this.instance.SendIncomingEvents(package, RequestContext.VirtualPathRoot);
+        }
+
+        public void PostPredictions([FromBody]IEnumerable<PredictionDTO> predictions)
+        {
+            this.instance = BalancerMonitor.GetInstance();
+            this.instance.SendPredictions(predictions);
         }
     }
 }

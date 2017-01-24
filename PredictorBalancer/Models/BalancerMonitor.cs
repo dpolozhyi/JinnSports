@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using log4net;
 using PredictorDTO;
 using System;
 using System.Collections.Generic;
@@ -11,67 +12,87 @@ namespace PredictorBalancer.Models
 {
     public class BalancerMonitor
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(BalancerMonitor));
+
         private static BalancerMonitor instance;
-
-        public PredictorList Predictors { get; private set; }
-
-        private Task update;
-        
 
         private BalancerMonitor()
         {
 
         }
 
+        public Notifier Notifier { get; private set; }
+        public Package Package { get; private set; }
+        public PredictorList Predictors { get; private set; }
+
         public static BalancerMonitor GetInstance()
         {
             if (instance == null)
             {
                 instance = new BalancerMonitor();
-                instance.RunUpdate();
-                instance.IsAwalable = true;
+                instance.Notifier = new Notifier();
+                instance.Predictors = new PredictorList();
             }
 
             return instance;
         }
 
-        public Package Package { get; private set; }
-        public bool IsAwalable { get; private set; }
-
-        public void SendIncomingEvents(PackageDTO package)
+        public void SendPredictions(IEnumerable<PredictionDTO> predictions)
         {
-            Package = Mapper.Map<PackageDTO, Package>(package);
-
-            int predictorsCount = CountAwailablePredictors();
-            int size = (package.IncomigEvents.Count() / predictorsCount) + 1;
-            int count = 0;
-
-            foreach (Predictor predictor in GetAwailablePredictors())
-            {
-                predictor.SendIncomingEvents(package.IncomigEvents.Skip(count * size).Take(size));
-                count++;
-            }
+            ApiConnection<IEnumerable<PredictionDTO>> connection = new ApiConnection<IEnumerable<PredictionDTO>>(Package.CallBackURL,
+                                                                        Package.CallBackController, Package.CallBackTimeout);
+            connection.Send(predictions);
         }
 
-        public void RunUpdate()
+        public void SendIncomingEvents(PackageDTO package, string baseUrl)
         {
-            update = new Task(() =>
+            try
+            {
+                Package = Mapper.Map<PackageDTO, Package>(package);
+
+                this.UpdateStatus();
+                IEnumerable<Predictor> predictors = this.GetavailablePredictors();
+
+                if (predictors.Count() == 0)
                 {
-                    while (true)
-                    {
-                        UpdateStatus();
-                        Thread.Sleep(1000 * 60 * 5); // 5 minute pause;
-                    }
-                });
-            update.Start();
+                    Notifier.SendEmail("All predictors are unavailable. Task aborted.");
+                    return;
+                }
+
+                // Divide incomingEvents to equal parts for all available predictors 
+                int size = (package.IncomigEvents.Count() / predictors.Count()) + (package.IncomigEvents.Count() % predictors.Count());
+                int count = 0;
+
+                foreach (Predictor predictor in predictors)
+                {
+                    predictor.SendIncomingEvents(this.CreatePackage(package.IncomigEvents.Skip(count * size).Take(size), baseUrl));
+                    count++;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Exception occured while trying to send incomingEvents", ex);
+            }
+            
+        }
+
+        private PackageDTO CreatePackage(IEnumerable<IncomingEventDTO> incomingEvents, string baseUrl)
+        {
+            return new PackageDTO
+            {
+                IncomigEvents = incomingEvents,
+                CallBackURL = baseUrl,
+                CallBackController = $"api/Balancer",
+                CallBackTimeout = 60
+            };
         }
 
         private void UpdateStatus()
         {
             int count = 0;
-            Task[] tasks = new Task[Predictors.GetAll().Count]; 
+            Task[] tasks = new Task[this.Predictors.GetAll().Count]; 
 
-            foreach (Predictor predictor in Predictors.GetAll())
+            foreach (Predictor predictor in this.Predictors.GetAll())
             {
                 tasks[count] = Task.Factory.StartNew(() => predictor.UpdateStatus());
                 count++;
@@ -80,14 +101,9 @@ namespace PredictorBalancer.Models
             Task.WaitAll(tasks);
         }
 
-        private int CountAwailablePredictors()
+        private IEnumerable<Predictor> GetavailablePredictors()
         {
-            return Predictors.GetAll().Where(p => p.CurrentStatus == Predictor.Status.Awailable).Count();
-        }
-
-        private IEnumerable<Predictor> GetAwailablePredictors()
-        {
-            return Predictors.GetAll().Where(p => p.CurrentStatus == Predictor.Status.Awailable);
+            return this.Predictors.GetAll().Where(p => p.CurrentStatus == Predictor.Status.Available).ToList();
         }
     }
 }

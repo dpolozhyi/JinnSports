@@ -35,15 +35,15 @@ namespace PredictorBalancer.Models
                 {
                     Log.Info("Starting Data transfer");
 
-                    client.BaseAddress = new Uri(baseUrl);
-                    client.Timeout = new TimeSpan(0, 0, timeoutSec);
+                    client.BaseAddress = new Uri(this.baseUrl);
+                    client.Timeout = new TimeSpan(0, 0, this.timeoutSec);
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     string json = JsonConvert.SerializeObject(content, Newtonsoft.Json.Formatting.Indented);
                     StringContent jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-                    HttpResponseMessage response = await client.PostAsync(controllerUrn, jsonContent);
+                    HttpResponseMessage response = await client.PostAsync(this.controllerUrn, jsonContent);
                     if (response.IsSuccessStatusCode)   
                     {
                         Log.Info("Data sucsessfully transfered");

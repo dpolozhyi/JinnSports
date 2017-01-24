@@ -11,38 +11,38 @@ namespace PredictorBalancer.Models
 
         public PredictorList()
         {
-            predictors = new List<Predictor>();
+            this.predictors = new List<Predictor>();
         }
 
         public void Add(string baseUrl, string controllerUrn, int timeoutSec)
         {
             int id = 0;
 
-            if (predictors.Count > 0)
+            if (this.predictors.Count > 0)
             {
-                id = predictors.Max(p => p.Id) + 1;
+                id = this.predictors.Max(p => p.Id) + 1;
             }
 
             Predictor predictor = new Predictor(baseUrl, controllerUrn, timeoutSec);
             predictor.Id = id;
 
-            predictors.Add(predictor);
+            this.predictors.Add(predictor);
         }
 
         public ICollection<Predictor> GetAll()
         {
-            return predictors;
+            return this.predictors;
         }
 
         public Predictor GetById(int id)
         {
-            return predictors.FirstOrDefault(p => p.Id == id);
+            return this.predictors.FirstOrDefault(p => p.Id == id);
         }
 
         public void Delete(int id)
         {
-            Predictor predictor = predictors.FirstOrDefault(p => p.Id == id);
-            predictors.Remove(predictor);
+            Predictor predictor = this.predictors.FirstOrDefault(p => p.Id == id);
+            this.predictors.Remove(predictor);
         }
     }
 }
