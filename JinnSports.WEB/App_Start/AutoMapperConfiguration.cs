@@ -5,6 +5,7 @@ using System.Linq;
 using JinnSports.BLL.Extentions;
 using JinnSports.BLL.Dtos.SportType;
 using JinnSports.Entities.Entities.Identity;
+using JinnSports.Entities.Entities.Temp;
 
 namespace JinnSports.WEB
 {
@@ -22,10 +23,11 @@ namespace JinnSports.WEB
                .ForMember(
                     e => e.Score,
                     opt => opt.MapFrom(
-                        res => string.Format(
+                        res => ((res.SportEvent.Results.ElementAt(0).Score == -1 || res.SportEvent.Results.ElementAt(1).Score == -1) ? "—:—" :
+                            string.Format(
                             "{0} : {1}",
                             res.SportEvent.Results.ElementAt(0).Score,
-                            res.SportEvent.Results.ElementAt(1).Score)))
+                            res.SportEvent.Results.ElementAt(1).Score))))
                .ForMember(
                     e => e.TeamNames,
                     opt => opt.MapFrom(
@@ -53,12 +55,17 @@ namespace JinnSports.WEB
                      opt => opt.MapFrom(
                          res => res.Results.Select(x => x.Team.Id)))
                .ForMember(
+                     e => e.SportType,
+                     opt => opt.MapFrom(
+                         res => res.SportType))
+               .ForMember(
                     e => e.Score,
                     opt => opt.MapFrom(
-                        res => string.Format(
+                        res => ((res.Results.ElementAt(0).Score == -1 || res.Results.ElementAt(1).Score == -1) ? "—:—" : 
+                            string.Format(
                             "{0} : {1}",
                             res.Results.ElementAt(0).Score,
-                            res.Results.ElementAt(1).Score)))
+                            res.Results.ElementAt(1).Score))))
                 .ForMember(
                     e => e.Date,
                     opt => opt.MapFrom(
@@ -139,6 +146,49 @@ namespace JinnSports.WEB
                         e => e.Name,
                         opt => opt.MapFrom(
                             s => s.Name));
+
+                config.CreateMap<Conformity, ConformityDto>()
+                   .ForMember(
+                       e => e.Id,
+                       opt => opt.MapFrom(
+                           s => s.Id))
+                  .ForMember(
+                       e => e.InputName,
+                       opt => opt.MapFrom(
+                           s => s.InputName))
+                  .ForMember(
+                       e => e.ExistedName,
+                       opt => opt.MapFrom(
+                           s => s.ExistedName));
+
+                config.CreateMap<TempResult, Result>()                   
+                  .ForMember(
+                       e => e.IsHome,
+                       opt => opt.MapFrom(
+                           s => s.IsHome))
+                  .ForMember(
+                       e => e.Team,
+                       opt => opt.MapFrom(
+                           s => s.Team))
+                  .ForMember(
+                       e => e.Score,
+                       opt => opt.MapFrom(
+                           s => s.Score));
+
+                config.CreateMap<TempSportEvent, SportEvent>()                   
+                  .ForMember(
+                       e => e.Date,
+                       opt => opt.MapFrom(
+                           s => s.Date))
+                  .ForMember(
+                       e => e.SportType,
+                       opt => opt.MapFrom(
+                           s => s.SportType))
+                  .ForMember(
+                       e => e.Results,
+                       opt => opt.MapFrom(
+                           s => s.TempResults));
+
             });
         }
     }

@@ -21,7 +21,7 @@ namespace JinnSports.WEB.Controllers
 
             if (team != null)
             {
-                var data = chartService.GetDataTableForTeam(team.Id);
+                var data = this.chartService.GetDataTableForTeam(team.Id);
 
                 return this.View(new TeamDetailsDto
                 {
@@ -29,10 +29,8 @@ namespace JinnSports.WEB.Controllers
                     WinRateDataTable = data
                 });
             }
-            else
-            {
-                return this.HttpNotFound();
-            }
+
+            return this.HttpNotFound();
         }
     }
 }

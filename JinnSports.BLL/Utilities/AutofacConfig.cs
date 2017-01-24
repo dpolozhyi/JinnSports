@@ -12,15 +12,19 @@ namespace JinnSports.BLL.Utilities
         public static void Configure(ref ContainerBuilder builder)
         {
             // Data access config
-            builder.Register(db => new SportsContext("SportsContext")).InstancePerRequest();
+            builder.Register(db => new SportsContext("SportsContext")).InstancePerLifetimeScope();
             builder.RegisterType<EFUnitOfWork>().As<IUnitOfWork>();
             // Services config
             builder.RegisterType<EventsService>().As<IEventService>();
+            builder.RegisterType<UserService>().As<IUserService>();
+            builder.RegisterType<ConformityService>().As<IConformityService>();
             builder.RegisterType<TeamService>().As<ITeamService>();
             builder.RegisterType<TeamDetailsService>().As<ITeamDetailsService>();
             builder.RegisterType<SportTypeService>().As<ISportTypeService>();
             builder.RegisterType<NewsService>().As<INewsService>();
             builder.RegisterType<ChartService>().As<IChartService>();
+            builder.RegisterType<PredictoionSender>().As<PredictoionSender>();
+            builder.RegisterType<PredictionsService>().As<PredictionsService>();
         }
     }
 }

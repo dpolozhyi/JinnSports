@@ -10,12 +10,12 @@ namespace JinnSports.WEB.Models
 
         public void AddColumn(string label, string type)
         {
-            Cols.Add(new Col { Label = label, Type = type });
+            this.Cols.Add(new Col { Label = label, Type = type });
         }
 
         public void AddRow(IList<object> values)
         {
-            Rows.Add(new Row { C = values.Select(x => new Row.RowValue { V = x }) });
+            this.Rows.Add(new Row { C = values.Select(x => new Row.RowValue { V = x }) });
         }
 
         public class Col
@@ -29,7 +29,7 @@ namespace JinnSports.WEB.Models
             public IEnumerable<RowValue> C { get; set; }
             public class RowValue
             {
-                public object V;
+                public object V { get; set; }
             }
         }
     }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Transactions;
 using JinnSports.BLL.Dtos.Charts;
 using JinnSports.BLL.Interfaces;
@@ -42,7 +38,7 @@ namespace JinnSports.UnitTests.Services
 
             this.databaseSportsContext.SaveChanges();
 
-            this.chartService = new ChartService(new EFUnitOfWork(databaseSportsContext));
+            this.chartService = new ChartService(new EFUnitOfWork(this.databaseSportsContext));
 
             this.databaseSportsContext.Database.ExecuteSqlCommand(
                 @"SET IDENTITY_INSERT [dbo].[SportTypes] ON;
@@ -102,10 +98,12 @@ namespace JinnSports.UnitTests.Services
         [SetUp]
         public void Init()
         {
-            this.databaseTransaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
-            {
-                IsolationLevel = IsolationLevel.Serializable
-            });
+            this.databaseTransaction = new TransactionScope(
+                TransactionScopeOption.Required, 
+                new TransactionOptions
+                {
+                    IsolationLevel = IsolationLevel.Serializable
+                });
         }
 
         [TearDown]
@@ -143,7 +141,7 @@ namespace JinnSports.UnitTests.Services
             dataTableForSecondTeam.AddRow(new List<object> { "22.11.2016", 25 });
             dataTableForSecondTeam.AddRow(new List<object> { "23.11.2016", 40 });
             
-            var res = chartService.GetDataTableForTeam(id);
+            var res = this.chartService.GetDataTableForTeam(id);
             string recievedResult = JsonConvert.SerializeObject(res);
 
             if (id == 1)

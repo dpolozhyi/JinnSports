@@ -13,8 +13,6 @@ using JinnSports.WEB;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Transactions;
 using static JinnSports.UnitTests.Services.TeamDetailsServiceTests;
@@ -191,10 +189,12 @@ namespace JinnSports.UnitTests.Services
         [SetUp]
         public void Init()
         {
-            this.databaseTransaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions
-            {
-                IsolationLevel = IsolationLevel.Serializable
-            });
+            this.databaseTransaction = new TransactionScope(
+                TransactionScopeOption.Required,
+                new TransactionOptions
+                {
+                    IsolationLevel = IsolationLevel.Serializable
+                });
         }
 
         [TearDown]
@@ -210,9 +210,9 @@ namespace JinnSports.UnitTests.Services
         }
 
         [Test]
-        [TestCase(1)]
-        [TestCase(2)]
-        public void CountCheckEventsExist(int sportId)
+        [TestCase(1, 0)]
+        [TestCase(2, 0)]
+        public void CountCheckEventsExist(int sportId, int time)
         {
             Assert.AreNotEqual(this.databaseSportsContext.SportEvents.Count(), 0);
 
@@ -220,21 +220,21 @@ namespace JinnSports.UnitTests.Services
                 .SportEvents.Where(e => e.SportType.Id == sportId).Count();
             Assert.Greater(expectedCount, 0);
 
-            int actualCount = this.eventService.Count(sportId);
+            int actualCount = this.eventService.Count(sportId, time);
 
             Assert.AreEqual(expectedCount, actualCount);
         }
 
-        [TestCase(-1)]
-        [TestCase(4)]
-        [TestCase(9999)]
-        public void CountCheckEventsNotExist(int sportId)
+        [TestCase(-1, 0)]
+        [TestCase(4, 0)]
+        [TestCase(9999, 0)]
+        public void CountCheckEventsNotExist(int sportId, int time)
         {
             int expectedCount = this.databaseSportsContext
                 .SportEvents.Where(e => e.SportType.Id == sportId).Count();
             Assert.AreEqual(expectedCount, 0);
 
-            int actualCount = this.eventService.Count(sportId);
+            int actualCount = this.eventService.Count(sportId, time);
             Assert.AreEqual(actualCount, 0);
         }
 
@@ -399,12 +399,12 @@ namespace JinnSports.UnitTests.Services
             Assert.IsNotNull(savedResult2);
 
             SportEvent savedEvent1 = unit.GetRepository<Result>()
-                .Get(filter: (r => r.SportEvent.Id == savedResult1.SportEvent.Id))
+                .Get(filter: r => r.SportEvent.Id == savedResult1.SportEvent.Id)
                 .Select(r => r.SportEvent).FirstOrDefault();
             Assert.IsTrue(savedEvent1.Results.Contains(savedResult2));
 
             SportEvent savedEvent2 = unit.GetRepository<Result>()
-                .Get(filter: (r => r.SportEvent.Id == savedResult3.SportEvent.Id))
+                .Get(filter: r => r.SportEvent.Id == savedResult3.SportEvent.Id)
                 .Select(r => r.SportEvent).FirstOrDefault();
             Assert.IsTrue(savedEvent2.Results.Contains(savedResult4));
 
@@ -447,7 +447,7 @@ namespace JinnSports.UnitTests.Services
             Assert.IsNotNull(savedResult2);
 
             SportEvent savedEvent1 = unit.GetRepository<Result>()
-                .Get(filter: (r => r.SportEvent.Id == savedResult1.SportEvent.Id))
+                .Get(filter: r => r.SportEvent.Id == savedResult1.SportEvent.Id)
                 .Select(r => r.SportEvent).FirstOrDefault();
             Assert.IsTrue(savedEvent1.Results.Contains(savedResult2));
 
