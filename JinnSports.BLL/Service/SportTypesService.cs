@@ -67,7 +67,7 @@ namespace JinnSports.BLL.Service
 
             if (sportTypeId != 0)
             {
-                if(time != 0)
+                if (time != 0)
                 {
                     sportEvents =
                         this.dataUnit.GetRepository<SportEvent>().Get(
