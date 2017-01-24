@@ -44,13 +44,13 @@ namespace PredictorBalancer.Models
             connection.Send(predictions);
         }
 
-        public void SendIncomingEvents(PackageDTO package, string baseUrl)
+        public async void SendIncomingEvents(PackageDTO package, string baseUrl)
         {
             try
             {
                 Package = Mapper.Map<PackageDTO, Package>(package);
 
-                this.UpdateStatus();
+                await this.UpdateStatus();
                 IEnumerable<Predictor> predictors = this.GetavailablePredictors();
 
                 if (predictors.Count() == 0)
@@ -76,6 +76,20 @@ namespace PredictorBalancer.Models
             
         }
 
+        // TODO: resolve async
+        public async Task UpdateStatus()
+        {
+            List<Task> tasks = new List<Task>();
+
+            foreach (Predictor predictor in this.Predictors.GetAll())
+            {
+                Task task = new Task(predictor.UpdateStatus);
+                task.Start();
+                tasks.Add(task);
+            }
+            await Task.WhenAll(tasks);
+        }
+
         private PackageDTO CreatePackage(IEnumerable<IncomingEventDTO> incomingEvents, string baseUrl)
         {
             return new PackageDTO
@@ -85,20 +99,6 @@ namespace PredictorBalancer.Models
                 CallBackController = $"api/Balancer",
                 CallBackTimeout = 60
             };
-        }
-
-        private void UpdateStatus()
-        {
-            int count = 0;
-            Task[] tasks = new Task[this.Predictors.GetAll().Count]; 
-
-            foreach (Predictor predictor in this.Predictors.GetAll())
-            {
-                tasks[count] = Task.Factory.StartNew(() => predictor.UpdateStatus());
-                count++;
-            }
-
-            Task.WaitAll(tasks);
         }
 
         private IEnumerable<Predictor> GetavailablePredictors()

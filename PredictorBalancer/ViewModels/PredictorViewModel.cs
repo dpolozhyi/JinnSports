@@ -8,6 +8,13 @@ namespace PredictorBalancer.ViewModels
 {
     public class PredictorViewModel
     {
+        public enum Status
+        {
+            Available,
+            Busy,
+            NotAvailable
+        }
+
         public int Id { get; set; }
         public Status CurrentStatus { get; set; }
     }

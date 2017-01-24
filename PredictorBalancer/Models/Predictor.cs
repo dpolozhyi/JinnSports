@@ -24,6 +24,7 @@ namespace PredictorBalancer.Models
             this.baseUrl = baseUrl;
             this.controllerUrn = controllerUrn;
             this.timeoutSec = timeoutSec;
+            this.CurrentStatus = Status.NotAvailable;
         }
 
         public enum Status

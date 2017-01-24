@@ -3,6 +3,7 @@ using PredictorBalancer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -12,10 +13,24 @@ namespace PredictorBalancer
     {
         private MonitorService monitorService;
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             this.monitorService = new MonitorService();
-            return this.View(this.monitorService.GetPredicors());
+            return this.View(await this.monitorService.GetPredicors());
+        }
+
+        public ActionResult Add(string baseUrl, string controllerUrn, int timeoutSec)
+        {
+            this.monitorService = new MonitorService();
+            monitorService.Add(baseUrl, controllerUrn, timeoutSec);
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Delete(int id)
+        {
+            this.monitorService = new MonitorService();
+            monitorService.Delete(id);
+            return RedirectToAction("Index");
         }
 
     }
