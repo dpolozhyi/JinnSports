@@ -17,12 +17,11 @@ namespace PredictorApplication.Controllers
         {
             this.monitor = PredictorMonitor.GetInstance();
 
-            if (!this.monitor.IsAvailable)
+            if (this.monitor.IsAvailable)
             {
-                return this.ResponseMessage(this.Request.CreateResponse(HttpStatusCode.ServiceUnavailable));
+                return this.Ok();
             }
-
-            return this.Ok();
+            return this.ResponseMessage(this.Request.CreateResponse(HttpStatusCode.ServiceUnavailable));
         }
 
         public IHttpActionResult Post([FromBody] PackageDTO package)
