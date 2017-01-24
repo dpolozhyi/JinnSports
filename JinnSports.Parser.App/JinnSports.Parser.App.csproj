@@ -58,6 +58,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -127,7 +128,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ApiConnection\ApiConnection.xml" />
     <Content Include="StyleCopReport.xml" />
   </ItemGroup>
   <ItemGroup />
@@ -142,9 +142,8 @@
   <PropertyGroup>
     <PostBuildEvent>if not exist "C:\ProgramData\JinnSports\" mkdir "C:\ProgramData\JinnSports\"
 xcopy /Y "$(ProjectDir)Proxy.xml" "C:\ProgramData\JinnSports\"</PostBuildEvent>
-    <PostBuildEvent>if not exist "C:\ProgramData\JinnSports\" mkdir "C:\ProgramData\JinnSports\"
-xcopy /Y "$(ProjectDir)Proxy.xml" "C:\ProgramData\JinnSports\"
-xcopy /Y "$(ProjectDir)\ApiConnection\ApiConnection.xml" "C:\ProgramData\JinnSports\"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

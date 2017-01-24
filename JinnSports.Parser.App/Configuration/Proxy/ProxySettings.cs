@@ -4,28 +4,28 @@ namespace JinnSports.Parser.App.Configuration.Proxy
 {
     public static class ProxySettings
     {
-        public static string GetPath(string name)
+        public static string GetPath()
         {
             var config = ConfigurationManager.GetSection("ProxySettings") as ProxySection;
-            return config.Instances[name].Path;
+            return config.Instances[ConfigurationManager.AppSettings.Get("currentProxyProfile")].Path;
         }
 
-        public static int GetAsyncInterval(string name)
+        public static int GetAsyncInterval()
         {
             var config = ConfigurationManager.GetSection("ProxySettings") as ProxySection;
-            return config.Instances[name].AsyncInterval;
+            return config.Instances[ConfigurationManager.AppSettings.Get("currentProxyProfile")].AsyncInterval;
         }
 
-        public static int GetCooldown(string name)
+        public static int GetCooldown()
         {
             var config = ConfigurationManager.GetSection("ProxySettings") as ProxySection;
-            return config.Instances[name].Cooldown;
+            return config.Instances[ConfigurationManager.AppSettings.Get("currentProxyProfile")].Cooldown;
         }
 
-        public static int GetTimeout(string name)
+        public static int GetTimeout()
         {
             var config = ConfigurationManager.GetSection("ProxySettings") as ProxySection;
-            return config.Instances[name].Timeout;
+            return config.Instances[ConfigurationManager.AppSettings.Get("currentProxyProfile")].Timeout;
         }
     }
 }
