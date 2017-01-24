@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace JinnSports.WEB.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class ParserController : Controller
     {
         // GET: Admin/Parser
