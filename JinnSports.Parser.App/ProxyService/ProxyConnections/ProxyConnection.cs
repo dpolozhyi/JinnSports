@@ -16,7 +16,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyConnections
 {
     public class ProxyConnection : IProxyConnection
     {
-        private static object connectionLocker = new Object();
+        private static object connectionLocker = new object();
         private ProxyRepository<ProxyServer> xmlWriter;
 
         public void UpdateElimination()

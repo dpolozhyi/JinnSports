@@ -179,6 +179,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\PredictionsConnection.xml" />
+    <Content Include="App_Data\PredictorConnection.xml" />
     <Content Include="App_Data\ApiConnection.xml" />
     <Content Include="Content\AdminLTE\AdminLTE.css" />
     <Content Include="Content\AdminLTE\AdminLTE.min.css" />
@@ -424,6 +426,8 @@
     <Content Include="Areas\Mvc\Views\Shared\_TeamPaginationPartial.cshtml" />
     <Content Include="Areas\Mvc\Views\Shared\_EventPaginationPartial.cshtml" />
     <Content Include="Areas\Mvc\Views\Shared\_TeamDetailPaginationPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\Conformities\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Conformities\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Parser\Index.cshtml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\AdminLTE\app.js" />
@@ -541,6 +545,7 @@
     <Compile Include="Controllers\Api\TeamController.cs" />
     <Compile Include="Controllers\Api\TeamDetailsController.cs" />
     <Compile Include="Areas\Admin\Controllers\SportEventsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ConformitiesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\EventController.cs" />

@@ -27,7 +27,7 @@ namespace JinnSports.BLL.Service
         public EventsService(IUnitOfWork unitOfWork)
         {
             this.dataUnit = unitOfWork;
-            this.predictionSender = new PredictoionSender(dataUnit);
+            this.predictionSender = new PredictoionSender(this.dataUnit);
         }
 
         public int Count(int sportTypeId, int time)
@@ -72,8 +72,7 @@ namespace JinnSports.BLL.Service
                 {
                     sportEvents =
                         this.dataUnit.GetRepository<SportEvent>().Get(
-                        filter: m => m.SportType.Id == sportTypeId && 
-                            DateTime.Compare(m.Date, DateTime.UtcNow) == time,
+                        filter: m => m.SportType.Id == sportTypeId && DateTime.Compare(m.Date, DateTime.UtcNow) == time,
                         includeProperties: "Results,SportType,Results.Team",
                         orderBy: s => time == 1 ? s.OrderBy(x => x.Date).ThenByDescending(x => x.Id) : s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
                         skip: skip,
@@ -207,9 +206,9 @@ namespace JinnSports.BLL.Service
                     this.Save(tempEvent, sportEvent);
                 }
                 this.dataUnit.SaveChanges();
-                
+
                 // TODO: resolve injection
-                predictionSender.SendPredictionRequest(); // Check new events and send request to Predictor
+                this.predictionSender.SendPredictionRequest(); // Check new events and send request to Predictor
             }
             catch (Exception ex)
             {

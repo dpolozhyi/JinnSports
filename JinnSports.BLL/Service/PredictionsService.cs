@@ -20,9 +20,9 @@ namespace JinnSports.BLL.Service
 
         public void SavePredictions(IEnumerable<PredictionDTO> predictions)
         {
-            using (dataUnit)
+            using (this.dataUnit)
             {
-                IEnumerable<Team> teams = dataUnit.GetRepository<Team>().Get();
+                IEnumerable<Team> teams = this.dataUnit.GetRepository<Team>().Get();
                 IEnumerable<SportEvent> sportEvents = dataUnit.GetRepository<SportEvent>().Get();
 
                 // TODO: Exception handling
@@ -38,10 +38,10 @@ namespace JinnSports.BLL.Service
                     prediction.AwayWinProbability = predictionDTO.AwayWinProbability;
                     prediction.DrawProbability = predictionDTO.DrawProbability;
 
-                    dataUnit.GetRepository<EventPrediction>().Insert(prediction);
+                    this.dataUnit.GetRepository<EventPrediction>().Insert(prediction);
                 }
 
-                dataUnit.SaveChanges();
+                this.dataUnit.SaveChanges();
             }
         }
 
