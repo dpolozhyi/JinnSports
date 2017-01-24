@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Hosting;
+using System.Xml;
 
 namespace JinnSports.BLL.Service
 {
@@ -37,13 +39,20 @@ namespace JinnSports.BLL.Service
                 package.IncomigEvents = incomingEvents;
 
                 // TODO: get connection parameters from settings
-                package.CallBackURL = "";
-                package.CallBackController = "api/Predictions";
-                package.CallBackTimeout = 60;
+                this.GetConnectionSettings(package);
 
                 ApiConnection connection = new ApiConnection();
                 connection.SendPackage(package);
             }
+        }
+
+        private void GetConnectionSettings(PackageDTO package)
+        {
+            XmlDocument settings = new XmlDocument();
+            settings.Load(HostingEnvironment.MapPath("~/App_Data/") + "PredictionsConnection.xml");
+            package.CallBackURL = settings.DocumentElement.SelectSingleNode("url").InnerText;
+            package.CallBackController = settings.DocumentElement.SelectSingleNode("name").InnerText;
+            package.CallBackTimeout = int.Parse(settings.DocumentElement.SelectSingleNode("timeout").InnerText ?? "60");
         }
 
         private void CheckForNewEvents()
