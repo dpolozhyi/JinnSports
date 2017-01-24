@@ -176,7 +176,7 @@ namespace JinnSports.BLL.Service
                         {
                             team = this.dataUnit.GetRepository<TeamName>()
                             .Get((x) => x.Name == team.Name).Select(x => x.Team).FirstOrDefault();
-
+                            
                             Result result = new Result { Team = team, Score = resultDTO.Score ?? -1, IsHome = resultDTO.IsHome };
                             sportEvent.Results.Add(result);
                         }
