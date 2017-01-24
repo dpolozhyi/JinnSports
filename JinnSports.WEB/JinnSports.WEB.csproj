@@ -179,6 +179,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\PredictionsConnection.xml" />
+    <Content Include="App_Data\PredictorConnection.xml" />
     <Content Include="App_Data\ApiConnection.xml" />
     <Content Include="Content\AdminLTE\AdminLTE.css" />
     <Content Include="Content\AdminLTE\AdminLTE.min.css" />

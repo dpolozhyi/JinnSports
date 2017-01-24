@@ -16,7 +16,7 @@ namespace JinnSports.Parser.App.ProxyService.ProxyRepository
     public class ProxyRepository<T> : IProxyRepository<T> where T : IProxyServer
     {
         private XmlSerializer xmlSerializer;
-        private static object repLocker = new Object();
+        private static object repLocker = new object();
         private string path;
 
         public ProxyRepository()

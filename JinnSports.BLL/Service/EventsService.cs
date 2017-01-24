@@ -206,7 +206,7 @@ namespace JinnSports.BLL.Service
                     this.Save(tempEvent, sportEvent);
                 }
                 this.dataUnit.SaveChanges();
-                
+
                 // TODO: resolve injection
                 this.predictionSender.SendPredictionRequest(); // Check new events and send request to Predictor
             }
