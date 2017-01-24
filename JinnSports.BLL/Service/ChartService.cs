@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using JinnSports.BLL.Dtos.Charts;
 using JinnSports.BLL.Interfaces;
@@ -27,7 +26,11 @@ namespace JinnSports.BLL.Service
             dataTable.AddColumn("Date", "date");
             dataTable.AddColumn("WinRate", "number");
 
-            var results = unitOfWork.GetRepository<Team>().GetById(id).Results.OrderBy(result => result.SportEvent.Date).ToList();
+            // Get existing results for team ordered by date
+            var results = unitOfWork.GetRepository<Team>().GetById(id).Results
+                .Where(r => r.Score != -1)
+                .OrderBy(result => result.SportEvent.Date)
+                .ToList();
             int winCounter = 0;
             int totalCounter = 0;
 
@@ -38,11 +41,24 @@ namespace JinnSports.BLL.Service
                 row.Add(result.SportEvent.Date);
 
                 var winners = result.SportEvent.Results.Where(r => r.Score == result.SportEvent.Results.Max(mr => mr.Score)).ToList();
-                if (winners.Count == 1 && winners[0].Team.Id == id)
+
+                int winrate = 0;
+                // If draw - adding last winrate 
+                if (winners.Count > 1)
+                {
+                    winrate = int.Parse(dataTable.Rows[dataTable.Rows.Count - 1].C.ElementAt(1).V.ToString());
+                    totalCounter--;
+                }
+                // If team is winner
+                else if (winners.Count == 1 && winners[0].Team.Id == id)
                 {
                     winCounter++;
+                    winrate = winCounter * 100 / totalCounter;
                 }
-                int winrate = winCounter * 100 / totalCounter;
+                else
+                {
+                    winrate = winCounter * 100 / totalCounter;
+                }
                 row.Add(winrate);
 
                 dataTable.AddRow(row);
