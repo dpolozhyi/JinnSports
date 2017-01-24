@@ -13,7 +13,7 @@ namespace JinnSports.WEB.Areas.Mvc.Controllers
 {
     public class EventController : Controller
     {
-        private int PAGESIZE = 10;
+        private const int PAGESIZE = 10;
 
         private readonly ISportTypeService sportTypeService;
 
@@ -33,8 +33,11 @@ namespace JinnSports.WEB.Areas.Mvc.Controllers
             }
 
             PageInfo pageInfo = new PageInfo(recordsTotal, page, PAGESIZE);
-            SportTypeSelectDto sportTypeModel = this.sportTypeService.GetSportTypes(id, time, 
-                (page - 1) * PAGESIZE, PAGESIZE);
+            SportTypeSelectDto sportTypeModel = this.sportTypeService.GetSportTypes(
+                id, 
+                time,
+                (page - 1) * PAGESIZE, 
+                PAGESIZE);
 
 
             if (sportTypeModel != null)
@@ -54,37 +57,18 @@ namespace JinnSports.WEB.Areas.Mvc.Controllers
         }
 
         [HttpPost]
-        public ActionResult PostIndex()
+        public ActionResult PostIndex(string sportTypeSelector, string timeSelector)
         {
-            string requestedId = Request["sportTypeSelector"];
-            int sportTypeId = !string.IsNullOrEmpty(requestedId) ? Convert.ToInt32(requestedId) : 0;
-
-            string requestedTime = Request["timeSelector"];
-            int timeId = !string.IsNullOrEmpty(requestedTime) ? Convert.ToInt32(requestedTime) : 1;
+            int sportTypeId = 
+                !string.IsNullOrEmpty(sportTypeSelector) ? Convert.ToInt32(sportTypeSelector) : 0;
+            
+            int timeId = 
+                !string.IsNullOrEmpty(timeSelector) ? Convert.ToInt32(timeSelector) : 1;
 
             int recordsTotal = this.sportTypeService.Count(sportTypeId, timeId - 1);
-            
 
-            PageInfo pageInfo = new PageInfo(recordsTotal, 1, PAGESIZE);
-            SportTypeSelectDto sportTypeModel = this.sportTypeService.GetSportTypes(sportTypeId, timeId - 1,
-                0, PAGESIZE);
-
-
-            if (sportTypeModel != null)
-            {
-                return this.View("Index",
-                    new SportEventViewModel()
-                    {
-                        PageInfo = pageInfo,
-                        SportTypeSelectDto = sportTypeModel,
-                        ActionName = "Index",
-                        ControllerName = "Event"
-                    });
-            }
-            else
-            {
-                return this.View();
-            }
+            return this.RedirectToAction(
+                "Index", new { id = sportTypeId, page = 1, time = timeId - 1 });
         }
     }
 }

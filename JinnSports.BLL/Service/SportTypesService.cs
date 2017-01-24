@@ -79,7 +79,8 @@ namespace JinnSports.BLL.Service
                         DateTime.Compare(m.Date, DateTime.UtcNow) == time,
                         includeProperties: "Results,SportType,Results.Team",
                         orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
-                        skip: skip, take: take).ToList();
+                        skip: skip, 
+                        take: take).ToList();
                 }
                 else
                 {
@@ -87,7 +88,8 @@ namespace JinnSports.BLL.Service
                         filter: x => x.SportType.Id == sportTypeId,
                         includeProperties: "Results,SportType,Results.Team",
                         orderBy: s => s.OrderByDescending(x => x.Date).ThenByDescending(x => x.Id),
-                        skip: skip, take: take).ToList();
+                        skip: skip, 
+                        take: take).ToList();
                 }
 
 
@@ -132,14 +134,16 @@ namespace JinnSports.BLL.Service
                         filter: m => DateTime.Compare(m.Date, DateTime.UtcNow) == time,
                         includeProperties: "Results,SportType,Results.Team",
                         orderBy: s => s.OrderBy(x => x.SportType.Id).ThenByDescending(x => x.Date).ThenByDescending(x => x.Id),
-                        skip: skip, take: take).ToList();
+                        skip: skip,
+                        take: take).ToList();
                 }
                 else
                 {
                     sportEvents = this.dataUnit.GetRepository<SportEvent>().Get(                        
                         includeProperties: "Results,SportType,Results.Team",
                         orderBy: s => s.OrderBy(x => x.SportType.Id).ThenByDescending(x => x.Date).ThenByDescending(x => x.Id),
-                        skip: skip, take: take).ToList();
+                        skip: skip,
+                        take: take).ToList();
                 }
 
                 selectedName = "Sport Events";

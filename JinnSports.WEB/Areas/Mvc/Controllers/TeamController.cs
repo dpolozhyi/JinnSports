@@ -50,7 +50,7 @@ namespace JinnSports.WEB.Areas.Mvc.Controllers
         }
         public ActionResult Details(int id, int page = 1)
         {
-            if(page < 1)
+            if (page < 1)
             {
                 page = 1;
             }
@@ -60,8 +60,8 @@ namespace JinnSports.WEB.Areas.Mvc.Controllers
             PageInfo pageInfo = new PageInfo(teamResultsCount, page, PAGESIZE);
 
             TeamDto team = this.teamService.GetTeamById(id);
-            IEnumerable<ResultDto> results = this.teamDetailsService.GetResults(id, 
-                (page - 1) * PAGESIZE, PAGESIZE);
+            IEnumerable<ResultDto> results = 
+                this.teamDetailsService.GetResults(id, (page - 1) * PAGESIZE, PAGESIZE);
 
             TeamResultsDto teamResults = new TeamResultsDto { Team = team, Results = results };
 

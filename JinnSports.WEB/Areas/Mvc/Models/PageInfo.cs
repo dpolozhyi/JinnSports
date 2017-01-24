@@ -11,18 +11,12 @@ namespace JinnSports.WEB.Areas.Mvc.Models
 
         private const int NEXTPAGES = 4;
 
-        public PageInfo(            
-            int totalItems, 
-            int currentPage, 
-            int pageSize)
+        public PageInfo(int totalItems, int currentPage, int pageSize)
         {   
             this.CurrentPage = currentPage;
             this.PageSize = pageSize; 
 
-            this.TotalItems = totalItems;
-
-            this.TotalPages = (int)Math.Ceiling(
-                this.TotalItems / (double)this.PageSize);
+            this.TotalPages = (int)Math.Ceiling(totalItems / (double)this.PageSize);
 
             if (this.TotalPages < PREVIOUSPAGES + NEXTPAGES + 1)
             {
@@ -41,17 +35,15 @@ namespace JinnSports.WEB.Areas.Mvc.Models
             }
 
             
-            if(this.EndPage > this.TotalPages)
+            if (this.EndPage > this.TotalPages)
             {
                 this.EndPage = this.TotalPages;
-                if(this.EndPage > PREVIOUSPAGES + NEXTPAGES + 1)
+                if (this.EndPage > PREVIOUSPAGES + NEXTPAGES + 1)
                 {
                     this.StartPage = this.EndPage - PREVIOUSPAGES - NEXTPAGES;
                 }
             }
         }
-
-        public int TotalItems { get; private set; }
 
         public int TotalPages { get; private set; }
 
