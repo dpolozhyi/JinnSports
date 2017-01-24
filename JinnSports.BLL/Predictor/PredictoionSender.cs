@@ -109,7 +109,7 @@ namespace JinnSports.BLL.Service
                     }
                     else
                     {
-                        teamEvent.DefenceScore = item.Score;
+                        teamEvent.DefenseScore = item.Score;
                     }  
                 }
 
