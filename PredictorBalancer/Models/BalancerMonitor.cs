@@ -39,8 +39,11 @@ namespace PredictorBalancer.Models
 
         public void SendPredictions(IEnumerable<PredictionDTO> predictions)
         {
-            ApiConnection<IEnumerable<PredictionDTO>> connection = new ApiConnection<IEnumerable<PredictionDTO>>(Package.CallBackURL,
-                                                                        Package.CallBackController, Package.CallBackTimeout);
+            ApiConnection<IEnumerable<PredictionDTO>> connection = new ApiConnection<IEnumerable<PredictionDTO>>(
+                Package.CallBackURL,
+                Package.CallBackController, 
+                Package.CallBackTimeout);
+
             connection.Send(predictions);
         }
 
