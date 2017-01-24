@@ -26,7 +26,7 @@ namespace JinnSports.Parser.App.HtmlParsers
 
         public HTMLParser24score()
         {
-            proxyTerminal = new ProxyTerminal();
+            this.proxyTerminal = new ProxyTerminal();
         }
 
         public uint DaysCount { get; set; }

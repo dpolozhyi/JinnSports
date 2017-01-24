@@ -18,13 +18,13 @@ namespace JinnSports.Parser.App.ProxyService.ProxyTerminal
 
         public void MakeProxyUnavaliable(string proxy)
         {
-            pc.SetStatus(proxy, ConnectionStatus.CS_СonnectedWrongly);
+            this.pc.SetStatus(proxy, ConnectionStatus.CS_СonnectedWrongly);
         }
 
         public HttpWebResponse GetProxyResponse(Uri url)
         {
             this.proxyAsync = new ProxyAsync(this.pc, url);
-            return proxyAsync.GetProxyAsync();
+            return this.proxyAsync.GetProxyAsync();
         }
     }
 }
