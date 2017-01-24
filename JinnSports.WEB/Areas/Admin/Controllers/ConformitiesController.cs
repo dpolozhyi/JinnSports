@@ -3,7 +3,8 @@ using JinnSports.BLL.Interfaces;
 using System.Web.Mvc;
 
 namespace JinnSports.WEB.Areas.Admin.Controllers
-{    
+{
+    [Authorize(Roles = "admin")]
     public class ConformitiesController : Controller
     {
         private readonly IConformityService conformityService;
