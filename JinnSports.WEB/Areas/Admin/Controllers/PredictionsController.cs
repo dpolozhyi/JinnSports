@@ -21,7 +21,7 @@ namespace JinnSports.WEB.Areas.Admin.Controllers
 
         public void PostPredictions(IEnumerable<PredictionDTO> predictions)
         {
-            predictionsService.SavePredictions(predictions);
+            this.predictionsService.SavePredictions(predictions);
         }
     }
 }
