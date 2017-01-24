@@ -96,8 +96,7 @@ namespace JinnSports.UnitTests.BLL
         [SetUp]
         public void Init()
         {
-            this.databaseTransaction = new TransactionScope(TransactionScopeOption.Required, 
-                new TransactionOptions{ IsolationLevel = IsolationLevel.Serializable });
+            this.databaseTransaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions{ IsolationLevel = IsolationLevel.Serializable });
         }
 
         [TearDown]

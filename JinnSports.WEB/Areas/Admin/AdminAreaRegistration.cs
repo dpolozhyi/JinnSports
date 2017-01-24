@@ -14,16 +14,10 @@ namespace JinnSports.WEB.Areas.Admin
 
         public override void RegisterArea(AreaRegistrationContext context) 
         {
-
-            context.MapRoute(
-                "Admin_Edit",
-                "Admin/Conformities/Edit/{inputName}",
-                new { controller = "Conformities", action = "Edit" });
-
             context.MapRoute(
                 "Admin_default",
-                "Admin/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional });
+                "Admin/{controller}/{action}/{inputName}",
+                new { action = "Index", inputName = UrlParameter.Optional });
         }
     }
 }
