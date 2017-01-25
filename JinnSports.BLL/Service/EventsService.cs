@@ -38,7 +38,7 @@ namespace JinnSports.BLL.Service
                 IEnumerable<SportEvent> sportEvents = this.dataUnit.GetRepository<SportEvent>().Get(filter: m => m.SportType.Id == sportTypeId);
                 if (time != 0)
                 {
-                    count = sportEvents.Count(m => Math.Sign(DateTime.Compare(m.Date, DateTime.UtcNow)) == time);
+                    count = sportEvents.Count(m => DateTime.Compare(m.Date, DateTime.UtcNow) == time);
                 }
                 else
                 {
@@ -51,7 +51,7 @@ namespace JinnSports.BLL.Service
                 if (time != 0)
                 {
 
-                    count = sportEvents.Count(m => Math.Sign(DateTime.Compare(m.Date, DateTime.UtcNow)) == time);
+                    count = sportEvents.Count(m => DateTime.Compare(m.Date, DateTime.UtcNow) == time);
                 }
                 else
                 {

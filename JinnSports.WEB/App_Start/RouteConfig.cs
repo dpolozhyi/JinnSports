@@ -18,7 +18,7 @@ namespace JinnSports.WEB
                  name: "Results",
                  url: "Results",
                  defaults: new { controller = "Event", action = "Index", id = UrlParameter.Optional },
-                 namespaces: new[] { "JinnSports.WEB.Controllers" });
+                namespaces: new[] { "JinnSports.WEB.Controllers" });
 
             routes.MapRoute(
                 name: "Teams",
