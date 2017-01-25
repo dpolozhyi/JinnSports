@@ -12,20 +12,22 @@ namespace JinnSports.BLL.Interfaces
         /// </summary>
         /// <param name="sportId">Sport type ID</param>
         /// <returns></returns>                        
-        int Count(int sportId);
+        int Count(int sportId, int time);
         
         /// <summary>
         /// Get events for sport type
         /// </summary>
         /// <param name="sportId">Sport type ID</param>
+        /// <param name="time"></param>
         /// <param name="skip"></param>
         /// <param name="take"></param>
         /// <returns></returns>
-        IEnumerable<ResultDto> GetSportEvents(int sportId, int skip, int take);
+        IEnumerable<ResultDto> GetSportEvents(int sportId, int time, int skip, int take);
+
+        MainPageDto GetMainPageInfo();
 
         bool SaveSportEvents(ICollection<SportEventDTO> eventDTOs);
 
         IEnumerable<SportTypeDto> GetSportTypes();
-
     }
 }

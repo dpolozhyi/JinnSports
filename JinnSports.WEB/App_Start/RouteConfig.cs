@@ -10,9 +10,15 @@ namespace JinnSports.WEB
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                 name: "Conformities",
+                 url: "Conformities",
+                 defaults: new { controller = "Conformities", action = "Index", id = UrlParameter.Optional });
+
+            routes.MapRoute(
                  name: "Results",
                  url: "Results",
-                 defaults: new { controller = "Event", action = "Index", id = UrlParameter.Optional });
+                 defaults: new { controller = "Event", action = "Index", id = UrlParameter.Optional },
+                namespaces: new[] { "JinnSports.WEB.Controllers" });
 
             routes.MapRoute(
                 name: "Teams",
@@ -24,7 +30,7 @@ namespace JinnSports.WEB
             routes.MapRoute(
                 name: "MainPage",
                 url: string.Empty,
-                defaults: new { controller = "Home", action = "Index"},
+                defaults: new { controller = "Home", action = "Index" },
                 namespaces: new[] { "JinnSports.WEB.Controllers" });
 
             routes.MapRoute(

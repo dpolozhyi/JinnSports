@@ -179,6 +179,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\PredictionsConnection.xml" />
+    <Content Include="App_Data\PredictorConnection.xml" />
+    <Content Include="App_Data\ApiConnection.xml" />
     <Content Include="Content\AdminLTE\AdminLTE.css" />
     <Content Include="Content\AdminLTE\AdminLTE.min.css" />
     <Content Include="Content\AdminLTE\skins\skin-black-light.css" />
@@ -207,6 +210,8 @@
     <Content Include="Content\AdminLTE\skins\skin-yellow.min.css" />
     <Content Include="Content\AdminLTE\skins\_all-skins.css" />
     <Content Include="Content\AdminLTE\skins\_all-skins.min.css" />
+    <Content Include="Content\blue%402x.png" />
+    <Content Include="Content\blue.png" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -356,6 +361,9 @@
     <Content Include="Content\DataTables\images\sort_desc.png" />
     <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\style.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -397,6 +405,7 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -420,12 +429,20 @@
     <Content Include="Areas\Mvc\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Mvc\Views\Shared\_ResultPartial.cshtml" />
     <Content Include="Areas\Mvc\Views\Shared\_HeaderPartial.cshtml" />
+    <Content Include="Areas\Mvc\Views\Shared\_TeamPaginationPartial.cshtml" />
+    <Content Include="Areas\Mvc\Views\Shared\_EventPaginationPartial.cshtml" />
+    <Content Include="Areas\Mvc\Views\Shared\_TeamDetailPaginationPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\Conformities\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Conformities\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Parser\Index.cshtml" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\FontAwesome.otf" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\AdminLTE\app.js" />
     <Content Include="Scripts\AdminLTE\app.min.js" />
-    <Content Include="Scripts\AdminLTE\demo.js" />
-    <Content Include="Scripts\AdminLTE\pages\dashboard.js" />
-    <Content Include="Scripts\AdminLTE\pages\dashboard2.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
@@ -502,12 +519,14 @@
     <Content Include="Scripts\DataTables\responsive.jqueryui.min.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.min.js" />
+    <Content Include="Scripts\icheck.min.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
+    <Content Include="Scripts\loader.js" />
     <Content Include="Views\web.config" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -521,15 +540,22 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\ParserController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PredictionsController.cs" />
     <Compile Include="Areas\Mvc\Controllers\EventController.cs" />
     <Compile Include="Areas\Mvc\Controllers\HomeController.cs" />
     <Compile Include="Areas\Mvc\Controllers\TeamController.cs" />
+    <Compile Include="Areas\Mvc\Models\PageInfo.cs" />
+    <Compile Include="Areas\Mvc\Models\SportEventViewModel.cs" />
+    <Compile Include="Areas\Mvc\Models\TeamDetailsViewModel.cs" />
+    <Compile Include="Areas\Mvc\Models\TeamViewModel.cs" />
     <Compile Include="Areas\Mvc\MvcAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\EventController.cs" />
     <Compile Include="Controllers\Api\TeamController.cs" />
     <Compile Include="Controllers\Api\TeamDetailsController.cs" />
     <Compile Include="Areas\Admin\Controllers\SportEventsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ConformitiesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\EventController.cs" />
@@ -549,7 +575,9 @@
     <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\Shared\_ResultPartial.cshtml" />
     <Content Include="Views\Event\Index.cshtml" />
-    <None Include="Properties\PublishProfiles\My.pubxml" />
+    <None Include="Properties\PublishProfiles\My.pubxml">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.1.min.map" />
@@ -569,6 +597,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Admin.cshtml" />
+    <Content Include="Views\Shared\_UpcomingEvents.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -577,15 +606,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
-    <Folder Include="Areas\Mvc\Controllers\Models\" />
     <Folder Include="Filters\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DTO\DTO.csproj">
-      <Project>{40F1BD33-B3C8-4268-8243-59230825EF9B}</Project>
+      <Project>{40f1bd33-b3c8-4268-8243-59230825ef9b}</Project>
       <Name>DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\JinnSports.BLL\JinnSports.BLL.csproj">
@@ -603,6 +630,10 @@
     <ProjectReference Include="..\JinnSports.Entities\JinnSports.Entities.csproj">
       <Project>{fe881c95-44b6-4c3b-8d18-906f050d3cbb}</Project>
       <Name>JinnSports.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PredictorDTO\PredictorDTO.csproj">
+      <Project>{96B1BC81-F95F-49C6-9B2F-44E2D00460CF}</Project>
+      <Name>PredictorDTO</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
