@@ -96,7 +96,7 @@ namespace PredictorBalancer.Models
             {
                 IncomigEvents = incomingEvents,
                 CallBackURL = baseUrl,
-                CallBackController = $"api/Balancer",
+                CallBackController = $"api/Predictions",
                 CallBackTimeout = 60
             };
         }
