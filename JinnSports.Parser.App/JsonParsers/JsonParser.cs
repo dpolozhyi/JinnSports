@@ -39,7 +39,7 @@ namespace JinnSports.Parser.App.JsonParsers
 
         public JsonParser(Uri uri)
         {
-            proxyTerminal = new ProxyTerminal();
+            this.proxyTerminal = new ProxyTerminal();
             this.SiteUri = uri;
         }
 
@@ -175,6 +175,13 @@ namespace JinnSports.Parser.App.JsonParsers
             return eventList;
         }
 
+        public DateTime UnixToDateTime(long unixTime)
+        {
+            DateTime eventTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            eventTime = eventTime.AddSeconds(unixTime);
+            return eventTime;
+        }
+
         private void GetScoresFromEvent(Event ev, List<ResultDTO> resultList)
         {
             string mainScore;
@@ -211,8 +218,8 @@ namespace JinnSports.Parser.App.JsonParsers
                     teams[i] = teams[i].Trim(' ');
                 }
 
-                resultList.Add(new ResultDTO() { TeamName = teams[0] });
-                resultList.Add(new ResultDTO() { TeamName = teams[1] });
+                resultList.Add(new ResultDTO() { TeamName = teams[0], IsHome = true });
+                resultList.Add(new ResultDTO() { TeamName = teams[1], IsHome = false });
 
                 return true;
             }
@@ -260,13 +267,6 @@ namespace JinnSports.Parser.App.JsonParsers
                     }
             }
             return name;
-        }
-
-        public DateTime UnixToDateTime(long unixTime)
-        {
-            DateTime eventTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            eventTime = eventTime.AddSeconds(unixTime);
-            return eventTime;
         }
     }
 }
