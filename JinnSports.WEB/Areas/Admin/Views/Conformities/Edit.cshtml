@@ -14,14 +14,14 @@
     @Html.AntiForgeryToken()
     <div class="form-group">
         @Html.LabelFor(m => m.ExistedName)
-        @Html.TextBoxFor(m => m.ExistedName, new { @class = "form-control" })   
+        @Html.TextBoxFor(m => m.ExistedName, new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.ExistedName)
-             
-    </div>    
+
+    </div>
     <div class="form-group">
         @Html.LabelFor(m => m.ExistedName)
-        @Html.DropDownListFor(m => m.ConformityId, new SelectList(Model.Conformities, "Id", "ExistedName"), "Select name", new { @class = "form-control" })  
-        @Html.ValidationMessageFor(m => m.ExistedName)      
+        @Html.DropDownListFor(m => m.ConformityId, new SelectList(Model.Conformities, "Id", "ExistedName"), "Select name", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.ConformityId)
     </div>
     @Html.HiddenFor(m => m.InputName)
     <button type="submit" class="btn btn-primary">Save</button>
