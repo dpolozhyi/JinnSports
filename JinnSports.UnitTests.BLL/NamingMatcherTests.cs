@@ -183,8 +183,7 @@ namespace JinnSports.UnitTests.BLL
             Conformity expConf = new Conformity
             {
                 InputName = "Ст. Этьен",
-                ExistedName = "Сент-Этьен",
-                IsConfirmed = false
+                ExistedName = "Сент-Этьен"
             };
 
             Team neutralTeam = new Team
