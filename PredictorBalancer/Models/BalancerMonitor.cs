@@ -86,9 +86,9 @@ namespace PredictorBalancer.Models
 
             foreach (Predictor predictor in this.Predictors.GetAll())
             {
-                Task task = new Task(predictor.UpdateStatus);
-                task.Start();
-                tasks.Add(task);
+                //Task task = new Task(predictor.UpdateStatus);
+                // task.Start();
+                tasks.Add(Task.Factory.StartNew(predictor.UpdateStatus));
             }
             await Task.WhenAll(tasks);
         }
