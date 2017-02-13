@@ -6,8 +6,8 @@ namespace JinnSports.BLL.Interfaces
 {
     public interface IConformityService
     {
-        List<string> GetConformities();
-        ConformityViewModel GetConformityViewModel(string inputName);
+        List<ConformityDto> GetConformities();
+        ConformityViewModel GetConformityViewModel(int id);
         void Save(ConformityViewModel model);
     }
 }
