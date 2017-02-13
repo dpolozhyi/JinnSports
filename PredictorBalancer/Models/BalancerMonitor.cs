@@ -45,6 +45,7 @@ namespace PredictorBalancer.Models
                 Package.CallBackTimeout);
 
             connection.Send(predictions);
+            Notifier.SendEmail($"{predictions.Count()} predictions send back at {DateTime.Now.ToString()}");
         }
 
         public async void SendIncomingEvents(PackageDTO package, string baseUrl)
@@ -71,6 +72,8 @@ namespace PredictorBalancer.Models
                     predictor.SendIncomingEvents(this.CreatePackage(package.IncomigEvents.Skip(count * size).Take(size), baseUrl));
                     count++;
                 }
+
+                Notifier.SendEmail($"New task with {predictors.Count()} awailable predictors at {DateTime.Now.ToString()}");
             }
             catch (Exception ex)
             {
