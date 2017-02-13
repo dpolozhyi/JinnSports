@@ -57,8 +57,8 @@ namespace JinnSports.BLL.Service
 
         private void CheckForNewEvents()
         {
-            using (this.dataUnit)
-            {
+            
+            
                 DateTime currentDate = DateTime.Today;
                 IEnumerable<SportEvent> events = this.dataUnit.GetRepository<SportEvent>().Get(e => e.Date >= currentDate);
                 IEnumerable<EventPrediction> eventPredictions = this.dataUnit.GetRepository<EventPrediction>().Get();
@@ -75,7 +75,7 @@ namespace JinnSports.BLL.Service
                         this.AddIncomingEvent(sportEvent);
                     }
                 }
-            }   
+               
         }
 
         private void AddIncomingEvent(SportEvent sportEvent)
