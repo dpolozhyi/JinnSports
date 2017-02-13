@@ -22,15 +22,18 @@ namespace JinnSports.BLL.Service
             this.dataUnit = unitOfWork;
         }
 
-        public List<string> GetConformities()
+        public List<ConformityDto> GetConformities()
         {
             Log.Info("Getting conformities data...");
-            List<string> inputNames = new List<string>();
+            List<ConformityDto> inputNames = new List<ConformityDto>();
             IEnumerable<Conformity> conformities = new List<Conformity>();
 
             try
             {
-                conformities = this.dataUnit.GetRepository<Conformity>().Get().GroupBy(x => x.InputName).Select(x => x.First()).ToList();
+                conformities = this.dataUnit.GetRepository<Conformity>()
+                    .Get().GroupBy(x => x.InputName)
+                    .Select(x => x.First())
+                    .ToList();
             }
             catch (Exception e)
             {
@@ -39,7 +42,7 @@ namespace JinnSports.BLL.Service
 
             foreach (Conformity conf in conformities)
             {
-                inputNames.Add(conf.InputName);
+                inputNames.Add(Mapper.Map<Conformity, ConformityDto>(conf));
             }
 
             Log.Info("Successful getting conformities data...");
@@ -47,14 +50,22 @@ namespace JinnSports.BLL.Service
             return inputNames;
         }
 
-        public ConformityViewModel GetConformityViewModel(string inputName)
+        public ConformityViewModel GetConformityViewModel(int id)
         {
             Log.Info("Getting ConformityViewModel...");
 
+            Conformity confByID = new Conformity();
             IEnumerable<Conformity> conformities = new List<Conformity>();
+
             try
             {
-                conformities = this.dataUnit.GetRepository<Conformity>().Get(x => x.InputName == inputName).GroupBy(x => x.ExistedName).Select(x => x.First());
+                confByID = this.dataUnit.GetRepository<Conformity>()
+                    .Get(x => x.Id == id).FirstOrDefault();
+
+                conformities = this.dataUnit.GetRepository<Conformity>()
+                    .Get(x => x.InputName == confByID.InputName)
+                    .GroupBy(x => x.ExistedName)
+                    .Select(x => x.First());
             }
             catch (Exception e)
             {
@@ -69,7 +80,7 @@ namespace JinnSports.BLL.Service
             }
 
             Log.Info("Successful getting ConformityViewModel...");
-            return new ConformityViewModel(inputName, conformitiesDtos);
+            return new ConformityViewModel(confByID.InputName, confByID.Id, conformitiesDtos);
         }
 
         public void Save(ConformityViewModel model)
@@ -79,7 +90,10 @@ namespace JinnSports.BLL.Service
             {
                 if (model.ConformityId != 0)
                 {
-                    Conformity conf = this.dataUnit.GetRepository<Conformity>().Get(x => x.Id == model.ConformityId).FirstOrDefault();
+                    Conformity conf = this.dataUnit.GetRepository<Conformity>()
+                        .Get(x => x.Id == model.ConformityId)
+                        .FirstOrDefault();
+
                     this.Saving(conf.InputName, conf.ExistedName, false);
                 }
                 if (model.ExistedName != null)
@@ -103,7 +117,8 @@ namespace JinnSports.BLL.Service
 
         private bool CheckExistedNamesInDB(string existedName)
         {
-            IEnumerable<TeamName> namesInDB = this.dataUnit.GetRepository<TeamName>().Get(x => x.Name == existedName);
+            IEnumerable<TeamName> namesInDB = this.dataUnit.GetRepository<TeamName>()
+                .Get(x => x.Name == existedName);
 
             if (namesInDB.Count() != 0)
             {
@@ -118,19 +133,28 @@ namespace JinnSports.BLL.Service
         private void Saving(string inputName, string existedName, bool createNewTeam)
         {
             IEnumerable<Conformity> conformities = this.dataUnit.GetRepository<Conformity>()
-                .Get(filter: x => x.InputName == inputName, includeProperties: "TempResult").GroupBy(x => x.TempResult.Id).Select(x => x.First());
+                .Get(filter: x => x.InputName == inputName, includeProperties: "TempResult")
+                .GroupBy(x => x.TempResult.Id)
+                .Select(x => x.First());
 
             foreach (Conformity conf in conformities)
             {
                 TempSportEvent tempEvent = this.dataUnit.GetRepository<TempResult>()
-                    .Get(filter: x => x.Id == conf.TempResult.Id, includeProperties: "TempSportEvent").Select(x => x.TempSportEvent).FirstOrDefault();
+                    .Get(filter: x => x.Id == conf.TempResult.Id, includeProperties: "TempSportEvent")
+                    .Select(x => x.TempSportEvent)
+                    .FirstOrDefault();
 
                 Team team = this.GetTeam(inputName, existedName, createNewTeam, tempEvent);
                 
                 int resultId1 = tempEvent.TempResults.ToArray()[0].Id;
                 int resultId2 = tempEvent.TempResults.ToArray()[1].Id;
-                var res1 = this.dataUnit.GetRepository<TempResult>().Get(filter: x => x.Id == resultId1, includeProperties: "Team").FirstOrDefault();
-                var res2 = this.dataUnit.GetRepository<TempResult>().Get(filter: x => x.Id == resultId2, includeProperties: "Team").FirstOrDefault();   
+                var res1 = this.dataUnit.GetRepository<TempResult>()
+                    .Get(filter: x => x.Id == resultId1, includeProperties: "Team")
+                    .FirstOrDefault();
+
+                var res2 = this.dataUnit.GetRepository<TempResult>()
+                    .Get(filter: x => x.Id == resultId2, includeProperties: "Team")
+                    .FirstOrDefault();   
 
                 if (res1.Team != null || res2.Team != null)
                 {
@@ -138,7 +162,8 @@ namespace JinnSports.BLL.Service
                     tempEvent.TempResults = new List<TempResult> { res1, res2 };
                     
                     conf.TempResult.Team = team;
-                    this.dataUnit.GetRepository<SportEvent>().Insert(Mapper.Map<TempSportEvent, SportEvent>(tempEvent));
+                    this.dataUnit.GetRepository<SportEvent>()
+                        .Insert(Mapper.Map<TempSportEvent, SportEvent>(tempEvent));
 
                     this.DeleteTempEvent(tempEvent);                 
 
@@ -163,7 +188,12 @@ namespace JinnSports.BLL.Service
             if (createNewTeam)
             {
                 TeamName tn2 = new TeamName { Name = existedName };
-                team = new Team { Name = existedName, SportType = tempEvent.SportType, Names = new List<TeamName> { tn } };
+                team = new Team
+                {
+                    Name = existedName,
+                    SportType = tempEvent.SportType,
+                    Names = new List<TeamName> { tn }
+                };
                 if (inputName != existedName)
                 {
                     team.Names.Add(tn2);
@@ -172,7 +202,10 @@ namespace JinnSports.BLL.Service
             else
             {
                 team = this.dataUnit.GetRepository<TeamName>()
-                    .Get(filter: t => t.Name == existedName, includeProperties: "Team").Select(t => t.Team).FirstOrDefault();
+                    .Get(filter: t => t.Name == existedName, includeProperties: "Team")
+                    .Select(t => t.Team)
+                    .FirstOrDefault();
+
                 team.Names.Add(tn);
             }
 

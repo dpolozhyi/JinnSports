@@ -21,40 +21,28 @@ namespace JinnSports.WEB.Areas.Admin.Controllers
             return this.View(model);
         }
                        
-        public ActionResult Edit(string inputName)
+        public ActionResult Edit(int id)
         {
-            var model = this.conformityService.GetConformityViewModel(inputName.Replace("_", " "));
+            var model = this.conformityService.GetConformityViewModel(id);
             return this.View(model);            
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Save(ConformityViewModel model)
-        {            
-            if (!this.IsValid(model))
+        {
+            var errors = ModelState.Values;
+            if (!ModelState.IsValid)
             {
-                var newModel = this.conformityService.GetConformityViewModel(model.InputName);
+                var newModel = this.conformityService
+                    .GetConformityViewModel(model.InputNameId);
+
                 return this.View("Edit", newModel);
             }
 
             this.conformityService.Save(model);
 
-           return this.RedirectToAction("Index");
-        }
-
-        private bool IsValid(ConformityViewModel conformity)
-        {          
-            if (conformity.ConformityId == 0 && conformity.ExistedName == null)
-            {
-                return false;
-            }
-
-            if (conformity.ConformityId != 0 && conformity.ExistedName != null)
-            {
-                return false;
-            }
-
-            return true;
+            return this.RedirectToAction("Index");
         }
     }
 }
