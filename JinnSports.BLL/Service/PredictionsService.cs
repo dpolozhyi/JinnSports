@@ -15,6 +15,18 @@ namespace JinnSports.BLL.Service
             this.dataUnit = unitOfWork;
         }
 
+        public IEnumerable<EventPrediction> GetPredictions()
+        {
+            IEnumerable<EventPrediction> predictions = new List<EventPrediction>();
+
+            using (this.dataUnit)
+            {
+                predictions = this.dataUnit.GetRepository<EventPrediction>().Get();
+            }
+
+            return predictions;
+        }
+
         public void SavePredictions(IEnumerable<PredictionDTO> predictions)
         {
             using (this.dataUnit)
