@@ -11,13 +11,13 @@ using System.Linq;
 
 namespace JinnSports.BLL.Service
 {
-    public class ConformityService : IConformityService
+    public class AdminService : IAdminService
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(ConformityService));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(AdminService));
 
         private readonly IUnitOfWork dataUnit;
 
-        public ConformityService(IUnitOfWork unitOfWork)
+        public AdminService(IUnitOfWork unitOfWork)
         {
             this.dataUnit = unitOfWork;
         }
@@ -49,6 +49,41 @@ namespace JinnSports.BLL.Service
 
             return inputNames;
         }
+
+        public AdminApiViewModel GetConformityApiViewModel()
+        {
+            Log.Info("Getting conformities data...");
+            IList<ConformityDto> conformityDtos = new List<ConformityDto>();
+            IEnumerable<Conformity> conformities = new List<Conformity>();
+
+            try
+            {
+                conformities = this.dataUnit.GetRepository<Conformity>().Get();
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception when trying to get conformities data from DB", e);
+            }
+
+            foreach (Conformity conformity in conformities)
+            {
+                conformityDtos.Add(Mapper.Map<Conformity, ConformityDto>(conformity));
+            }
+
+            List<ConformityApiViewModel> groups = conformityDtos
+                .GroupBy(c => c.InputName)
+                .Select(g => new ConformityApiViewModel() { GroupName = g.Key, Dtos = g.ToList() })
+                .ToList();
+
+            List<string> names = this.dataUnit.GetRepository<TeamName>()
+                .Get()
+                .Select(x => x.Name)
+                .ToList();
+
+            Log.Info("Successful getting conformities data...");
+           
+            return new AdminApiViewModel { Conformities = groups, Names = names };
+        }        
 
         public ConformityViewModel GetConformityViewModel(int id)
         {
@@ -106,6 +141,27 @@ namespace JinnSports.BLL.Service
                     {
                         this.Saving(model.InputName, model.ExistedName, true);
                     }
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error("Exception when trying to manage ConformityViewModel and DB", e);
+            }
+            Log.Info("Successful manaing ConformityViewModel...");
+        }
+
+        public void Save(string inputName, string existedName)
+        {
+            Log.Info("Managing ConformityViewModel post...");
+            try
+            {
+                if (this.CheckExistedNamesInDB(existedName))
+                {
+                    this.Saving(inputName, existedName, false);
+                }
+                else
+                {
+                    this.Saving(inputName, existedName, true);
                 }
             }
             catch (Exception e)
