@@ -2,17 +2,13 @@
 using JinnSports.BLL.Interfaces;
 using log4net;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace JinnSports.BLL.Service
 {
     public class LoggerService : ILoggerService
     {
-        private static readonly log4net.ILog log = LogManager.GetLogger("ClientLog");
+        private static readonly ILog log = LogManager.GetLogger("ClientLog");
 
         public void SaveLog(LogDto logs)
         {
