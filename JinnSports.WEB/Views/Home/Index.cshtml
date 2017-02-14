@@ -84,8 +84,10 @@
         };
     </script>
     @Scripts.Render("~/Scripts/DataTable")
+    @Scripts.Render("~/bundles/app")
     <script>
         $(document).ready(function () {
+            log.init();
             $('#eventTable').dataTable().fnDestroy();
             loadResults(0, 1);
         });
