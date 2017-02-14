@@ -7,9 +7,9 @@ namespace JinnSports.WEB.Areas.Admin.Controllers
     [Authorize(Roles = "admin")]
     public class ConformitiesController : Controller
     {
-        private readonly IConformityService conformityService;
+        private readonly IAdminService conformityService;
 
-        public ConformitiesController(IConformityService conformityService)
+        public ConformitiesController(IAdminService conformityService)
         {
             this.conformityService = conformityService;
         }
@@ -20,7 +20,7 @@ namespace JinnSports.WEB.Areas.Admin.Controllers
                
             return this.View(model);
         }
-                       
+        
         public ActionResult Edit(int id)
         {
             var model = this.conformityService.GetConformityViewModel(id);
