@@ -1,4 +1,5 @@
-﻿using JinnSports.BLL.Service;
+﻿using JinnSports.BLL.Dtos;
+using JinnSports.BLL.Service;
 using JinnSports.Entities.Entities;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace JinnSports.WEB.Controllers
 
         public ActionResult Index()
         {
-            IEnumerable<EventPrediction> predictions = this.predictionsService.GetPredictions();
+            IEnumerable<EventPredictionDto> predictions = this.predictionsService.GetPredictions();
             if (predictions != null)
             {
                 return this.View(predictions);

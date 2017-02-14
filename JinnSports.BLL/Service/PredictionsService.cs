@@ -1,6 +1,8 @@
-﻿using JinnSports.DataAccessInterfaces.Interfaces;
+﻿using JinnSports.BLL.Dtos;
+using JinnSports.DataAccessInterfaces.Interfaces;
 using JinnSports.Entities.Entities;
 using PredictorDTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,13 +17,22 @@ namespace JinnSports.BLL.Service
             this.dataUnit = unitOfWork;
         }
 
-        public IEnumerable<EventPrediction> GetPredictions()
+        public IEnumerable<EventPredictionDto> GetPredictions()
         {
-            IEnumerable<EventPrediction> predictions = new List<EventPrediction>();
+            IList<EventPredictionDto> predictions = new List<EventPredictionDto>();
 
-            using (this.dataUnit)
+            foreach (EventPrediction prediction in this.dataUnit.GetRepository<EventPrediction>().Get())
             {
-                predictions = this.dataUnit.GetRepository<EventPrediction>().Get();
+                EventPredictionDto predictionDto = new EventPredictionDto();
+                predictionDto.EventType = prediction.SportEvent.SportType.Name;
+                predictionDto.EventDate = prediction.SportEvent.Date.ToShortDateString();
+                predictionDto.HomeTeamName = prediction.HomeTeam.Name;
+                predictionDto.AwayTeamName = prediction.AwayTeam.Name;
+                predictionDto.HomeWinProbability = Convert.ToString(prediction.HomeWinProbability * 10).Substring(0, 2);
+                predictionDto.AwayWinProbability = Convert.ToString(prediction.AwayWinProbability * 10).Substring(0, 2);
+                predictionDto.DrawProbability = Convert.ToString(prediction.DrawProbability * 10).Substring(0, 2);
+
+                predictions.Add(predictionDto);
             }
 
             return predictions;
@@ -29,8 +40,7 @@ namespace JinnSports.BLL.Service
 
         public void SavePredictions(IEnumerable<PredictionDTO> predictions)
         {
-            using (this.dataUnit)
-            {
+            
                 IEnumerable<Team> teams = this.dataUnit.GetRepository<Team>().Get();
                 IEnumerable<SportEvent> sportEvents = this.dataUnit.GetRepository<SportEvent>().Get();
 
@@ -51,7 +61,6 @@ namespace JinnSports.BLL.Service
                 }
 
                 this.dataUnit.SaveChanges();
-            }
         }
 
     }

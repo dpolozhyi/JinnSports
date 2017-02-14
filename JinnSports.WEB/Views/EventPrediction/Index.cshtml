@@ -1,5 +1,5 @@
-﻿@using JinnSports.Entities.Entities
-@model IEnumerable<EventPrediction>
+﻿@using JinnSports.BLL.Dtos
+@model IEnumerable<EventPredictionDto>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -7,11 +7,13 @@
 <!-- select -->
 <h2>Предсказания результатов матчей</h2>
 <div>
-    @foreach(EventPrediction ep in Model)
+    @foreach (EventPredictionDto ep in Model)
     {
-        <p>@ep.SportEvent.SportType | @ep.SportEvent.Date</p>
-        <p>Home team: @ep.HomeTeam.Name | Away team: @ep.AwayTeam.Name</p>
-        <p>Home Win Probability: @ep.HomeWinProbability*10 | Draw Probability: @ep.DrawProbability*10 | Away Win Probability: @ep.AwayWinProbability*10</p>
-        <hr />
+        <div>
+            <p>@ep.EventType | @ep.EventDate</p>
+            <p>Home team: @ep.HomeTeamName | Away team: @ep.AwayTeamName</p>
+            <p>Home Win Probability: @ep.HomeWinProbability % | Draw Probability: @ep.DrawProbability % | Away Win Probability: @ep.AwayWinProbability %</p>
+            <hr />
+        </div>
     }
 </div>
