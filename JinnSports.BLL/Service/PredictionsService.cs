@@ -28,9 +28,9 @@ namespace JinnSports.BLL.Service
                 predictionDto.EventDate = prediction.SportEvent.Date.ToShortDateString();
                 predictionDto.HomeTeamName = prediction.HomeTeam.Name;
                 predictionDto.AwayTeamName = prediction.AwayTeam.Name;
-                predictionDto.HomeWinProbability = Convert.ToString(prediction.HomeWinProbability * 10).Substring(0, 2);
-                predictionDto.AwayWinProbability = Convert.ToString(prediction.AwayWinProbability * 10).Substring(0, 2);
-                predictionDto.DrawProbability = Convert.ToString(prediction.DrawProbability * 10).Substring(0, 2);
+                predictionDto.HomeWinProbability = Convert.ToString(Math.Round(prediction.HomeWinProbability * 10));
+                predictionDto.AwayWinProbability = Convert.ToString(Math.Round(prediction.AwayWinProbability * 10));
+                predictionDto.DrawProbability = Convert.ToString(Math.Round(prediction.DrawProbability * 10));
 
                 predictions.Add(predictionDto);
             }
