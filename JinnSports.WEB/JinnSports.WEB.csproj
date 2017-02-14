@@ -425,7 +425,7 @@
     <Content Include="Areas\Mvc\Views\Event\Index.cshtml" />
     <Content Include="Areas\Mvc\Views\Team\Index.cshtml" />
     <Content Include="Areas\Mvc\Views\Team\Details.cshtml" />
-    <Content Include="Areas\Mvc\Views\Home\Home.cshtml" />
+    <Content Include="Areas\Mvc\Views\Home\Index.cshtml" />
     <Content Include="Areas\Mvc\Views\Shared\_FooterPartial.cshtml" />
     <Content Include="Areas\Mvc\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Mvc\Views\Shared\_ResultPartial.cshtml" />
