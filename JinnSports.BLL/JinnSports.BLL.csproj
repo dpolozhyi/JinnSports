@@ -76,6 +76,7 @@
     <Compile Include="Dtos\ConformityApiViewModel.cs" />
     <Compile Include="Dtos\ConformityDto.cs" />
     <Compile Include="Dtos\ConformityViewModel.cs" />
+    <Compile Include="Dtos\EventPredictionDto.cs" />
     <Compile Include="Dtos\MainPageDto.cs" />
     <Compile Include="Dtos\NewsDto.cs" />
     <Compile Include="Dtos\ResultDto.cs" />
